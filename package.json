@@ -1,0 +1,41 @@
+{
+	"name": "checkout-my",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start:build": "tsc -w",
+		"start:run": "nodemon build/index.js",
+		"start": "concurrently npm:start:*"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/princhcanal/checkout-my.git"
+	},
+	"author": "Princh Harold Canal",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/princhcanal/checkout-my/issues"
+	},
+	"homepage": "https://github.com/princhcanal/checkout-my#readme",
+	"dependencies": {
+		"@types/body-parser": "^1.19.0",
+		"@types/connect-flash": "0.0.35",
+		"@types/express": "^4.17.7",
+		"@types/express-session": "^1.17.0",
+		"@types/mongoose": "^5.7.36",
+		"@types/multer": "^1.4.4",
+		"@types/passport": "^1.0.4",
+		"@types/passport-local": "^1.0.33",
+		"@types/passport-local-mongoose": "^4.0.13",
+		"body-parser": "^1.19.0",
+		"connect-flash": "^0.1.1",
+		"express": "^4.17.1",
+		"express-session": "^1.17.1",
+		"mongoose": "^5.10.0",
+		"multer": "^1.4.2",
+		"passport": "^0.4.1",
+		"passport-local": "^1.0.0",
+		"passport-local-mongoose": "^6.0.1"
+	}
+}
