@@ -19,12 +19,9 @@ const postValidator = {
 			.withMessage('Title cannot be empty'),
 	],
 	updatePost: [
-		body('author').trim().optional().withMessage('Author cannot be empty'),
-		body('content')
-			.trim()
-			.optional()
-			.withMessage('Content cannot be empty'),
-		body('title').trim().optional().withMessage('Title cannot be empty'),
+		body('author').trim().optional(),
+		body('content').trim().optional(),
+		body('title').trim().optional(),
 	],
 };
 

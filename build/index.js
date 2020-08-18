@@ -7,8 +7,9 @@ var app_1 = __importDefault(require("./app"));
 require("dotenv/config");
 var validateEnv_1 = require("./utils/validateEnv");
 var post_controller_1 = __importDefault(require("./controllers/post.controller"));
+var auth_controller_1 = __importDefault(require("./controllers/auth.controller"));
 validateEnv_1.validateEnv();
 var port = parseInt(process.env.PORT) || 5000;
-var app = new app_1.default([new post_controller_1.default()], port);
+var app = new app_1.default([new post_controller_1.default(), new auth_controller_1.default()], port);
 app.listen();
 //# sourceMappingURL=index.js.map

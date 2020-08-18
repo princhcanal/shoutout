@@ -180,7 +180,9 @@ var PostController = /** @class */ (function () {
         this.router.delete(this.path + "/:id", this.deletePost);
         this.router.get(this.path, this.getAllPosts);
         this.router.get(this.path + "/:id", this.getPostById);
-        this.router.patch(this.path + "/:id", validation_middleware_1.default(post_validator_1.default.createPost), this.updatePost);
+        this.router.patch(this.path + "/:id", 
+        // validationMiddleware(postValidator.createPost),
+        this.updatePost);
     };
     return PostController;
 }());

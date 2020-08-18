@@ -30,7 +30,7 @@ class PostController implements Controller {
 
 		this.router.patch(
 			`${this.path}/:id`,
-			validationMiddleware(postValidator.createPost),
+			// validationMiddleware(postValidator.createPost),
 			this.updatePost
 		);
 	}

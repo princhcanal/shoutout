@@ -20,12 +20,9 @@ var postValidator = {
             .withMessage('Title cannot be empty'),
     ],
     updatePost: [
-        express_validator_1.body('author').trim().optional().withMessage('Author cannot be empty'),
-        express_validator_1.body('content')
-            .trim()
-            .optional()
-            .withMessage('Content cannot be empty'),
-        express_validator_1.body('title').trim().optional().withMessage('Title cannot be empty'),
+        express_validator_1.body('author').trim().optional(),
+        express_validator_1.body('content').trim().optional(),
+        express_validator_1.body('title').trim().optional(),
     ],
 };
 exports.default = postValidator;
