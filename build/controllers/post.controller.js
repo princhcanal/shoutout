@@ -42,6 +42,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var post_model_1 = __importDefault(require("../models/post.model"));
 var PostNotFoundException_1 = __importDefault(require("../exceptions/PostNotFoundException"));
+var post_validator_1 = __importDefault(require("../validators/post.validator"));
+var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var PostController = /** @class */ (function () {
     function PostController() {
         var _this = this;
@@ -53,22 +55,20 @@ var PostController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        _a.trys.push([0, 2, , 3]);
                         postData = req.body;
                         createdPost = new this.post(postData);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, createdPost.save()];
-                    case 2:
+                    case 1:
                         post = _a.sent();
                         message = 'Post created successfully';
                         res.status(201).json({ message: message, post: post });
-                        return [3 /*break*/, 4];
-                    case 3:
+                        return [3 /*break*/, 3];
+                    case 2:
                         err_1 = _a.sent();
                         next(err_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         }); };
@@ -176,11 +176,11 @@ var PostController = /** @class */ (function () {
         this.initializeRoutes();
     }
     PostController.prototype.initializeRoutes = function () {
-        this.router.post(this.path, this.createPost);
+        this.router.post(this.path, validation_middleware_1.default(post_validator_1.default.createPost), this.createPost);
         this.router.delete(this.path + "/:id", this.deletePost);
         this.router.get(this.path, this.getAllPosts);
         this.router.get(this.path + "/:id", this.getPostById);
-        this.router.patch(this.path + "/:id", this.updatePost);
+        this.router.patch(this.path + "/:id", validation_middleware_1.default(post_validator_1.default.createPost), this.updatePost);
     };
     return PostController;
 }());

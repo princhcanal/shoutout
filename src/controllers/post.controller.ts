@@ -2,8 +2,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import Controller from '../interfaces/controller.interface';
 import Post from '../interfaces/post.interface';
 import postModel from '../models/post.model';
-import postValidator from '../validators/post.validator';
 import PostNotFoundException from '../exceptions/PostNotFoundException';
+import postValidator from '../validators/post.validator';
+import validationMiddleware from '../middleware/validation.middleware';
 
 class PostController implements Controller {
 	public path = '/posts';
@@ -15,11 +16,23 @@ class PostController implements Controller {
 	}
 
 	private initializeRoutes() {
-		this.router.post(this.path, this.createPost);
+		this.router.post(
+			this.path,
+			validationMiddleware(postValidator.createPost),
+			this.createPost
+		);
+
 		this.router.delete(`${this.path}/:id`, this.deletePost);
+
 		this.router.get(this.path, this.getAllPosts);
+
 		this.router.get(`${this.path}/:id`, this.getPostById);
-		this.router.patch(`${this.path}/:id`, this.updatePost);
+
+		this.router.patch(
+			`${this.path}/:id`,
+			validationMiddleware(postValidator.createPost),
+			this.updatePost
+		);
 	}
 
 	private createPost = async (
@@ -27,10 +40,10 @@ class PostController implements Controller {
 		res: Response,
 		next: NextFunction
 	) => {
-		const postData: Post = req.body;
-		const createdPost = new this.post(postData);
-
 		try {
+			const postData: Post = req.body;
+			const createdPost = new this.post(postData);
+
 			const post = await createdPost.save();
 			const message = 'Post created successfully';
 			res.status(201).json({ message, post });
