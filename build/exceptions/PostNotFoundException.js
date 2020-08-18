@@ -12,18 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var HttpException = /** @class */ (function (_super) {
-    __extends(HttpException, _super);
-    function HttpException(status, message, data) {
-        if (data === void 0) { data = {}; }
-        var _this = _super.call(this, message) || this;
-        _this.status = status;
-        _this.message = message;
-        _this.data = data;
-        return _this;
+var HttpException_1 = __importDefault(require("./HttpException"));
+var PostNotFoundException = /** @class */ (function (_super) {
+    __extends(PostNotFoundException, _super);
+    function PostNotFoundException(id) {
+        return _super.call(this, 404, "Post with id " + id + " not found") || this;
     }
-    return HttpException;
-}(Error));
-exports.default = HttpException;
-//# sourceMappingURL=HttpException.js.map
+    return PostNotFoundException;
+}(HttpException_1.default));
+exports.default = PostNotFoundException;
+//# sourceMappingURL=PostNotFoundException.js.map

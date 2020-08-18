@@ -3,6 +3,7 @@ import Controller from '../interfaces/controller.interface';
 import Post from '../interfaces/post.interface';
 import postModel from '../models/post.model';
 import postValidator from '../validators/post.validator';
+import PostNotFoundException from '../exceptions/PostNotFoundException';
 
 class PostController implements Controller {
 	public path = '/posts';
@@ -28,10 +29,14 @@ class PostController implements Controller {
 	) => {
 		const postData: Post = req.body;
 		const createdPost = new this.post(postData);
+
 		try {
-			const savedPost = await createdPost.save();
-			res.json(savedPost);
-		} catch (err) {}
+			const post = await createdPost.save();
+			const message = 'Post created successfully';
+			res.status(201).json({ message, post });
+		} catch (err) {
+			next(err);
+		}
 	};
 
 	private deletePost = async (
@@ -40,11 +45,18 @@ class PostController implements Controller {
 		next: NextFunction
 	) => {
 		const id = req.params.id;
+
 		try {
-			await this.post.findByIdAndDelete(id);
-			res.json(200);
+			const post = await this.post.findByIdAndDelete(id);
+
+			if (!post) {
+				throw new PostNotFoundException(id);
+			}
+
+			const message = 'Post deleted successfully';
+			res.status(200).json({ message });
 		} catch (err) {
-			res.json(404);
+			next(err);
 		}
 	};
 
@@ -55,9 +67,10 @@ class PostController implements Controller {
 	) => {
 		try {
 			const posts = await this.post.find();
-			res.json(posts);
+			const message = 'Posts fetched successfully';
+			res.status(200).json({ message, posts });
 		} catch (err) {
-			console.log(err);
+			next(err);
 		}
 	};
 
@@ -70,9 +83,15 @@ class PostController implements Controller {
 
 		try {
 			const post = await this.post.findById(id);
-			res.json(post);
+
+			if (!post) {
+				throw new PostNotFoundException(id);
+			}
+
+			const message = 'Post fetched successfully';
+			res.status(200).json({ message, post });
 		} catch (err) {
-			console.log(err);
+			next(err);
 		}
 	};
 
@@ -83,13 +102,20 @@ class PostController implements Controller {
 	) => {
 		const id = req.params.id;
 		const postData: Post = req.body;
+
 		try {
 			const post = await this.post.findByIdAndUpdate(id, postData, {
 				new: true,
 			});
-			res.json(post);
+
+			if (!post) {
+				throw new PostNotFoundException(id);
+			}
+
+			const message = 'Post updated successfully';
+			res.status(200).json({ message, post });
 		} catch (err) {
-			console.log(err);
+			next(err);
 		}
 	};
 }

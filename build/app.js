@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
+var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var App = /** @class */ (function () {
     function App(controllers, port) {
         this.app = express_1.default();
@@ -49,6 +50,7 @@ var App = /** @class */ (function () {
         this.connectToDatabase();
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
+        this.initializeErrorHandling();
     }
     App.prototype.initializeMiddlewares = function () {
         this.app.use(body_parser_1.default.json());
@@ -58,6 +60,9 @@ var App = /** @class */ (function () {
             res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
             next();
         });
+    };
+    App.prototype.initializeErrorHandling = function () {
+        this.app.use(error_middleware_1.default);
     };
     App.prototype.initializeControllers = function (controllers) {
         var _this = this;
