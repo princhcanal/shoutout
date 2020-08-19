@@ -57,6 +57,7 @@ var user_model_1 = __importDefault(require("../models/user.model"));
 var user_validator_1 = __importDefault(require("../validators/user.validator"));
 var EmailAlreadyExistsException_1 = __importDefault(require("../exceptions/EmailAlreadyExistsException"));
 var WrongCredentialsException_1 = __importDefault(require("../exceptions/WrongCredentialsException"));
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var AuthController = /** @class */ (function () {
     function AuthController() {
         var _this = this;
@@ -64,7 +65,7 @@ var AuthController = /** @class */ (function () {
         this.router = express_1.default.Router();
         this.user = user_model_1.default;
         this.register = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var userData, user, hashedPassword, user_1, err_1;
+            var userData, user, hashedPassword, user_1, tokenData, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -81,7 +82,10 @@ var AuthController = /** @class */ (function () {
                         return [4 /*yield*/, this.user.create(__assign(__assign({}, userData), { password: hashedPassword }))];
                     case 4:
                         user_1 = _a.sent();
-                        res.status(201).json({ user: user_1 });
+                        tokenData = this.createToken(user_1);
+                        message = 'User registered successfully';
+                        res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
+                        res.status(201).json({ message: message, user: user_1 });
                         _a.label = 5;
                     case 5: return [3 /*break*/, 7];
                     case 6:
@@ -93,7 +97,7 @@ var AuthController = /** @class */ (function () {
             });
         }); };
         this.login = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var loginData, user, isPasswordMatch, err_2;
+            var loginData, user, isPasswordMatch, tokenData, message, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -111,7 +115,10 @@ var AuthController = /** @class */ (function () {
                         if (!isPasswordMatch) {
                             throw new WrongCredentialsException_1.default();
                         }
-                        res.status(200).json({ user: user });
+                        tokenData = this.createToken(user);
+                        message = 'User logged in successfully';
+                        res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
+                        res.status(200).json({ message: message, user: user });
                         return [3 /*break*/, 4];
                     case 3:
                         err_2 = _a.sent();
@@ -121,11 +128,29 @@ var AuthController = /** @class */ (function () {
                 }
             });
         }); };
+        this.logout = function (req, res, next) {
+            res.setHeader('Set-Cookie', ['Authorization=;Max-age=0']);
+            var message = 'User logged out successfully';
+            res.status(200).json({ message: message });
+        };
         this.initializeRoutes();
     }
     AuthController.prototype.initializeRoutes = function () {
         this.router.post(this.path + "/register", validation_middleware_1.default(user_validator_1.default.register), this.register);
         this.router.post(this.path + "/login", validation_middleware_1.default(user_validator_1.default.login), this.login);
+        this.router.post(this.path + "/logout", this.logout);
+    };
+    AuthController.prototype.createToken = function (user) {
+        var expiresIn = 60 * 60;
+        var secret = process.env.JWT_SECRET;
+        var tokenData = { _id: user._id };
+        return {
+            expiresIn: expiresIn,
+            token: jsonwebtoken_1.default.sign(tokenData, secret, { expiresIn: expiresIn }),
+        };
+    };
+    AuthController.prototype.createCookie = function (token) {
+        return "Authorization=" + token.token + "; HttpOnly; Max-Age=" + token.expiresIn;
     };
     return AuthController;
 }());

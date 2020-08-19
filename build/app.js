@@ -43,6 +43,7 @@ var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
+var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var App = /** @class */ (function () {
     function App(controllers, port) {
         this.app = express_1.default();
@@ -54,6 +55,7 @@ var App = /** @class */ (function () {
     }
     App.prototype.initializeMiddlewares = function () {
         this.app.use(body_parser_1.default.json());
+        this.app.use(cookie_parser_1.default());
         this.app.use(function (req, res, next) {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');

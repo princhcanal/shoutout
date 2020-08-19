@@ -5,6 +5,7 @@ import postModel from '../models/post.model';
 import PostNotFoundException from '../exceptions/PostNotFoundException';
 import postValidator from '../validators/post.validator';
 import validationMiddleware from '../middleware/validation.middleware';
+import authMiddleware from '../middleware/auth.middleware';
 
 class PostController implements Controller {
 	public path = '/posts';
@@ -16,23 +17,22 @@ class PostController implements Controller {
 	}
 
 	private initializeRoutes() {
-		this.router.post(
-			this.path,
-			validationMiddleware(postValidator.createPost),
-			this.createPost
-		);
-
-		this.router.delete(`${this.path}/:id`, this.deletePost);
-
 		this.router.get(this.path, this.getAllPosts);
-
 		this.router.get(`${this.path}/:id`, this.getPostById);
 
-		this.router.patch(
-			`${this.path}/:id`,
-			// validationMiddleware(postValidator.createPost),
-			this.updatePost
-		);
+		this.router
+			.all(`${this.path}/*`, authMiddleware)
+			.post(
+				this.path,
+				validationMiddleware(postValidator.createPost),
+				this.createPost
+			)
+			.delete(`${this.path}/:id`, this.deletePost)
+			.patch(
+				`${this.path}/:id`,
+				validationMiddleware(postValidator.createPost),
+				this.updatePost
+			);
 	}
 
 	private createPost = async (
@@ -42,7 +42,10 @@ class PostController implements Controller {
 	) => {
 		try {
 			const postData: Post = req.body;
-			const createdPost = new this.post(postData);
+			const createdPost = new this.post({
+				...postData,
+				authorId: req.user._id,
+			});
 
 			const post = await createdPost.save();
 			const message = 'Post created successfully';

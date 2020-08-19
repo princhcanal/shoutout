@@ -4,6 +4,15 @@ import mongoose from 'mongoose';
 import { validateEnv } from './utils/validateEnv';
 import PostController from './controllers/post.controller';
 import AuthController from './controllers/auth.controller';
+import User from './interfaces/user.interface';
+
+declare global {
+	namespace Express {
+		interface Request {
+			user: User;
+		}
+	}
+}
 
 validateEnv();
 

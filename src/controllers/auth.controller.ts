@@ -8,6 +8,9 @@ import Login from '../interfaces/login.interface';
 import userValidator from '../validators/user.validator';
 import EmailAlreadyExistsException from '../exceptions/EmailAlreadyExistsException';
 import WrongCredentialsException from '../exceptions/WrongCredentialsException';
+import Token from '../interfaces/token.interface';
+import TokenData from '../interfaces/tokenData.interface';
+import jwt from 'jsonwebtoken';
 
 class AuthController implements Controller {
 	public path = '/auth';
@@ -29,6 +32,7 @@ class AuthController implements Controller {
 			validationMiddleware(userValidator.login),
 			this.login
 		);
+		this.router.post(`${this.path}/logout`, this.logout);
 	}
 
 	private register = async (
@@ -48,7 +52,10 @@ class AuthController implements Controller {
 					...userData,
 					password: hashedPassword,
 				});
-				res.status(201).json({ user });
+				const tokenData = this.createToken(user);
+				const message = 'User registered successfully';
+				res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
+				res.status(201).json({ message, user });
 			}
 		} catch (err) {
 			next(err);
@@ -73,11 +80,35 @@ class AuthController implements Controller {
 				throw new WrongCredentialsException();
 			}
 
-			res.status(200).json({ user });
+			const tokenData = this.createToken(user);
+			const message = 'User logged in successfully';
+			res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
+			res.status(200).json({ message, user });
 		} catch (err) {
 			next(err);
 		}
 	};
+
+	private logout = (req: Request, res: Response, next: NextFunction) => {
+		res.setHeader('Set-Cookie', ['Authorization=;Max-age=0']);
+		const message = 'User logged out successfully';
+		res.status(200).json({ message });
+	};
+
+	private createToken(user: User): Token {
+		const expiresIn = 60 * 60;
+		const secret = process.env.JWT_SECRET as string;
+		const tokenData: TokenData = { _id: user._id };
+
+		return {
+			expiresIn,
+			token: jwt.sign(tokenData, secret, { expiresIn }),
+		};
+	}
+
+	private createCookie(token: Token) {
+		return `Authorization=${token.token}; HttpOnly; Max-Age=${token.expiresIn}`;
+	}
 }
 
 export default AuthController;

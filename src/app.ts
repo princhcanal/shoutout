@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import Controller from './interfaces/controller.interface';
 import errorMiddleware from './middleware/error.middleware';
+import cookieParser from 'cookie-parser';
 
 class App {
 	public app: express.Application;
@@ -20,6 +21,7 @@ class App {
 
 	private initializeMiddlewares() {
 		this.app.use(bodyParser.json());
+		this.app.use(cookieParser());
 		this.app.use((req: Request, res: Response, next: NextFunction) => {
 			res.setHeader('Access-Control-Allow-Origin', '*');
 			res.setHeader(
