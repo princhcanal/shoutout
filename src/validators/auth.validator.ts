@@ -2,9 +2,14 @@ import { body, check } from 'express-validator';
 import userModel from '../models/user.model';
 import EmailAlreadyExistsException from '../exceptions/EmailAlreadyExistsException';
 
-const userValidator = {
+const authValidator = {
 	register: [
-		body('name').trim().not().isEmpty().withMessage('Name cannot be empty'),
+		body('name').trim().optional(),
+		body('username')
+			.trim()
+			.not()
+			.isEmpty()
+			.withMessage('Username cannot be empty'),
 		check('email')
 			.isEmail()
 			.withMessage('Please enter a valid email')
@@ -28,6 +33,11 @@ const userValidator = {
 			.isLength({ min: 4 })
 			.isAlphanumeric(),
 	],
+	updateUser: [
+		body('name').trim().optional(),
+		body('email').trim().optional(),
+		body('username').trim().optional(),
+	],
 };
 
-export default userValidator;
+export default authValidator;

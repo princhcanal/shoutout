@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import TokenData from '../interfaces/tokenData.interface';
-import RequestWithUser from '../interfaces/requestWithUser.interface';
 import userModel from '../models/user.model';
 import AuthTokenMissingException from '../exceptions/AuthTokenMissingException';
 import WrongAuthTokenException from '../exceptions/WrongAuthTokenException';
@@ -29,6 +28,7 @@ const authMiddleware = async (
 			}
 
 			req.user = user;
+			next();
 		} catch (err) {
 			next(err);
 		}

@@ -2,8 +2,10 @@ import mongoose from 'mongoose';
 import Post from '../interfaces/post.interface';
 
 const postSchema = new mongoose.Schema({
-	authorId: String,
-	author: String,
+	author: {
+		ref: 'User',
+		type: mongoose.Schema.Types.ObjectId,
+	},
 	content: String,
 	title: String,
 });

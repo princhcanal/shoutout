@@ -44,7 +44,7 @@ class PostController implements Controller {
 			const postData: Post = req.body;
 			const createdPost = new this.post({
 				...postData,
-				authorId: req.user._id,
+				author: req.user._id,
 			});
 
 			const post = await createdPost.save();
@@ -60,9 +60,9 @@ class PostController implements Controller {
 		res: Response,
 		next: NextFunction
 	) => {
-		const id = req.params.id;
-
 		try {
+			const id = req.params.id;
+
 			const post = await this.post.findByIdAndDelete(id);
 
 			if (!post) {
@@ -95,9 +95,9 @@ class PostController implements Controller {
 		res: Response,
 		next: NextFunction
 	) => {
-		const id = req.params.id;
-
 		try {
+			const id = req.params.id;
+
 			const post = await this.post.findById(id);
 
 			if (!post) {
@@ -116,10 +116,10 @@ class PostController implements Controller {
 		res: Response,
 		next: NextFunction
 	) => {
-		const id = req.params.id;
-		const postData: Post = req.body;
-
 		try {
+			const id = req.params.id;
+			const postData: Post = req.body;
+
 			const post = await this.post.findByIdAndUpdate(id, postData, {
 				new: true,
 			});

@@ -5,8 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = __importDefault(require("mongoose"));
 var postSchema = new mongoose_1.default.Schema({
-    authorId: String,
-    author: String,
+    author: {
+        ref: 'User',
+        type: mongoose_1.default.Schema.Types.ObjectId,
+    },
     content: String,
     title: String,
 });

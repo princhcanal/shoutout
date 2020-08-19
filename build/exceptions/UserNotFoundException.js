@@ -17,12 +17,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var HttpException_1 = __importDefault(require("./HttpException"));
-var WrongCredentialsException = /** @class */ (function (_super) {
-    __extends(WrongCredentialsException, _super);
-    function WrongCredentialsException() {
-        return _super.call(this, 401, "Wrong email or password") || this;
+var UserNotFoundException = /** @class */ (function (_super) {
+    __extends(UserNotFoundException, _super);
+    function UserNotFoundException(username) {
+        return _super.call(this, 404, "User " + username + " not found") || this;
     }
-    return WrongCredentialsException;
+    return UserNotFoundException;
 }(HttpException_1.default));
-exports.default = WrongCredentialsException;
-//# sourceMappingURL=WrongCredentialsException.js.map
+exports.default = UserNotFoundException;
+//# sourceMappingURL=UserNotFoundException.js.map

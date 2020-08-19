@@ -42,8 +42,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
-var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
+var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var App = /** @class */ (function () {
     function App(controllers, port) {
         this.app = express_1.default();

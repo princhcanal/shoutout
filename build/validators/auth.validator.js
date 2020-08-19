@@ -39,43 +39,56 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var express_validator_1 = require("express-validator");
 var user_model_1 = __importDefault(require("../models/user.model"));
-var AuthTokenMissingException_1 = __importDefault(require("../exceptions/AuthTokenMissingException"));
-var WrongAuthTokenException_1 = __importDefault(require("../exceptions/WrongAuthTokenException"));
-var authMiddleware = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var cookies, secret, verificationResponse, id, user, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                cookies = req.cookies;
-                if (!(cookies && cookies.Authorization)) return [3 /*break*/, 5];
-                secret = process.env.JWT_SECRET;
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                verificationResponse = jsonwebtoken_1.default.verify(cookies.Authorization, secret);
-                id = verificationResponse._id;
-                return [4 /*yield*/, user_model_1.default.findById(id)];
-            case 2:
-                user = _a.sent();
-                if (!user) {
-                    throw new WrongAuthTokenException_1.default();
-                }
-                req.user = user;
-                next();
-                return [3 /*break*/, 4];
-            case 3:
-                err_1 = _a.sent();
-                next(err_1);
-                return [3 /*break*/, 4];
-            case 4: return [3 /*break*/, 6];
-            case 5:
-                next(new AuthTokenMissingException_1.default());
-                _a.label = 6;
-            case 6: return [2 /*return*/];
-        }
-    });
-}); };
-exports.default = authMiddleware;
-//# sourceMappingURL=auth.middleware.js.map
+var EmailAlreadyExistsException_1 = __importDefault(require("../exceptions/EmailAlreadyExistsException"));
+var authValidator = {
+    register: [
+        express_validator_1.body('name').trim().optional(),
+        express_validator_1.body('username')
+            .trim()
+            .not()
+            .isEmpty()
+            .withMessage('Username cannot be empty'),
+        express_validator_1.check('email')
+            .isEmail()
+            .withMessage('Please enter a valid email')
+            .custom(function (value, _a) {
+            var req = _a.req;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var user;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, user_model_1.default.findOne({ email: value })];
+                        case 1:
+                            user = _b.sent();
+                            if (user) {
+                                console.log('validator', user);
+                                throw new EmailAlreadyExistsException_1.default(value);
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        })
+            .normalizeEmail(),
+        express_validator_1.body('password', 'Password must be at least 4 characters')
+            .trim()
+            .isLength({ min: 4 })
+            .isAlphanumeric(),
+    ],
+    login: [
+        express_validator_1.check('email').isEmail().withMessage('Please enter a valid email'),
+        express_validator_1.body('password', 'Invalid password')
+            .trim()
+            .isLength({ min: 4 })
+            .isAlphanumeric(),
+    ],
+    updateUser: [
+        express_validator_1.body('name').trim().optional(),
+        express_validator_1.body('email').trim().optional(),
+        express_validator_1.body('username').trim().optional(),
+    ],
+};
+exports.default = authValidator;
+//# sourceMappingURL=auth.validator.js.map

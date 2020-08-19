@@ -2,7 +2,7 @@ import HttpException from './HttpException';
 
 class WrongAuthTokenException extends HttpException {
 	constructor() {
-		super(404, `Wrong auth token`);
+		super(401, `Wrong auth token`);
 	}
 }
 
