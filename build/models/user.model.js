@@ -9,7 +9,13 @@ var userSchema = new mongoose_1.default.Schema({
     name: String,
     email: String,
     password: String,
-});
+    followers: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+    ],
+}, { timestamps: true });
 var userModel = mongoose_1.default.model('User', userSchema);
 exports.default = userModel;
 //# sourceMappingURL=user.model.js.map

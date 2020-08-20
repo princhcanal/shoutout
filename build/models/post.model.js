@@ -11,7 +11,7 @@ var postSchema = new mongoose_1.default.Schema({
     },
     content: String,
     title: String,
-});
+}, { timestamps: true });
 var postModel = mongoose_1.default.model('Post', postSchema);
 exports.default = postModel;
 //# sourceMappingURL=post.model.js.map

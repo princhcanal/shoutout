@@ -81,8 +81,42 @@ var UserController = /** @class */ (function () {
                 }
             });
         }); };
+        this.followUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, numFollowers, message, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                    case 1:
+                        user = _a.sent();
+                        if (!user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        if (!user.followers.includes(req.user._id)) {
+                            user.followers.push(req.user._id);
+                        }
+                        return [4 /*yield*/, user.save()];
+                    case 2:
+                        user = _a.sent();
+                        return [4 /*yield*/, user.populate('followers', 'username').execPopulate()];
+                    case 3:
+                        _a.sent();
+                        numFollowers = user.followers.length;
+                        message = "User " + username + " followed successfully";
+                        res.status(200).json({ message: message, numFollowers: numFollowers });
+                        return [3 /*break*/, 5];
+                    case 4:
+                        err_2 = _a.sent();
+                        next(err_2);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        }); };
         this.getAllPosts = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var posts, message, err_2;
+            var posts, message, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -94,15 +128,15 @@ var UserController = /** @class */ (function () {
                         res.json({ message: message, posts: posts });
                         return [3 /*break*/, 3];
                     case 2:
-                        err_2 = _a.sent();
-                        next(err_2);
+                        err_3 = _a.sent();
+                        next(err_3);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
         }); };
         this.getPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var postId, post, message, err_3;
+            var postId, post, message, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -115,14 +149,14 @@ var UserController = /** @class */ (function () {
                         res.json({ message: message, post: post });
                         return [3 /*break*/, 3];
                     case 2:
-                        err_3 = _a.sent();
+                        err_4 = _a.sent();
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
         }); };
         this.updateUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var userData, user, message, err_4;
+            var userData, user, message, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -135,8 +169,8 @@ var UserController = /** @class */ (function () {
                         res.status(200).json({ message: message, user: user });
                         return [3 /*break*/, 3];
                     case 2:
-                        err_4 = _a.sent();
-                        next(err_4);
+                        err_5 = _a.sent();
+                        next(err_5);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -150,7 +184,8 @@ var UserController = /** @class */ (function () {
             .all(this.path + "/*", auth_middleware_1.default)
             .get(this.path + "/posts", this.getAllPosts)
             .get(this.path + "/posts/:id", this.getPost)
-            .patch("" + this.path, this.updateUser);
+            .patch("" + this.path, this.updateUser)
+            .post(this.path + "/:username", this.followUser);
     };
     return UserController;
 }());
