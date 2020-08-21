@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, check } from 'express-validator';
 
 const postValidator = {
 	createPost: [

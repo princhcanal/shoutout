@@ -9,6 +9,7 @@ var postSchema = new mongoose_1.default.Schema({
     content: { type: String, required: true },
     title: { type: String, required: true },
     price: { type: Number, required: true },
+    image: { type: String, required: true },
 });
 var postModel = mongoose_1.default.model('Post', postSchema);
 exports.default = postModel;

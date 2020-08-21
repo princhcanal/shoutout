@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+
 import Controller from '../interfaces/controller.interface';
 import Post from '../interfaces/post.interface';
 import postModel from '../models/post.model';
@@ -6,6 +7,7 @@ import PostNotFoundException from '../exceptions/PostNotFoundException';
 import postValidator from '../validators/post.validator';
 import validationMiddleware from '../middleware/validation.middleware';
 import authMiddleware from '../middleware/auth.middleware';
+import multerConfig from '../utils/multerConfig';
 
 class PostController implements Controller {
 	public path = '/posts';
@@ -44,6 +46,7 @@ class PostController implements Controller {
 			const postData: Post = req.body;
 			const createdPost = new this.post({
 				...postData,
+				image: req.file.path,
 				author: req.user._id,
 			});
 

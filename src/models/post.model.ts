@@ -6,6 +6,7 @@ const postSchema = new mongoose.Schema({
 	content: { type: String, required: true },
 	title: { type: String, required: true },
 	price: { type: Number, required: true },
+	image: { type: String, required: true },
 });
 
 const postModel = mongoose.model<Post & mongoose.Document>('Post', postSchema);

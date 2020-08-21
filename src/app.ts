@@ -1,9 +1,11 @@
 import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
+
 import Controller from './interfaces/controller.interface';
 import errorMiddleware from './middleware/error.middleware';
-import cookieParser from 'cookie-parser';
+import multerConfig from './utils/multerConfig';
 
 class App {
 	public app: express.Application;
@@ -20,8 +22,11 @@ class App {
 	}
 
 	private initializeMiddlewares() {
+		this.app.use(bodyParser.urlencoded({ extended: true }));
 		this.app.use(bodyParser.json());
+		this.app.use(multerConfig.single('image'));
 		this.app.use(cookieParser());
+		this.app.use('/images', express.static('images'));
 		this.app.use((req: Request, res: Response, next: NextFunction) => {
 			res.setHeader('Access-Control-Allow-Origin', '*');
 			res.setHeader(
