@@ -10,6 +10,7 @@ exports.validateEnv = function () {
         MONGO_URI: envalid_1.str(),
         PORT: envalid_1.port(),
         JWT_SECRET: envalid_1.str(),
+        BASE_URL: envalid_1.str(),
     });
 };
 //# sourceMappingURL=validateEnv.js.map

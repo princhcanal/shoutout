@@ -69,11 +69,7 @@ var PostController = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         postData = req.body;
-<<<<<<< HEAD
                         createdPost = new this.post(__assign(__assign({}, postData), { image: req.file.path, author: req.user._id }));
-=======
-                        createdPost = new this.post(__assign(__assign({}, postData), { author: req.user._id }));
->>>>>>> bf1f815119131e99e1c1df2af1b6ca14ef5e4d9a
                         return [4 /*yield*/, createdPost.save()];
                     case 1:
                         post = _a.sent();

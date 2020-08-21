@@ -2,7 +2,7 @@ import { body, check } from 'express-validator';
 
 const postValidator = {
 	createPost: [
-		body('content')
+		body('description')
 			.trim()
 			.not()
 			.isEmpty()
@@ -21,7 +21,7 @@ const postValidator = {
 			.withMessage('Price must be numeric'),
 	],
 	updatePost: [
-		body('author').trim().optional(),
+		body('description').trim().optional(),
 		body('content').trim().optional(),
 		body('title').trim().optional(),
 		body('price')

@@ -7,7 +7,6 @@ import PostNotFoundException from '../exceptions/PostNotFoundException';
 import postValidator from '../validators/post.validator';
 import validationMiddleware from '../middleware/validation.middleware';
 import authMiddleware from '../middleware/auth.middleware';
-import multerConfig from '../utils/multerConfig';
 
 class PostController implements Controller {
 	public path = '/posts';

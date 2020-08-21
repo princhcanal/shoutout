@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_validator_1 = require("express-validator");
 var postValidator = {
     createPost: [
-        express_validator_1.body('content')
+        express_validator_1.body('description')
             .trim()
             .not()
             .isEmpty()
@@ -22,7 +22,7 @@ var postValidator = {
             .withMessage('Price must be numeric'),
     ],
     updatePost: [
-        express_validator_1.body('author').trim().optional(),
+        express_validator_1.body('description').trim().optional(),
         express_validator_1.body('content').trim().optional(),
         express_validator_1.body('title').trim().optional(),
         express_validator_1.body('price')

@@ -43,13 +43,8 @@ var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
-<<<<<<< HEAD
 var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var multerConfig_1 = __importDefault(require("./utils/multerConfig"));
-=======
-var cookie_parser_1 = __importDefault(require("cookie-parser"));
-var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
->>>>>>> bf1f815119131e99e1c1df2af1b6ca14ef5e4d9a
 var App = /** @class */ (function () {
     function App(controllers, port) {
         this.app = express_1.default();

@@ -1,6 +1,6 @@
 interface Post {
 	author: string;
-	content: string;
+	description: string;
 	title: string;
 	price: number;
 	image: string;

@@ -45,7 +45,6 @@ var post_model_1 = __importDefault(require("../models/post.model"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var UserNotFoundException_1 = __importDefault(require("../exceptions/UserNotFoundException"));
 // TODO: implement subscription service for each user for discounts on products
-// TODO: implement follow feature
 var UserController = /** @class */ (function () {
     function UserController() {
         var _this = this;
@@ -82,11 +81,108 @@ var UserController = /** @class */ (function () {
             });
         }); };
         this.followUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var username, user, numFollowers, message, err_2;
+            var username, followingUser, user, message, numFollowers, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 4, , 5]);
+                        _a.trys.push([0, 7, , 8]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                    case 1:
+                        followingUser = _a.sent();
+                        return [4 /*yield*/, this.user.findById(req.user._id)];
+                    case 2:
+                        user = _a.sent();
+                        message = "User " + username + " followed successfully";
+                        if (!followingUser || !user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        if (!followingUser.followers.includes(user._id)) {
+                            followingUser.followers.push(user._id);
+                        }
+                        else {
+                            message = "User " + username + " already followed";
+                            return [2 /*return*/, res.status(200).json({ message: message })];
+                        }
+                        if (!!user.following.includes(followingUser._id)) return [3 /*break*/, 4];
+                        user.following.push(followingUser._id);
+                        return [4 /*yield*/, user.save()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [4 /*yield*/, followingUser.save()];
+                    case 5:
+                        followingUser = _a.sent();
+                        return [4 /*yield*/, followingUser
+                                .populate('followers', 'username')
+                                .execPopulate()];
+                    case 6:
+                        _a.sent();
+                        numFollowers = followingUser.followers.length;
+                        res.status(200).json({ message: message, numFollowers: numFollowers });
+                        return [3 /*break*/, 8];
+                    case 7:
+                        err_2 = _a.sent();
+                        next(err_2);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.subscribeUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, subscribingUser, user, message, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                    case 1:
+                        subscribingUser = _a.sent();
+                        return [4 /*yield*/, this.user.findById(req.user._id)];
+                    case 2:
+                        user = _a.sent();
+                        message = "User " + username + " subscribed successfully";
+                        if (!subscribingUser || !user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        if (!subscribingUser.subscribers.includes(user._id)) {
+                            subscribingUser.subscribers.push(user._id);
+                        }
+                        else {
+                            message = "User " + username + " already subscribed";
+                            return [2 /*return*/, res.status(200).json({ message: message })];
+                        }
+                        if (!!user.subscriptions.includes(subscribingUser._id)) return [3 /*break*/, 4];
+                        user.subscriptions.push(subscribingUser._id);
+                        return [4 /*yield*/, user.save()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [4 /*yield*/, subscribingUser.save()];
+                    case 5:
+                        subscribingUser = _a.sent();
+                        return [4 /*yield*/, subscribingUser
+                                .populate('subscribers', 'username')
+                                .execPopulate()];
+                    case 6:
+                        _a.sent();
+                        res.status(200).json({ message: message });
+                        return [3 /*break*/, 8];
+                    case 7:
+                        err_3 = _a.sent();
+                        next(err_3);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getUserPosts = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, posts, message, err_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
                         username = req.params.username;
                         return [4 /*yield*/, this.user.findOne({ username: username })];
                     case 1:
@@ -94,64 +190,17 @@ var UserController = /** @class */ (function () {
                         if (!user) {
                             throw new UserNotFoundException_1.default(username);
                         }
-                        if (!user.followers.includes(req.user._id)) {
-                            user.followers.push(req.user._id);
-                        }
-                        return [4 /*yield*/, user.save()];
+                        return [4 /*yield*/, this.post.find({ author: user._id })];
                     case 2:
-                        user = _a.sent();
-                        return [4 /*yield*/, user.populate('followers', 'username').execPopulate()];
-                    case 3:
-                        _a.sent();
-                        numFollowers = user.followers.length;
-                        message = "User " + username + " followed successfully";
-                        res.status(200).json({ message: message, numFollowers: numFollowers });
-                        return [3 /*break*/, 5];
-                    case 4:
-                        err_2 = _a.sent();
-                        next(err_2);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
-                }
-            });
-        }); };
-        this.getAllPosts = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var posts, message, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.post.find({ author: req.user._id })];
-                    case 1:
                         posts = _a.sent();
                         message = 'Posts fetched successfully';
-                        res.json({ message: message, posts: posts });
-                        return [3 /*break*/, 3];
-                    case 2:
-                        err_3 = _a.sent();
-                        next(err_3);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); };
-        this.getPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var postId, post, message, err_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        postId = req.params.id;
-                        return [4 /*yield*/, this.post.findById(postId)];
-                    case 1:
-                        post = _a.sent();
-                        message = 'Post fetched successfully';
-                        res.json({ message: message, post: post });
-                        return [3 /*break*/, 3];
-                    case 2:
+                        res.status(200).json({ message: message, posts: posts });
+                        return [3 /*break*/, 4];
+                    case 3:
                         err_4 = _a.sent();
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        next(err_4);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
@@ -176,16 +225,58 @@ var UserController = /** @class */ (function () {
                 }
             });
         }); };
+        this.getFollowing = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, followingUsers, following, message, err_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                    case 1:
+                        user = _a.sent();
+                        if (!user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        return [4 /*yield*/, this.user
+                                .find({
+                                followers: user._id,
+                            })
+                                .select('username')];
+                    case 2:
+                        followingUsers = _a.sent();
+                        following = followingUsers.map(function (f) {
+                            return {
+                                _id: f._id,
+                                username: f.username,
+                                url: process.env.BASE_URL + "/user/" + f.username,
+                            };
+                        });
+                        message = 'Following fetched successfully';
+                        res.status(200).json({
+                            message: message,
+                            following: following,
+                        });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_6 = _a.sent();
+                        next(err_6);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
         this.initializeRoutes();
     }
     UserController.prototype.initializeRoutes = function () {
         this.router.get(this.path + "/:username", this.getUserProfile);
+        this.router.get(this.path + "/:username/following", this.getFollowing);
+        this.router.get(this.path + "/:username/posts", this.getUserPosts);
         this.router
-            .all(this.path + "/*", auth_middleware_1.default)
-            .get(this.path + "/posts", this.getAllPosts)
-            .get(this.path + "/posts/:id", this.getPost)
+            .all(this.path + "*", auth_middleware_1.default)
             .patch("" + this.path, this.updateUser)
-            .post(this.path + "/:username", this.followUser);
+            .post(this.path + "/:username/follow", this.followUser)
+            .post(this.path + "/:username/subscribe", this.subscribeUser);
     };
     return UserController;
 }());

@@ -8,5 +8,6 @@ export const validateEnv = () => {
 		MONGO_URI: str(),
 		PORT: port(),
 		JWT_SECRET: str(),
+		BASE_URL: str(),
 	});
 };
