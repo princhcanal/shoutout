@@ -43,11 +43,22 @@ class PostController implements Controller {
 	) => {
 		try {
 			const postData: Post = req.body;
-			const createdPost = new this.post({
+			let createdPost = new this.post({
 				...postData,
 				image: req.file.path,
 				author: req.user._id,
+				url: `${process.env.BASE_URL}${this.path}`,
 			});
+			const postWithUrl = await this.post.findByIdAndUpdate(
+				createdPost._id,
+				{
+					url: `${process.env.BASE_URL}${this.path}/${createdPost._id}`,
+				}
+			);
+
+			if (postWithUrl) {
+				createdPost = postWithUrl;
+			}
 
 			const post = await createdPost.save();
 			const message = 'Post created successfully';

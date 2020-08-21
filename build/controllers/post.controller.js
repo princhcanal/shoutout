@@ -63,24 +63,32 @@ var PostController = /** @class */ (function () {
         this.router = express_1.default.Router();
         this.post = post_model_1.default;
         this.createPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var postData, createdPost, post, message, err_1;
+            var postData, createdPost, postWithUrl, post, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         postData = req.body;
-                        createdPost = new this.post(__assign(__assign({}, postData), { image: req.file.path, author: req.user._id }));
-                        return [4 /*yield*/, createdPost.save()];
+                        createdPost = new this.post(__assign(__assign({}, postData), { image: req.file.path, author: req.user._id, url: "" + process.env.BASE_URL + this.path }));
+                        return [4 /*yield*/, this.post.findByIdAndUpdate(createdPost._id, {
+                                url: "" + process.env.BASE_URL + this.path + "/" + createdPost._id,
+                            })];
                     case 1:
+                        postWithUrl = _a.sent();
+                        if (postWithUrl) {
+                            createdPost = postWithUrl;
+                        }
+                        return [4 /*yield*/, createdPost.save()];
+                    case 2:
                         post = _a.sent();
                         message = 'Post created successfully';
                         res.status(201).json({ message: message, post: post });
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 4];
+                    case 3:
                         err_1 = _a.sent();
                         next(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };

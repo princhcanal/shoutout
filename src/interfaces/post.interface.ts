@@ -4,6 +4,7 @@ interface Post {
 	title: string;
 	price: number;
 	image: string;
+	url: string;
 }
 
 export default Post;

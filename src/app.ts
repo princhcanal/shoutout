@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import Controller from './interfaces/controller.interface';
 import errorMiddleware from './middleware/error.middleware';
+import notFoundMiddleware from './middleware/notFound.middleware';
 import multerConfig from './utils/multerConfig';
 
 class App {
@@ -42,6 +43,7 @@ class App {
 	}
 
 	private initializeErrorHandling() {
+		this.app.use(notFoundMiddleware);
 		this.app.use(errorMiddleware);
 	}
 

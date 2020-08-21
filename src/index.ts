@@ -4,6 +4,7 @@ import { validateEnv } from './utils/validateEnv';
 import PostController from './controllers/post.controller';
 import AuthController from './controllers/auth.controller';
 import UserController from './controllers/user.controller';
+import FeedController from './controllers/feed.controller';
 import User from './interfaces/user.interface';
 
 declare global {
@@ -19,7 +20,12 @@ validateEnv();
 const port = parseInt(process.env.PORT as string) || 5000;
 
 const app = new App(
-	[new PostController(), new AuthController(), new UserController()],
+	[
+		new PostController(),
+		new AuthController(),
+		new UserController(),
+		new FeedController(),
+	],
 	port
 );
 

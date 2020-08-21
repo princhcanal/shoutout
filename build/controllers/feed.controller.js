@@ -40,79 +40,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var body_parser_1 = __importDefault(require("body-parser"));
-var cookie_parser_1 = __importDefault(require("cookie-parser"));
-var mongoose_1 = __importDefault(require("mongoose"));
-var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
-var notFound_middleware_1 = __importDefault(require("./middleware/notFound.middleware"));
-var multerConfig_1 = __importDefault(require("./utils/multerConfig"));
-var App = /** @class */ (function () {
-    function App(controllers, port) {
-        this.app = express_1.default();
-        this.port = port;
-        this.connectToDatabase();
-        this.initializeMiddlewares();
-        this.initializeControllers(controllers);
-        this.initializeErrorHandling();
-    }
-    App.prototype.initializeMiddlewares = function () {
-        this.app.use(body_parser_1.default.urlencoded({ extended: true }));
-        this.app.use(body_parser_1.default.json());
-        this.app.use(multerConfig_1.default.single('image'));
-        this.app.use(cookie_parser_1.default());
-        this.app.use('/images', express_1.default.static('images'));
-        this.app.use(function (req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
-            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-            next();
-        });
-    };
-    App.prototype.initializeErrorHandling = function () {
-        this.app.use(notFound_middleware_1.default);
-        this.app.use(error_middleware_1.default);
-    };
-    App.prototype.initializeControllers = function (controllers) {
+var post_model_1 = __importDefault(require("../models/post.model"));
+var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
+var FeedController = /** @class */ (function () {
+    function FeedController() {
         var _this = this;
-        controllers.forEach(function (controller) {
-            _this.app.use('/', controller.router);
-        });
-    };
-    App.prototype.connectToDatabase = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var MONGO_URI, err_1;
+        this.path = '/feed';
+        this.router = express_1.default.Router();
+        this.post = post_model_1.default;
+        this.getFeed = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var count, posts, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        MONGO_URI = process.env.MONGO_URI;
-                        _a.label = 1;
+                        _a.trys.push([0, 2, , 3]);
+                        count = 1;
+                        if (req.query.count) {
+                            count = parseInt(req.query.count.toString());
+                        }
+                        return [4 /*yield*/, this.post
+                                .find({
+                                author: { $in: req.user.following },
+                            })
+                                .sort({ createdAt: -1 })
+                                .skip(10 * (count - 1))
+                                .limit(10)];
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, mongoose_1.default.connect(MONGO_URI, {
-                                useNewUrlParser: true,
-                                useUnifiedTopology: true,
-                            })];
+                        posts = _a.sent();
+                        message = 'Feed fetched successfully';
+                        res.status(200).json({ message: message, posts: posts });
+                        return [3 /*break*/, 3];
                     case 2:
-                        _a.sent();
-                        console.log('Connected to database');
-                        return [3 /*break*/, 4];
-                    case 3:
                         err_1 = _a.sent();
-                        console.log('Could not connect to database');
-                        console.log(err_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        next(err_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
-        });
+        }); };
+        this.initializeRoutes();
+    }
+    FeedController.prototype.initializeRoutes = function () {
+        this.router
+            .all(this.path + "*", auth_middleware_1.default)
+            .get("" + this.path, this.getFeed);
     };
-    App.prototype.listen = function () {
-        var _this = this;
-        this.app.listen(this.port, function () {
-            console.log("Serving on port " + _this.port);
-        });
-    };
-    return App;
+    return FeedController;
 }());
-exports.default = App;
-//# sourceMappingURL=app.js.map
+exports.default = FeedController;
+//# sourceMappingURL=feed.controller.js.map
