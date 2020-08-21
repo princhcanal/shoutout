@@ -29,6 +29,7 @@ const authMiddleware = async (
 			}
 
 			req.user = user;
+			next();
 		} catch (err) {
 			next(err);
 		}

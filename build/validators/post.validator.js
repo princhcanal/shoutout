@@ -3,11 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_validator_1 = require("express-validator");
 var postValidator = {
     createPost: [
-        express_validator_1.body('author')
-            .trim()
-            .not()
-            .isEmpty()
-            .withMessage('Author cannot be empty'),
         express_validator_1.body('content')
             .trim()
             .not()

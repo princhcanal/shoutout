@@ -63,6 +63,7 @@ var authMiddleware = function (req, res, next) { return __awaiter(void 0, void 0
                     throw new WrongAuthTokenException_1.default();
                 }
                 req.user = user;
+                next();
                 return [3 /*break*/, 4];
             case 3:
                 err_1 = _a.sent();

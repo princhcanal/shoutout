@@ -8,6 +8,8 @@ exports.validateEnv = function () {
         MONGO_USER: envalid_1.str(),
         MONGO_DB_NAME: envalid_1.str(),
         MONGO_URI: envalid_1.str(),
+        PORT: envalid_1.port(),
+        JWT_SECRET: envalid_1.str(),
     });
 };
 //# sourceMappingURL=validateEnv.js.map

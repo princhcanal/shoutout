@@ -69,7 +69,7 @@ var PostController = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         postData = req.body;
-                        createdPost = new this.post(__assign(__assign({}, postData), { authorId: req.user._id }));
+                        createdPost = new this.post(__assign(__assign({}, postData), { author: req.user._id }));
                         return [4 /*yield*/, createdPost.save()];
                     case 1:
                         post = _a.sent();
@@ -191,10 +191,10 @@ var PostController = /** @class */ (function () {
         this.router.get(this.path, this.getAllPosts);
         this.router.get(this.path + "/:id", this.getPostById);
         this.router
-            .all(this.path + "/*", auth_middleware_1.default)
+            .all(this.path + "*", auth_middleware_1.default)
             .post(this.path, validation_middleware_1.default(post_validator_1.default.createPost), this.createPost)
             .delete(this.path + "/:id", this.deletePost)
-            .patch(this.path + "/:id", validation_middleware_1.default(post_validator_1.default.createPost), this.updatePost);
+            .patch(this.path + "/:id", validation_middleware_1.default(post_validator_1.default.updatePost), this.updatePost);
     };
     return PostController;
 }());

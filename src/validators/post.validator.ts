@@ -2,11 +2,6 @@ import { body } from 'express-validator';
 
 const postValidator = {
 	createPost: [
-		body('author')
-			.trim()
-			.not()
-			.isEmpty()
-			.withMessage('Author cannot be empty'),
 		body('content')
 			.trim()
 			.not()

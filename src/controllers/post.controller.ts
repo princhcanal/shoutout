@@ -21,7 +21,7 @@ class PostController implements Controller {
 		this.router.get(`${this.path}/:id`, this.getPostById);
 
 		this.router
-			.all(`${this.path}/*`, authMiddleware)
+			.all(`${this.path}*`, authMiddleware)
 			.post(
 				this.path,
 				validationMiddleware(postValidator.createPost),
@@ -30,7 +30,7 @@ class PostController implements Controller {
 			.delete(`${this.path}/:id`, this.deletePost)
 			.patch(
 				`${this.path}/:id`,
-				validationMiddleware(postValidator.createPost),
+				validationMiddleware(postValidator.updatePost),
 				this.updatePost
 			);
 	}
@@ -44,7 +44,7 @@ class PostController implements Controller {
 			const postData: Post = req.body;
 			const createdPost = new this.post({
 				...postData,
-				authorId: req.user._id,
+				author: req.user._id,
 			});
 
 			const post = await createdPost.save();
