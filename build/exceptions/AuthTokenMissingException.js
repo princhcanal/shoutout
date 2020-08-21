@@ -20,7 +20,7 @@ var HttpException_1 = __importDefault(require("./HttpException"));
 var AuthTokenMissingException = /** @class */ (function (_super) {
     __extends(AuthTokenMissingException, _super);
     function AuthTokenMissingException() {
-        return _super.call(this, 404, "Auth token missing") || this;
+        return _super.call(this, 401, "Auth token missing") || this;
     }
     return AuthTokenMissingException;
 }(HttpException_1.default));

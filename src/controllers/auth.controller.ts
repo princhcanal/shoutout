@@ -1,15 +1,15 @@
 import express, { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
-import Controller from '../interfaces/controller.interface';
-import validationMiddleware from '../middleware/validation.middleware';
-import userModel from '../models/user.model';
 import User from '../interfaces/user.interface';
 import Login from '../interfaces/login.interface';
-import userValidator from '../validators/user.validator';
-import EmailAlreadyExistsException from '../exceptions/EmailAlreadyExistsException';
-import WrongCredentialsException from '../exceptions/WrongCredentialsException';
+import Controller from '../interfaces/controller.interface';
 import Token from '../interfaces/token.interface';
 import TokenData from '../interfaces/tokenData.interface';
+import validationMiddleware from '../middleware/validation.middleware';
+import userModel from '../models/user.model';
+import authValidator from '../validators/auth.validator';
+import EmailAlreadyExistsException from '../exceptions/EmailAlreadyExistsException';
+import WrongCredentialsException from '../exceptions/WrongCredentialsException';
 import jwt from 'jsonwebtoken';
 
 class AuthController implements Controller {
@@ -24,12 +24,12 @@ class AuthController implements Controller {
 	private initializeRoutes() {
 		this.router.post(
 			`${this.path}/register`,
-			validationMiddleware(userValidator.register),
+			validationMiddleware(authValidator.register),
 			this.register
 		);
 		this.router.post(
 			`${this.path}/login`,
-			validationMiddleware(userValidator.login),
+			validationMiddleware(authValidator.login),
 			this.login
 		);
 		this.router.post(`${this.path}/logout`, this.logout);
@@ -90,13 +90,13 @@ class AuthController implements Controller {
 	};
 
 	private logout = (req: Request, res: Response, next: NextFunction) => {
-		res.setHeader('Set-Cookie', ['Authorization=;Max-age=0']);
 		const message = 'User logged out successfully';
+		res.setHeader('Set-Cookie', ['Authorization=; HttpOnly; Max-Age=0']);
 		res.status(200).json({ message });
 	};
 
 	private createToken(user: User): Token {
-		const expiresIn = 60 * 60;
+		const expiresIn = 60 * 60; // an hour
 		const secret = process.env.JWT_SECRET as string;
 		const tokenData: TokenData = { _id: user._id };
 

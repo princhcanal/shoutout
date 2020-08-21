@@ -54,7 +54,7 @@ var express_1 = __importDefault(require("express"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var user_model_1 = __importDefault(require("../models/user.model"));
-var user_validator_1 = __importDefault(require("../validators/user.validator"));
+var auth_validator_1 = __importDefault(require("../validators/auth.validator"));
 var EmailAlreadyExistsException_1 = __importDefault(require("../exceptions/EmailAlreadyExistsException"));
 var WrongCredentialsException_1 = __importDefault(require("../exceptions/WrongCredentialsException"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -129,19 +129,19 @@ var AuthController = /** @class */ (function () {
             });
         }); };
         this.logout = function (req, res, next) {
-            res.setHeader('Set-Cookie', ['Authorization=;Max-age=0']);
             var message = 'User logged out successfully';
+            res.setHeader('Set-Cookie', ['Authorization=; HttpOnly; Max-Age=0']);
             res.status(200).json({ message: message });
         };
         this.initializeRoutes();
     }
     AuthController.prototype.initializeRoutes = function () {
-        this.router.post(this.path + "/register", validation_middleware_1.default(user_validator_1.default.register), this.register);
-        this.router.post(this.path + "/login", validation_middleware_1.default(user_validator_1.default.login), this.login);
+        this.router.post(this.path + "/register", validation_middleware_1.default(auth_validator_1.default.register), this.register);
+        this.router.post(this.path + "/login", validation_middleware_1.default(auth_validator_1.default.login), this.login);
         this.router.post(this.path + "/logout", this.logout);
     };
     AuthController.prototype.createToken = function (user) {
-        var expiresIn = 60 * 60;
+        var expiresIn = 60 * 60; // an hour
         var secret = process.env.JWT_SECRET;
         var tokenData = { _id: user._id };
         return {

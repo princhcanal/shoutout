@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -51,64 +40,78 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var user_model_1 = __importDefault(require("../models/user.model"));
 var post_model_1 = __importDefault(require("../models/post.model"));
-var PostNotFoundException_1 = __importDefault(require("../exceptions/PostNotFoundException"));
-var post_validator_1 = __importDefault(require("../validators/post.validator"));
-var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
-var PostController = /** @class */ (function () {
-    function PostController() {
+var UserNotFoundException_1 = __importDefault(require("../exceptions/UserNotFoundException"));
+// TODO: implement subscription service for each user for discounts on products
+// TODO: implement follow feature
+var UserController = /** @class */ (function () {
+    function UserController() {
         var _this = this;
-        this.path = '/posts';
+        this.path = '/user';
         this.router = express_1.default.Router();
+        this.user = user_model_1.default;
         this.post = post_model_1.default;
-        this.createPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var postData, createdPost, post, message, err_1;
+        this.getUserProfile = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, posts, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        postData = req.body;
-<<<<<<< HEAD
-                        createdPost = new this.post(__assign(__assign({}, postData), { image: req.file.path, author: req.user._id }));
-=======
-                        createdPost = new this.post(__assign(__assign({}, postData), { author: req.user._id }));
->>>>>>> bf1f815119131e99e1c1df2af1b6ca14ef5e4d9a
-                        return [4 /*yield*/, createdPost.save()];
+                        _a.trys.push([0, 3, , 4]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
                     case 1:
-                        post = _a.sent();
-                        message = 'Post created successfully';
-                        res.status(201).json({ message: message, post: post });
-                        return [3 /*break*/, 3];
+                        user = _a.sent();
+                        if (!user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        return [4 /*yield*/, this.post.find({ author: user._id })];
                     case 2:
+                        posts = _a.sent();
+                        message = "User " + username + " fetched successfully";
+                        user.password = '';
+                        res.status(200).json({ message: message, user: user, posts: posts });
+                        return [3 /*break*/, 4];
+                    case 3:
                         err_1 = _a.sent();
                         next(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };
-        this.deletePost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var id, post, message, err_2;
+        this.followUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, numFollowers, message, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        id = req.params.id;
-                        return [4 /*yield*/, this.post.findByIdAndDelete(id)];
+                        _a.trys.push([0, 4, , 5]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
                     case 1:
-                        post = _a.sent();
-                        if (!post) {
-                            throw new PostNotFoundException_1.default(id);
+                        user = _a.sent();
+                        if (!user) {
+                            throw new UserNotFoundException_1.default(username);
                         }
-                        message = 'Post deleted successfully';
-                        res.status(200).json({ message: message });
-                        return [3 /*break*/, 3];
+                        if (!user.followers.includes(req.user._id)) {
+                            user.followers.push(req.user._id);
+                        }
+                        return [4 /*yield*/, user.save()];
                     case 2:
+                        user = _a.sent();
+                        return [4 /*yield*/, user.populate('followers', 'username').execPopulate()];
+                    case 3:
+                        _a.sent();
+                        numFollowers = user.followers.length;
+                        message = "User " + username + " followed successfully";
+                        res.status(200).json({ message: message, numFollowers: numFollowers });
+                        return [3 /*break*/, 5];
+                    case 4:
                         err_2 = _a.sent();
                         next(err_2);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); };
@@ -118,11 +121,11 @@ var PostController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.post.find()];
+                        return [4 /*yield*/, this.post.find({ author: req.user._id })];
                     case 1:
                         posts = _a.sent();
                         message = 'Posts fetched successfully';
-                        res.status(200).json({ message: message, posts: posts });
+                        res.json({ message: message, posts: posts });
                         return [3 /*break*/, 3];
                     case 2:
                         err_3 = _a.sent();
@@ -132,48 +135,38 @@ var PostController = /** @class */ (function () {
                 }
             });
         }); };
-        this.getPostById = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var id, post, message, err_4;
+        this.getPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var postId, post, message, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        id = req.params.id;
-                        return [4 /*yield*/, this.post.findById(id)];
+                        postId = req.params.id;
+                        return [4 /*yield*/, this.post.findById(postId)];
                     case 1:
                         post = _a.sent();
-                        if (!post) {
-                            throw new PostNotFoundException_1.default(id);
-                        }
                         message = 'Post fetched successfully';
-                        res.status(200).json({ message: message, post: post });
+                        res.json({ message: message, post: post });
                         return [3 /*break*/, 3];
                     case 2:
                         err_4 = _a.sent();
-                        next(err_4);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
         }); };
-        this.updatePost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var id, postData, post, message, err_5;
+        this.updateUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var userData, user, message, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        id = req.params.id;
-                        postData = req.body;
-                        return [4 /*yield*/, this.post.findByIdAndUpdate(id, postData, {
-                                new: true,
-                            })];
+                        userData = req.body;
+                        return [4 /*yield*/, this.user.findByIdAndUpdate(req.user._id, userData, { new: true })];
                     case 1:
-                        post = _a.sent();
-                        if (!post) {
-                            throw new PostNotFoundException_1.default(id);
-                        }
-                        message = 'Post updated successfully';
-                        res.status(200).json({ message: message, post: post });
+                        user = _a.sent();
+                        message = 'User updated successfully';
+                        res.status(200).json({ message: message, user: user });
                         return [3 /*break*/, 3];
                     case 2:
                         err_5 = _a.sent();
@@ -185,16 +178,16 @@ var PostController = /** @class */ (function () {
         }); };
         this.initializeRoutes();
     }
-    PostController.prototype.initializeRoutes = function () {
-        this.router.get(this.path, this.getAllPosts);
-        this.router.get(this.path + "/:id", this.getPostById);
+    UserController.prototype.initializeRoutes = function () {
+        this.router.get(this.path + "/:username", this.getUserProfile);
         this.router
-            .all(this.path + "*", auth_middleware_1.default)
-            .post(this.path, validation_middleware_1.default(post_validator_1.default.createPost), this.createPost)
-            .delete(this.path + "/:id", this.deletePost)
-            .patch(this.path + "/:id", validation_middleware_1.default(post_validator_1.default.updatePost), this.updatePost);
+            .all(this.path + "/*", auth_middleware_1.default)
+            .get(this.path + "/posts", this.getAllPosts)
+            .get(this.path + "/posts/:id", this.getPost)
+            .patch("" + this.path, this.updateUser)
+            .post(this.path + "/:username", this.followUser);
     };
-    return PostController;
+    return UserController;
 }());
-exports.default = PostController;
-//# sourceMappingURL=post.controller.js.map
+exports.default = UserController;
+//# sourceMappingURL=user.controller.js.map

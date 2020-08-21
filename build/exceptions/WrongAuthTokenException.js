@@ -20,7 +20,7 @@ var HttpException_1 = __importDefault(require("./HttpException"));
 var WrongAuthTokenException = /** @class */ (function (_super) {
     __extends(WrongAuthTokenException, _super);
     function WrongAuthTokenException() {
-        return _super.call(this, 404, "Wrong auth token") || this;
+        return _super.call(this, 401, "Wrong auth token") || this;
     }
     return WrongAuthTokenException;
 }(HttpException_1.default));
