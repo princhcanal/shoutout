@@ -57,6 +57,7 @@ var post_validator_1 = __importDefault(require("../validators/post.validator"));
 var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var deleteFile_1 = __importDefault(require("../utils/deleteFile"));
+// TODO: add authorization
 var PostController = /** @class */ (function () {
     function PostController() {
         var _this = this;

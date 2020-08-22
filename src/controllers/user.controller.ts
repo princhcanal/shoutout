@@ -6,6 +6,7 @@ import authMiddleware from '../middleware/auth.middleware';
 import UserNotFoundException from '../exceptions/UserNotFoundException';
 
 // TODO: implement subscription service for each user for discounts on products
+// TODO: update getFollowing
 class UserController implements Controller {
 	public path = '/user';
 	public router = express.Router();

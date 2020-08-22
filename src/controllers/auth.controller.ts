@@ -51,6 +51,7 @@ class AuthController implements Controller {
 				const user = await this.user.create({
 					...userData,
 					password: hashedPassword,
+					url: `${process.env.BASE_URL}/user/${userData.username}`,
 				});
 				const tokenData = this.createToken(user);
 				const message = 'User registered successfully';

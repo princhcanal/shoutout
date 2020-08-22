@@ -9,6 +9,7 @@ import validationMiddleware from '../middleware/validation.middleware';
 import authMiddleware from '../middleware/auth.middleware';
 import deleteFile from '../utils/deleteFile';
 
+// TODO: add authorization
 class PostController implements Controller {
 	public path = '/posts';
 	public router = express.Router();

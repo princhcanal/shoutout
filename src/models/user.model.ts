@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
 		name: { type: String, default: '' },
 		email: { type: String, required: true },
 		password: { type: String, required: true },
+		url: { type: String, required: true },
 		followers: [
 			{
 				type: mongoose.Schema.Types.ObjectId,

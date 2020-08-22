@@ -79,7 +79,7 @@ var AuthController = /** @class */ (function () {
                     case 2: return [4 /*yield*/, bcryptjs_1.default.hash(userData.password, 10)];
                     case 3:
                         hashedPassword = _a.sent();
-                        return [4 /*yield*/, this.user.create(__assign(__assign({}, userData), { password: hashedPassword }))];
+                        return [4 /*yield*/, this.user.create(__assign(__assign({}, userData), { password: hashedPassword, url: process.env.BASE_URL + "/user/" + userData.username }))];
                     case 4:
                         user_1 = _a.sent();
                         tokenData = this.createToken(user_1);
