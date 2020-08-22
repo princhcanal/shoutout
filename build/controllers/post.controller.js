@@ -53,6 +53,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var post_model_1 = __importDefault(require("../models/post.model"));
 var PostNotFoundException_1 = __importDefault(require("../exceptions/PostNotFoundException"));
+var NotAuthorizedException_1 = __importDefault(require("../exceptions/NotAuthorizedException"));
 var post_validator_1 = __importDefault(require("../validators/post.validator"));
 var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
@@ -104,6 +105,9 @@ var PostController = /** @class */ (function () {
                         if (!post) {
                             throw new PostNotFoundException_1.default(id);
                         }
+                        if (post.author.toString() !== req.user._id.toString()) {
+                            throw new NotAuthorizedException_1.default();
+                        }
                         deleteFile_1.default(post.image);
                         return [4 /*yield*/, this.post.findByIdAndDelete(id)];
                     case 2:
@@ -119,28 +123,8 @@ var PostController = /** @class */ (function () {
                 }
             });
         }); };
-        this.getAllPosts = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var posts, message, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.post.find()];
-                    case 1:
-                        posts = _a.sent();
-                        message = 'Posts fetched successfully';
-                        res.status(200).json({ message: message, posts: posts });
-                        return [3 /*break*/, 3];
-                    case 2:
-                        err_3 = _a.sent();
-                        next(err_3);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        }); };
         this.getPostById = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var id, post, message, err_4;
+            var id, post, message, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -156,15 +140,15 @@ var PostController = /** @class */ (function () {
                         res.status(200).json({ message: message, post: post });
                         return [3 /*break*/, 3];
                     case 2:
-                        err_4 = _a.sent();
-                        next(err_4);
+                        err_3 = _a.sent();
+                        next(err_3);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
         }); };
         this.updatePost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var id, postData, post, message, err_5;
+            var id, postData, post, message, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -179,12 +163,15 @@ var PostController = /** @class */ (function () {
                         if (!post) {
                             throw new PostNotFoundException_1.default(id);
                         }
+                        if (post.author.toString() !== req.user._id.toString()) {
+                            throw new NotAuthorizedException_1.default();
+                        }
                         message = 'Post updated successfully';
                         res.status(200).json({ message: message, post: post });
                         return [3 /*break*/, 3];
                     case 2:
-                        err_5 = _a.sent();
-                        next(err_5);
+                        err_4 = _a.sent();
+                        next(err_4);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -193,7 +180,6 @@ var PostController = /** @class */ (function () {
         this.initializeRoutes();
     }
     PostController.prototype.initializeRoutes = function () {
-        this.router.get(this.path, this.getAllPosts);
         this.router.get(this.path + "/:id", this.getPostById);
         this.router
             .all(this.path + "*", auth_middleware_1.default)
