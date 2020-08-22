@@ -4,9 +4,9 @@ import userModel from '../models/user.model';
 import postModel from '../models/post.model';
 import authMiddleware from '../middleware/auth.middleware';
 import UserNotFoundException from '../exceptions/UserNotFoundException';
+import User from '../interfaces/user.interface';
 
 // TODO: implement subscription service for each user for discounts on products
-// TODO: update getFollowing
 class UserController implements Controller {
 	public path = '/user';
 	public router = express.Router();
@@ -177,22 +177,19 @@ class UserController implements Controller {
 	) => {
 		try {
 			const username = req.params.username;
-			const user = await this.user.findOne({ username });
+			const user = await this.user
+				.findOne({ username })
+				.populate('following');
 
 			if (!user) {
 				throw new UserNotFoundException(username);
 			}
 
-			const followingUsers = await this.user
-				.find({
-					followers: user._id,
-				})
-				.select('username');
-			const following = followingUsers.map((f) => {
+			const followingUsers = user.following as User[];
+			const following = followingUsers.map((f: User) => {
 				return {
-					_id: f._id,
 					username: f.username,
-					url: `${process.env.BASE_URL}/user/${f.username}`,
+					url: f.url,
 				};
 			});
 

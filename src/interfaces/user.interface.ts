@@ -5,10 +5,10 @@ interface User {
 	email: string;
 	password: string;
 	url: string;
-	followers: string[];
-	following: string[];
-	subscriptions: string[];
-	subscribers: string[];
+	followers: string[] | User[];
+	following: string[] | User[];
+	subscriptions: string[] | User[];
+	subscribers: string[] | User[];
 }
 
 export default User;

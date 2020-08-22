@@ -45,7 +45,6 @@ var post_model_1 = __importDefault(require("../models/post.model"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var UserNotFoundException_1 = __importDefault(require("../exceptions/UserNotFoundException"));
 // TODO: implement subscription service for each user for discounts on products
-// TODO: update getFollowing
 var UserController = /** @class */ (function () {
     function UserController() {
         var _this = this;
@@ -231,26 +230,21 @@ var UserController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
+                        _a.trys.push([0, 2, , 3]);
                         username = req.params.username;
-                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                        return [4 /*yield*/, this.user
+                                .findOne({ username: username })
+                                .populate('following')];
                     case 1:
                         user = _a.sent();
                         if (!user) {
                             throw new UserNotFoundException_1.default(username);
                         }
-                        return [4 /*yield*/, this.user
-                                .find({
-                                followers: user._id,
-                            })
-                                .select('username')];
-                    case 2:
-                        followingUsers = _a.sent();
+                        followingUsers = user.following;
                         following = followingUsers.map(function (f) {
                             return {
-                                _id: f._id,
                                 username: f.username,
-                                url: process.env.BASE_URL + "/user/" + f.username,
+                                url: f.url,
                             };
                         });
                         message = 'Following fetched successfully';
@@ -258,12 +252,12 @@ var UserController = /** @class */ (function () {
                             message: message,
                             following: following,
                         });
-                        return [3 /*break*/, 4];
-                    case 3:
+                        return [3 /*break*/, 3];
+                    case 2:
                         err_6 = _a.sent();
                         next(err_6);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         }); };
