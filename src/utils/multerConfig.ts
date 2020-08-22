@@ -34,7 +34,7 @@ const fileFilter = (
 ) => {
 	if (
 		file.mimetype === 'image/jpg' ||
-		file.mimetype === 'image/jpg' ||
+		file.mimetype === 'image/jpeg' ||
 		file.mimetype === 'image/png'
 	) {
 		cb(null, true);

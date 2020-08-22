@@ -6,7 +6,7 @@ const postValidator = {
 			.trim()
 			.not()
 			.isEmpty()
-			.withMessage('Content cannot be empty'),
+			.withMessage('Description cannot be empty'),
 		body('title')
 			.trim()
 			.not()

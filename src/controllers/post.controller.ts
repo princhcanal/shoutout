@@ -7,6 +7,7 @@ import PostNotFoundException from '../exceptions/PostNotFoundException';
 import postValidator from '../validators/post.validator';
 import validationMiddleware from '../middleware/validation.middleware';
 import authMiddleware from '../middleware/auth.middleware';
+import deleteFile from '../utils/deleteFile';
 
 class PostController implements Controller {
 	public path = '/posts';
@@ -49,18 +50,15 @@ class PostController implements Controller {
 				author: req.user._id,
 				url: `${process.env.BASE_URL}${this.path}`,
 			});
-			const postWithUrl = await this.post.findByIdAndUpdate(
+			createdPost = await createdPost.save();
+
+			const post = await this.post.findByIdAndUpdate(
 				createdPost._id,
 				{
 					url: `${process.env.BASE_URL}${this.path}/${createdPost._id}`,
-				}
+				},
+				{ new: true }
 			);
-
-			if (postWithUrl) {
-				createdPost = postWithUrl;
-			}
-
-			const post = await createdPost.save();
 			const message = 'Post created successfully';
 			res.status(201).json({ message, post });
 		} catch (err) {
@@ -76,11 +74,14 @@ class PostController implements Controller {
 		try {
 			const id = req.params.id;
 
-			const post = await this.post.findByIdAndDelete(id);
+			const post = await this.post.findById(id);
 
 			if (!post) {
 				throw new PostNotFoundException(id);
 			}
+
+			deleteFile(post.image);
+			await this.post.findByIdAndDelete(id);
 
 			const message = 'Post deleted successfully';
 			res.status(200).json({ message });

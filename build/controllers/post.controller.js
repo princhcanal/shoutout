@@ -56,6 +56,7 @@ var PostNotFoundException_1 = __importDefault(require("../exceptions/PostNotFoun
 var post_validator_1 = __importDefault(require("../validators/post.validator"));
 var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
+var deleteFile_1 = __importDefault(require("../utils/deleteFile"));
 var PostController = /** @class */ (function () {
     function PostController() {
         var _this = this;
@@ -63,22 +64,19 @@ var PostController = /** @class */ (function () {
         this.router = express_1.default.Router();
         this.post = post_model_1.default;
         this.createPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var postData, createdPost, postWithUrl, post, message, err_1;
+            var postData, createdPost, post, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         postData = req.body;
                         createdPost = new this.post(__assign(__assign({}, postData), { image: req.file.path, author: req.user._id, url: "" + process.env.BASE_URL + this.path }));
+                        return [4 /*yield*/, createdPost.save()];
+                    case 1:
+                        createdPost = _a.sent();
                         return [4 /*yield*/, this.post.findByIdAndUpdate(createdPost._id, {
                                 url: "" + process.env.BASE_URL + this.path + "/" + createdPost._id,
-                            })];
-                    case 1:
-                        postWithUrl = _a.sent();
-                        if (postWithUrl) {
-                            createdPost = postWithUrl;
-                        }
-                        return [4 /*yield*/, createdPost.save()];
+                            }, { new: true })];
                     case 2:
                         post = _a.sent();
                         message = 'Post created successfully';
@@ -97,22 +95,26 @@ var PostController = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         id = req.params.id;
-                        return [4 /*yield*/, this.post.findByIdAndDelete(id)];
+                        return [4 /*yield*/, this.post.findById(id)];
                     case 1:
                         post = _a.sent();
                         if (!post) {
                             throw new PostNotFoundException_1.default(id);
                         }
+                        deleteFile_1.default(post.image);
+                        return [4 /*yield*/, this.post.findByIdAndDelete(id)];
+                    case 2:
+                        _a.sent();
                         message = 'Post deleted successfully';
                         res.status(200).json({ message: message });
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 4];
+                    case 3:
                         err_2 = _a.sent();
                         next(err_2);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };

@@ -91,6 +91,7 @@ var App = /** @class */ (function () {
                         return [4 /*yield*/, mongoose_1.default.connect(MONGO_URI, {
                                 useNewUrlParser: true,
                                 useUnifiedTopology: true,
+                                useFindAndModify: false,
                             })];
                     case 2:
                         _a.sent();

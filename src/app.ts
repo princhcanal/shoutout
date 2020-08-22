@@ -60,6 +60,7 @@ class App {
 			await mongoose.connect(MONGO_URI as string, {
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
+				useFindAndModify: false,
 			});
 			console.log('Connected to database');
 		} catch (err) {

@@ -7,7 +7,7 @@ var postValidator = {
             .trim()
             .not()
             .isEmpty()
-            .withMessage('Content cannot be empty'),
+            .withMessage('Description cannot be empty'),
         express_validator_1.body('title')
             .trim()
             .not()
