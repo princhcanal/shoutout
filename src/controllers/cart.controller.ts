@@ -3,6 +3,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import Controller from '../interfaces/controller.interface';
 import Post from '../interfaces/post.interface';
 import authMiddleware from '../middleware/auth.middleware';
+import validationMiddleware from '../middleware/validation.middleware';
+import cartValidator from '../validators/cart.validator';
 import cartModel from '../models/cart.model';
 import orderItemModel from '../models/orderItem.model';
 import CartNotFoundException from '../exceptions/CartNotFoundException';
@@ -21,7 +23,11 @@ class CartController implements Controller {
 		this.router
 			.all(`${this.path}*`, authMiddleware)
 			.get(`${this.path}`, this.getCart)
-			.post(`${this.path}/add`, this.addToCart);
+			.post(
+				`${this.path}/add`,
+				validationMiddleware(cartValidator.addToCart),
+				this.addToCart
+			);
 	}
 
 	private getCart = async (
