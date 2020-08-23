@@ -9,5 +9,6 @@ export const validateEnv = () => {
 		PORT: port(),
 		JWT_SECRET: str(),
 		BASE_URL: str(),
+		STRIPE_SECRET_KEY: str(),
 	});
 };

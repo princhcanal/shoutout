@@ -10,7 +10,6 @@ import validationMiddleware from '../middleware/validation.middleware';
 import authMiddleware from '../middleware/auth.middleware';
 import deleteFile from '../utils/deleteFile';
 
-// TODO: add authorization
 class PostController implements Controller {
 	public path = '/posts';
 	public router = express.Router();
@@ -46,7 +45,6 @@ class PostController implements Controller {
 		try {
 			const postData: Post = req.body;
 			let createdPost = new this.post({
-				...postData,
 				image: req.file.path,
 				author: req.user._id,
 				url: `${process.env.BASE_URL}${this.path}`,

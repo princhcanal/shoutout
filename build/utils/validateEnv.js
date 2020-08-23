@@ -11,6 +11,7 @@ exports.validateEnv = function () {
         PORT: envalid_1.port(),
         JWT_SECRET: envalid_1.str(),
         BASE_URL: envalid_1.str(),
+        STRIPE_SECRET_KEY: envalid_1.str(),
     });
 };
 //# sourceMappingURL=validateEnv.js.map

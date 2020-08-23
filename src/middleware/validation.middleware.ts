@@ -1,4 +1,4 @@
-import { RequestHandler, Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { validationResult, ValidationChain } from 'express-validator';
 import HttpException from '../exceptions/HttpException';
 import { compose } from 'compose-middleware';

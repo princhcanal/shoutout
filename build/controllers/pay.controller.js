@@ -40,35 +40,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var post_model_1 = __importDefault(require("../models/post.model"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
-var FeedController = /** @class */ (function () {
-    function FeedController() {
+var stripe_1 = __importDefault(require("stripe"));
+var PayController = /** @class */ (function () {
+    function PayController() {
         var _this = this;
-        this.path = '/feed';
+        this.path = '/pay';
         this.router = express_1.default.Router();
-        this.post = post_model_1.default;
-        this.getFeed = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var count, posts, message, err_1;
+        this.stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
+            apiVersion: '2020-03-02',
+            typescript: true,
+        });
+        this.createCheckoutSession = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var session, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        count = 1;
-                        if (req.query.count) {
-                            count = parseInt(req.query.count.toString());
-                        }
-                        return [4 /*yield*/, this.post
-                                .find({
-                                author: { $in: req.user.following },
-                            })
-                                .sort({ createdAt: -1 })
-                                .skip(10 * (count - 1))
-                                .limit(10)];
+                        return [4 /*yield*/, this.stripe.checkout.sessions.create({
+                                payment_method_types: ['card'],
+                                line_items: [
+                                    {
+                                        price_data: {
+                                            currency: 'usd',
+                                            product_data: {
+                                                name: 'T-shirt',
+                                            },
+                                            unit_amount: 2000,
+                                        },
+                                        quantity: 1,
+                                    },
+                                ],
+                                mode: 'payment',
+                                success_url: "" + process.env.BASE_URL + this.path + "/success",
+                                cancel_url: "" + process.env.BASE_URL + this.path + "/cancel",
+                            })];
                     case 1:
-                        posts = _a.sent();
-                        message = 'Feed fetched successfully';
-                        res.status(200).json({ message: message, posts: posts });
+                        session = _a.sent();
+                        message = 'Stripe session created successfully';
+                        res.status(201).json({ message: message, session: session });
                         return [3 /*break*/, 3];
                     case 2:
                         err_1 = _a.sent();
@@ -80,12 +90,12 @@ var FeedController = /** @class */ (function () {
         }); };
         this.initializeRoutes();
     }
-    FeedController.prototype.initializeRoutes = function () {
+    PayController.prototype.initializeRoutes = function () {
         this.router
             .all(this.path + "*", auth_middleware_1.default)
-            .get("" + this.path, this.getFeed);
+            .post(this.path + "/create-checkout-session", this.createCheckoutSession);
     };
-    return FeedController;
+    return PayController;
 }());
-exports.default = FeedController;
-//# sourceMappingURL=feed.controller.js.map
+exports.default = PayController;
+//# sourceMappingURL=pay.controller.js.map
