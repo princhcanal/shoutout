@@ -45,6 +45,7 @@ class PostController implements Controller {
 		try {
 			const postData: Post = req.body;
 			let createdPost = new this.post({
+				...postData,
 				image: req.file.path,
 				author: req.user._id,
 				url: `${process.env.BASE_URL}${this.path}`,
