@@ -1,1 +1,1 @@
-{"version":3,"file":"orderItem.interface.js","sourceRoot":"","sources":["../../src/interfaces/orderItem.interface.ts"],"names":[],"mappings":""}
+{"version":3,"file":"orderItem.interface.js","sourceRoot":"","sources":["../../server/interfaces/orderItem.interface.ts"],"names":[],"mappings":""}

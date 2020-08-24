@@ -4,9 +4,12 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start:build": "tsc -w",
-		"start:run": "nodemon build/index.js",
-		"start": "concurrently npm:start:*"
+		"start": "node build/index.js",
+		"server:build": "tsc -w",
+		"server:run": "nodemon build/index.js",
+		"server": "concurrently npm:server:*",
+		"client": "npm run start --prefix client",
+		"dev": "concurrently \"npm run server\" \"npm run client\""
 	},
 	"repository": {
 		"type": "git",
