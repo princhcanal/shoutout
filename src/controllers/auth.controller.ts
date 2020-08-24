@@ -11,11 +11,15 @@ import authValidator from '../validators/auth.validator';
 import EmailAlreadyExistsException from '../exceptions/EmailAlreadyExistsException';
 import WrongCredentialsException from '../exceptions/WrongCredentialsException';
 import jwt from 'jsonwebtoken';
+import cartModel from '../models/cart.model';
+import wishlistModel from '../models/wishlist.model';
 
 class AuthController implements Controller {
 	public path = '/auth';
 	public router = express.Router();
 	private user = userModel;
+	private cart = cartModel;
+	private wishlist = wishlistModel;
 
 	constructor() {
 		this.initializeRoutes();
@@ -42,22 +46,33 @@ class AuthController implements Controller {
 	) => {
 		try {
 			const userData: User = req.body;
-			const user = await this.user.findOne({ email: userData.email });
+			const existingUser = await this.user.findOne({
+				email: userData.email,
+			});
 
-			if (user) {
+			if (existingUser) {
 				throw new EmailAlreadyExistsException(userData.email);
-			} else {
-				const hashedPassword = await bcrypt.hash(userData.password, 10);
-				const user = await this.user.create({
-					...userData,
-					password: hashedPassword,
-					url: `${process.env.BASE_URL}/user/${userData.username}`,
-				});
-				const tokenData = this.createToken(user);
-				const message = 'User registered successfully';
-				res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-				res.status(201).json({ message, user });
 			}
+
+			const hashedPassword = await bcrypt.hash(userData.password, 10);
+			const user = await this.user.create({
+				...userData,
+				password: hashedPassword,
+				url: `${process.env.BASE_URL}/user/${userData.username}`,
+			});
+			const cart = new this.cart({
+				user: user._id,
+			});
+			const wishlist = new this.wishlist({
+				user: user._id,
+			});
+			await cart.save();
+			await wishlist.save();
+
+			const tokenData = this.createToken(user);
+			const message = 'User registered successfully';
+			res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
+			res.status(201).json({ message, user });
 		} catch (err) {
 			next(err);
 		}

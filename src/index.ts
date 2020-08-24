@@ -6,6 +6,8 @@ import AuthController from './controllers/auth.controller';
 import UserController from './controllers/user.controller';
 import FeedController from './controllers/feed.controller';
 import PayController from './controllers/pay.controller';
+import CartController from './controllers/cart.controller';
+import WishlistController from './controllers/wishlist.controller';
 import User from './interfaces/user.interface';
 
 declare global {
@@ -27,6 +29,8 @@ const app = new App(
 		new UserController(),
 		new FeedController(),
 		new PayController(),
+		new CartController(),
+		new WishlistController(),
 	],
 	port
 );

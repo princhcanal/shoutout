@@ -58,36 +58,54 @@ var auth_validator_1 = __importDefault(require("../validators/auth.validator"));
 var EmailAlreadyExistsException_1 = __importDefault(require("../exceptions/EmailAlreadyExistsException"));
 var WrongCredentialsException_1 = __importDefault(require("../exceptions/WrongCredentialsException"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var cart_model_1 = __importDefault(require("../models/cart.model"));
+var wishlist_model_1 = __importDefault(require("../models/wishlist.model"));
 var AuthController = /** @class */ (function () {
     function AuthController() {
         var _this = this;
         this.path = '/auth';
         this.router = express_1.default.Router();
         this.user = user_model_1.default;
+        this.cart = cart_model_1.default;
+        this.wishlist = wishlist_model_1.default;
         this.register = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var userData, user, hashedPassword, user_1, tokenData, message, err_1;
+            var userData, existingUser, hashedPassword, user, cart, wishlist, tokenData, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 6, , 7]);
                         userData = req.body;
-                        return [4 /*yield*/, this.user.findOne({ email: userData.email })];
+                        return [4 /*yield*/, this.user.findOne({
+                                email: userData.email,
+                            })];
                     case 1:
-                        user = _a.sent();
-                        if (!user) return [3 /*break*/, 2];
-                        throw new EmailAlreadyExistsException_1.default(userData.email);
-                    case 2: return [4 /*yield*/, bcryptjs_1.default.hash(userData.password, 10)];
-                    case 3:
+                        existingUser = _a.sent();
+                        if (existingUser) {
+                            throw new EmailAlreadyExistsException_1.default(userData.email);
+                        }
+                        return [4 /*yield*/, bcryptjs_1.default.hash(userData.password, 10)];
+                    case 2:
                         hashedPassword = _a.sent();
                         return [4 /*yield*/, this.user.create(__assign(__assign({}, userData), { password: hashedPassword, url: process.env.BASE_URL + "/user/" + userData.username }))];
+                    case 3:
+                        user = _a.sent();
+                        cart = new this.cart({
+                            user: user._id,
+                        });
+                        wishlist = new this.wishlist({
+                            user: user._id,
+                        });
+                        return [4 /*yield*/, cart.save()];
                     case 4:
-                        user_1 = _a.sent();
-                        tokenData = this.createToken(user_1);
+                        _a.sent();
+                        return [4 /*yield*/, wishlist.save()];
+                    case 5:
+                        _a.sent();
+                        tokenData = this.createToken(user);
                         message = 'User registered successfully';
                         res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-                        res.status(201).json({ message: message, user: user_1 });
-                        _a.label = 5;
-                    case 5: return [3 /*break*/, 7];
+                        res.status(201).json({ message: message, user: user });
+                        return [3 /*break*/, 7];
                     case 6:
                         err_1 = _a.sent();
                         next(err_1);

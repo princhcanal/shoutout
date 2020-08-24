@@ -6,7 +6,7 @@ const wishlistValidator = {
 			.trim()
 			.not()
 			.isEmpty()
-			.withMessage('Product cannot be empty'),
+			.withMessage('ProductId cannot be empty'),
 	],
 };
 

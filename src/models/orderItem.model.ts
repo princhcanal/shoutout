@@ -4,12 +4,16 @@ import OrderItem from '../interfaces/orderItem.interface';
 
 const orderItemSchema = new mongoose.Schema(
 	{
-		product: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Post',
-			},
-		],
+		cart: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Cart',
+			required: true,
+		},
+		product: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Post',
+			required: true,
+		},
 		quantity: { type: Number, required: true },
 	},
 	{ timestamps: true }

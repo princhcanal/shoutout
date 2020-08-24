@@ -6,6 +6,7 @@ import authMiddleware from '../middleware/auth.middleware';
 import validationMiddleware from '../middleware/validation.middleware';
 import wishlistValidator from '../validators/wishlist.validator';
 import WishlistNotFoundException from '../exceptions/WishlistNotFoundException';
+import WishlistItemNotFoundException from '../exceptions/WishlistItemNotFoundException';
 
 class WishlistController implements Controller {
 	public path = '/wishlist';
@@ -21,10 +22,11 @@ class WishlistController implements Controller {
 			.all(`${this.path}*`, authMiddleware)
 			.get(`${this.path}`, this.getWishlist)
 			.post(
-				`${this.path}/add`,
+				`${this.path}`,
 				validationMiddleware(wishlistValidator.addToWishlist),
 				this.addToWishlist
-			);
+			)
+			.delete(`${this.path}/:id`, this.removeFromWishlist);
 	}
 
 	private getWishlist = async (
@@ -33,9 +35,11 @@ class WishlistController implements Controller {
 		next: NextFunction
 	) => {
 		try {
-			const wishlist = await this.wishlist.findOne({
-				user: req.user._id,
-			});
+			const wishlist = await this.wishlist
+				.findOne({
+					user: req.user._id,
+				})
+				.populate('products');
 
 			if (!wishlist) {
 				throw new WishlistNotFoundException(req.user.username);
@@ -57,16 +61,54 @@ class WishlistController implements Controller {
 			const wishlist = await this.wishlist.findOne({
 				user: req.user._id,
 			});
+			const prodId = req.body.product;
 
 			if (!wishlist) {
 				throw new WishlistNotFoundException(req.user.username);
 			}
 
-			wishlist.products.push(req.body.product);
+			let message = `Product ${prodId} already in wishlist`;
+			if (wishlist.products.includes(prodId)) {
+				return res.status(200).json({ message, wishlist });
+			}
+
+			wishlist.products.push(prodId);
 			await wishlist.save();
 
-			const message = 'Product added to wishlist successfully';
+			message = 'Product added to wishlist successfully';
 			res.status(201).json({ message, wishlist });
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	private removeFromWishlist = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const wishlist = await this.wishlist.findOne({
+				user: req.user._id,
+			});
+
+			const prodId = req.params.id;
+
+			if (!wishlist) {
+				throw new WishlistNotFoundException(req.user.username);
+			}
+
+			const wishlistProducts = wishlist.products as string[];
+
+			if (!wishlistProducts.includes(prodId)) {
+				throw new WishlistItemNotFoundException(prodId);
+			}
+
+			wishlist.products.splice(wishlistProducts.indexOf(prodId), 1);
+			await wishlist.save();
+
+			const message = `Product ${prodId} removed from wishlist successfully`;
+			res.status(200).json({ message, wishlist });
 		} catch (err) {
 			next(err);
 		}
