@@ -24,7 +24,7 @@ html {
 
 body {
 	margin: 0;
-	padding: 0;
+	padding: 0 0 4rem 0;
 	min-height: 100vh;
 	font-family: 'Quicksand';
 	background: var(--color-white);
@@ -33,6 +33,11 @@ body {
 		var(--color-white),
 		var(--color-light-blue)
 	);
+}
+
+::selection {
+	background-color: var(--color-turquoise);
+	color: var(--color-white);
 }
 
 h1,
