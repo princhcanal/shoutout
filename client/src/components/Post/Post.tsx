@@ -1,5 +1,4 @@
 import React from 'react';
-
 import styles from './Post.module.scss';
 
 import Card from '../Card/Card';
@@ -9,7 +8,7 @@ interface PostProps {}
 const Post = (props: PostProps) => {
 	return (
 		<div className={styles.post}>
-			<Card classNames={[styles.card]}>
+			<Card className={styles.card}>
 				<h1>Post</h1>
 				<div className='image'>
 					<img

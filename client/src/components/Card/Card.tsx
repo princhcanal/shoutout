@@ -4,14 +4,14 @@ import styles from './Card.module.scss';
 
 interface CardProps {
 	children: any;
-	classNames?: string[];
+	className?: string;
 }
 
 const Card = (props: CardProps) => {
 	const classNames = [styles.card];
 
-	if (props.classNames) {
-		classNames.push(...props.classNames);
+	if (props.className) {
+		classNames.push(...props.className.split(' '));
 	}
 
 	return <div className={classNames.join(' ')}>{props.children}</div>;

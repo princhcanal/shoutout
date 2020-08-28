@@ -1,0 +1,26 @@
+.input {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+input {
+	border: 1px solid transparent;
+	outline: none;
+	border-radius: var(--border-radius);
+	padding: 0.4rem;
+	background-color: #eee;
+}
+
+input:focus {
+	border: 1px solid var(--color-turquoise);
+}
+
+label {
+	margin-bottom: 0.5rem;
+}
+
+.invalidMessage {
+	position: absolute;
+	bottom: -0.5rem;
+}

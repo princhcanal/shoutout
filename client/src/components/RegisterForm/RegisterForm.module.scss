@@ -1,2 +1,80 @@
 .registerForm {
+	width: 95%;
+	margin: auto;
+	background-color: var(--color-very-light-blue);
+	border-radius: var(--border-radius);
+	box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, 0.2);
+}
+
+.card {
+	display: flex;
+	padding: 0;
+	justify-content: space-between;
+}
+
+.form {
+	width: 60%;
+	display: flex;
+	flex-direction: column;
+	padding: 3rem 7rem;
+}
+
+.formHeader {
+	color: var(--color-turquoise);
+	text-align: center;
+}
+
+.input {
+	margin-bottom: 1rem;
+}
+
+.input label {
+	color: var(--color-turquoise);
+}
+
+.image {
+	width: 40%;
+	background-color: var(--color-beige);
+	border-top-left-radius: var(--border-radius);
+	border-bottom-left-radius: var(--border-radius);
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+.imageHeader {
+	text-align: center;
+	color: var(--color-turquoise);
+}
+
+.imagePicture svg {
+	width: 100%;
+	height: 100%;
+}
+
+.login {
+	font-size: 0.8rem;
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.login a {
+	color: var(--color-dark-turquoise);
+}
+
+.login a:hover {
+	text-decoration: underline;
+}
+
+.buttons {
+	text-align: end;
+}
+
+.button {
+	border: none;
+	padding: 0.5rem 0.7rem;
+	border-radius: var(--border-radius);
+	background-color: var(--color-turquoise);
+	color: var(--color-white);
 }

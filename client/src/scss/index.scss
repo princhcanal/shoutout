@@ -17,6 +17,9 @@
 	--color-blue: #3587a4;
 	--color-turquoise: #2d898b;
 	--color-dark-turquoise: #2d848a;
+	--color-beige: #fff2e1;
+
+	--border-radius: 0.3rem;
 }
 
 html {
@@ -24,15 +27,8 @@ html {
 
 body {
 	margin: 0;
-	padding: 0 0 4rem 0;
 	min-height: 100vh;
 	font-family: 'Quicksand';
-	background: var(--color-white);
-	background: linear-gradient(
-		to bottom right,
-		var(--color-white),
-		var(--color-light-blue)
-	);
 }
 
 ::selection {

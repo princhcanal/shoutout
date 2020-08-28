@@ -1,9 +1,12 @@
 import React from 'react';
+import styles from './Login.module.scss';
+
+import LoginForm from '../../components/LoginForm/LoginForm';
 
 const Login = () => {
 	return (
-		<div>
-			<h1>Login</h1>
+		<div className={styles.login}>
+			<LoginForm />
 		</div>
 	);
 };

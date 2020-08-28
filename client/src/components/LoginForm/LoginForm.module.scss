@@ -1,0 +1,41 @@
+.loginForm {
+	background-color: var(--color-white);
+	padding: 3rem;
+	border-radius: var(--border-radius);
+	width: 50%;
+}
+
+.input {
+	margin-bottom: 1rem;
+}
+
+.input label {
+	color: var(--color-turquoise);
+}
+
+.register {
+	text-align: center;
+	color: var(--color-turquoise);
+	font-size: 0.8rem;
+	margin-bottom: 1.5rem;
+}
+
+.register a:visited {
+	color: var(--color-light-blue);
+}
+
+.register a:hover {
+	text-decoration: underline;
+}
+
+.buttons {
+	text-align: center;
+}
+
+.button {
+	border: none;
+	padding: 0.5rem 0.7rem;
+	border-radius: var(--border-radius);
+	background-color: var(--color-turquoise);
+	color: var(--color-white);
+}

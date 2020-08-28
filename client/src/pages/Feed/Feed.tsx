@@ -1,5 +1,4 @@
 import React from 'react';
-
 import styles from './Feed.module.scss';
 
 import Post from '../../components/Post/Post';
