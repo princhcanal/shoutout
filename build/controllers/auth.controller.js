@@ -69,7 +69,7 @@ var AuthController = /** @class */ (function () {
         this.cart = cart_model_1.default;
         this.wishlist = wishlist_model_1.default;
         this.register = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var userData, existingUser, hashedPassword, user, cart, wishlist, tokenData, message, err_1;
+            var userData, existingUser, hashedPassword, user, cart, wishlist, token, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -101,10 +101,10 @@ var AuthController = /** @class */ (function () {
                         return [4 /*yield*/, wishlist.save()];
                     case 5:
                         _a.sent();
-                        tokenData = this.createToken(user);
+                        token = this.createToken(user);
                         message = 'User registered successfully';
-                        res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-                        res.status(201).json({ message: message, user: user });
+                        res.setHeader('Set-Cookie', [this.createCookie(token)]);
+                        res.status(201).json({ message: message, token: token });
                         return [3 /*break*/, 7];
                     case 6:
                         err_1 = _a.sent();
@@ -115,7 +115,7 @@ var AuthController = /** @class */ (function () {
             });
         }); };
         this.login = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var loginData, user, isPasswordMatch, tokenData, message, err_2;
+            var loginData, user, isPasswordMatch, token, message, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -133,10 +133,10 @@ var AuthController = /** @class */ (function () {
                         if (!isPasswordMatch) {
                             throw new WrongCredentialsException_1.default();
                         }
-                        tokenData = this.createToken(user);
+                        token = this.createToken(user);
                         message = 'User logged in successfully';
-                        res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-                        res.status(200).json({ message: message, user: user });
+                        res.setHeader('Set-Cookie', [this.createCookie(token)]);
+                        res.status(200).json({ message: message, token: token });
                         return [3 /*break*/, 4];
                     case 3:
                         err_2 = _a.sent();

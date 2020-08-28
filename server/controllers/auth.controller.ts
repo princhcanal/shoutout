@@ -55,7 +55,7 @@ class AuthController implements Controller {
 			}
 
 			const hashedPassword = await bcrypt.hash(userData.password, 10);
-			const user = await this.user.create({
+			let user = await this.user.create({
 				...userData,
 				password: hashedPassword,
 				url: `${process.env.BASE_URL}/user/${userData.username}`,
@@ -69,10 +69,10 @@ class AuthController implements Controller {
 			await cart.save();
 			await wishlist.save();
 
-			const tokenData = this.createToken(user);
+			const token = this.createToken(user);
 			const message = 'User registered successfully';
-			res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-			res.status(201).json({ message, user });
+			res.setHeader('Set-Cookie', [this.createCookie(token)]);
+			res.status(201).json({ message, token });
 		} catch (err) {
 			next(err);
 		}
@@ -96,10 +96,10 @@ class AuthController implements Controller {
 				throw new WrongCredentialsException();
 			}
 
-			const tokenData = this.createToken(user);
+			const token = this.createToken(user);
 			const message = 'User logged in successfully';
-			res.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-			res.status(200).json({ message, user });
+			res.setHeader('Set-Cookie', [this.createCookie(token)]);
+			res.status(200).json({ message, token });
 		} catch (err) {
 			next(err);
 		}
