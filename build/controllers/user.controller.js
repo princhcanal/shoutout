@@ -59,7 +59,9 @@ var UserController = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         username = req.params.username;
-                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                        return [4 /*yield*/, this.user
+                                .findOne({ username: username })
+                                .select('-password')];
                     case 1:
                         user = _a.sent();
                         if (!user) {
@@ -69,7 +71,6 @@ var UserController = /** @class */ (function () {
                     case 2:
                         posts = _a.sent();
                         message = "User " + username + " fetched successfully";
-                        user.password = '';
                         res.status(200).json({ message: message, user: user, posts: posts });
                         return [3 /*break*/, 4];
                     case 3:

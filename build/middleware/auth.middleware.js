@@ -49,6 +49,7 @@ var authMiddleware = function (req, res, next) { return __awaiter(void 0, void 0
         switch (_a.label) {
             case 0:
                 cookies = req.cookies;
+                console.log('Cookies:', cookies);
                 if (!(cookies && cookies.Authorization)) return [3 /*break*/, 5];
                 secret = process.env.JWT_SECRET;
                 _a.label = 1;

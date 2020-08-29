@@ -33,6 +33,7 @@ class FeedController implements Controller {
 				.find({
 					author: { $in: req.user.following },
 				})
+				.populate('author', 'username url')
 				.sort({ createdAt: -1 })
 				.skip(10 * (count - 1))
 				.limit(10);

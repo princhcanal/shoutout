@@ -7,17 +7,12 @@ import { Link, useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
 
 import * as AuthActions from '../../store/auth/actions';
 import Input from '../Form/Input/Input';
-import { TokenPayload } from '../../store/auth';
+import { LoginFormValues } from '../../store/auth';
 
-interface LoginFormValues {
-	email: string;
-	password: string;
-}
-
+// TODO: abstract onSubmit
 const LoginForm = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
@@ -36,19 +31,18 @@ const LoginForm = () => {
 		try {
 			const res = await axios.post('/auth/login', values);
 			const expires = 1 / 24;
-			Cookies.set('token', res.data.token.token, { expires });
-			const token = Cookies.get('token');
+			Cookies.set('Authorization', res.data.token.token, { expires });
+			const token = Cookies.get('Authorization');
 
 			if (token) {
-				const tokenPayload = jwtDecode<TokenPayload>(token);
-				dispatch(AuthActions.setUserId(tokenPayload._id));
+				dispatch(AuthActions.login());
+				history.push('/');
+			} else {
+				history.replace('/login');
 			}
-
-			history.push('/');
-			dispatch(AuthActions.setIsLoggedIn(true));
-			console.log(res);
 		} catch (err) {
 			console.log(err);
+			history.replace('/login');
 		}
 	};
 

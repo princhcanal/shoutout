@@ -19,8 +19,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var HttpException_1 = __importDefault(require("./HttpException"));
 var UserNotFoundException = /** @class */ (function (_super) {
     __extends(UserNotFoundException, _super);
-    function UserNotFoundException(username) {
-        return _super.call(this, 404, "User " + username + " not found") || this;
+    function UserNotFoundException(id) {
+        return _super.call(this, 404, "User " + id + " not found") || this;
     }
     return UserNotFoundException;
 }(HttpException_1.default));

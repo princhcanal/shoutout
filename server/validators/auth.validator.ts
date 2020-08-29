@@ -16,7 +16,6 @@ const authValidator = {
 			.custom(async (value, { req }) => {
 				const user = await userModel.findOne({ email: value });
 				if (user) {
-					console.log('validator', user);
 					throw new EmailAlreadyExistsException(value);
 				}
 			})

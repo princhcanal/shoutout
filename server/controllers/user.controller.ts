@@ -36,16 +36,16 @@ class UserController implements Controller {
 	) => {
 		try {
 			const username = req.params.username;
-			const user = await this.user.findOne({ username });
+			const user = await this.user
+				.findOne({ username })
+				.select('-password');
 
 			if (!user) {
 				throw new UserNotFoundException(username);
 			}
 
 			const posts = await this.post.find({ author: user._id });
-
 			const message = `User ${username} fetched successfully`;
-			user.password = '';
 			res.status(200).json({ message, user, posts });
 		} catch (err) {
 			next(err);

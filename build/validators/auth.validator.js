@@ -63,7 +63,6 @@ var authValidator = {
                         case 1:
                             user = _b.sent();
                             if (user) {
-                                console.log('validator', user);
                                 throw new EmailAlreadyExistsException_1.default(value);
                             }
                             return [2 /*return*/];

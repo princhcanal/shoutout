@@ -12,10 +12,7 @@ const storage = multer.diskStorage({
 		file: Express.Multer.File,
 		cb: DiskStorageCallback
 	) => {
-		const dest = path.join(
-			path.dirname(require.main?.filename as string),
-			'images'
-		);
+		const dest = 'images';
 		cb(null, dest);
 	},
 	filename: (

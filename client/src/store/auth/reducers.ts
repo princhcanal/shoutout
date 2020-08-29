@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 import {
 	AuthState,
@@ -11,36 +12,49 @@ import {
 	LOGOUT,
 	SET_IS_LOGGED_IN,
 	SET_USER_ID,
+	SetUsernameAction,
+	SET_USERNAME,
+	TokenPayload,
 } from './types';
 
 const initialState: AuthState = {
 	isLoggedIn: false,
 	userId: '',
+	username: '',
 };
 
 const login = (state: AuthState, action: LoginAction): AuthState => {
-	const token = Cookies.get('token');
+	const token = Cookies.get('Authorization');
 
 	if (!token) {
 		return {
 			...state,
 			isLoggedIn: false,
 			userId: '',
+			username: '',
 		};
 	}
+
+	const tokenPayload = jwtDecode<TokenPayload>(token);
+	const username = tokenPayload.username;
+	const userId = tokenPayload._id;
 
 	return {
 		...state,
 		isLoggedIn: true,
+		username,
+		userId,
 	};
 };
 
 const logout = (state: AuthState, action: LogoutAction): AuthState => {
-	Cookies.remove('token');
+	Cookies.remove('Authorization');
 
 	return {
 		...state,
 		isLoggedIn: false,
+		userId: '',
+		username: '',
 	};
 };
 
@@ -61,6 +75,16 @@ const setUserId = (state: AuthState, action: SetUserIdAction): AuthState => {
 	};
 };
 
+const setUsername = (
+	state: AuthState,
+	action: SetUsernameAction
+): AuthState => {
+	return {
+		...state,
+		username: action.username,
+	};
+};
+
 export const authReducer = (
 	state: AuthState = initialState,
 	action: AuthActionTypes
@@ -74,6 +98,8 @@ export const authReducer = (
 			return setIsLoggedIn(state, action);
 		case SET_USER_ID:
 			return setUserId(state, action);
+		case SET_USERNAME:
+			return setUsername(state, action);
 		default:
 			return state;
 	}

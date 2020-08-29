@@ -7,19 +7,12 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from '../../axios';
 import Cookies from 'js-cookie';
-import jwtDecode from 'jwt-decode';
 
 import Input from '../Form/Input/Input';
 import Card from '../../components/Card/Card';
 import { Link } from 'react-router-dom';
 import * as AuthActions from '../../store/auth/actions';
-import { TokenPayload } from '../../store/auth';
-
-interface RegisterFormValues {
-	email: string;
-	password: string;
-	username: string;
-}
+import { RegisterFormValues } from '../../store/auth';
 
 const RegisterForm = () => {
 	const history = useHistory();
@@ -44,19 +37,18 @@ const RegisterForm = () => {
 		try {
 			const res = await axios.post('/auth/register', values);
 			const expires = 1 / 24;
-			Cookies.set('token', res.data.token.token, { expires });
-			const token = Cookies.get('token');
+			Cookies.set('Authorization', res.data.token.token, { expires });
+			const token = Cookies.get('Authorization');
 
 			if (token) {
-				const tokenPayload = jwtDecode<TokenPayload>(token);
-				dispatch(AuthActions.setUserId(tokenPayload._id));
+				dispatch(AuthActions.login());
+				history.push('/');
+			} else {
+				history.replace('/register');
 			}
-
-			history.push('/feed');
-			dispatch(AuthActions.setIsLoggedIn(true));
-			console.log('Data:', res.data);
 		} catch (err) {
 			console.log(err);
+			history.replace('/register');
 		}
 	};
 

@@ -44,9 +44,14 @@ class PostController implements Controller {
 	) => {
 		try {
 			const postData: Post = req.body;
+			const image = `${process.env.BASE_URL}/${req.file.path.replace(
+				'\\',
+				'/'
+			)}`;
+
 			let createdPost = new this.post({
 				...postData,
-				image: req.file.path,
+				image,
 				author: req.user._id,
 				url: `${process.env.BASE_URL}${this.path}`,
 			});

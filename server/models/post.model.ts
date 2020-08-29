@@ -3,7 +3,11 @@ import Post from '../interfaces/post.interface';
 
 const postSchema = new mongoose.Schema(
 	{
-		author: { type: mongoose.Schema.Types.ObjectId, required: true },
+		author: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'User',
+		},
 		description: { type: String, required: true },
 		title: { type: String, required: true },
 		price: { type: Number, required: true },

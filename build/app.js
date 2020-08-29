@@ -62,9 +62,10 @@ var App = /** @class */ (function () {
         this.app.use(cookie_parser_1.default());
         this.app.use('/images', express_1.default.static('images'));
         this.app.use(function (req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
             res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
             res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
             next();
         });
     };

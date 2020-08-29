@@ -65,13 +65,14 @@ var PostController = /** @class */ (function () {
         this.router = express_1.default.Router();
         this.post = post_model_1.default;
         this.createPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var postData, createdPost, post, message, err_1;
+            var postData, image, createdPost, post, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         postData = req.body;
-                        createdPost = new this.post(__assign(__assign({}, postData), { image: req.file.path, author: req.user._id, url: "" + process.env.BASE_URL + this.path }));
+                        image = process.env.BASE_URL + "/" + req.file.path.replace('\\', '/');
+                        createdPost = new this.post(__assign(__assign({}, postData), { image: image, author: req.user._id, url: "" + process.env.BASE_URL + this.path }));
                         return [4 /*yield*/, createdPost.save()];
                     case 1:
                         createdPost = _a.sent();
