@@ -7,6 +7,8 @@ import Post from '../../components/Post/Post';
 import PostType from '../../types/post';
 import FetchFeedData from '../../types/fetchFeedData';
 
+// TODO: implement Add to Cart button
+// TODO: implement Add to Wishlist button
 const Feed = () => {
 	const [posts, setPosts] = useState<PostType[]>([]);
 

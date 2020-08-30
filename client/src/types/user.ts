@@ -3,10 +3,10 @@ interface User {
 	name: string;
 	email: string;
 	url: string;
-	followers: [];
-	following: [];
-	subscriptions: [];
-	subscribers: [];
+	followers: string[];
+	following: string[];
+	subscriptions: string[];
+	subscribers: string[];
 }
 
 export default User;

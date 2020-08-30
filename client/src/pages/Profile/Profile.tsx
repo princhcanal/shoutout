@@ -2,33 +2,53 @@ import React, { useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
 
 import axios from '../../axios';
+
+import Post from '../../components/Post/Post';
+import ProfileCard from '../../components/ProfileCard/ProfileCard';
+import PostType from '../../types/post';
+import User from '../../types/user';
+import FetchUserProfileData from '../../types/fetchUserData';
+import { useParams, useHistory } from 'react-router-dom';
+import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
 
-import { RootState } from '../../store';
-import Post from '../../components/Post/Post';
-import PostType from '../../types/post';
-import FetchUserProfileData from '../../types/fetchUserData';
-
+// TODO: implement unfollow and unsubscribe
 const Profile = () => {
+	const history = useHistory();
+	const userId = useSelector<RootState, string>((state) => state.auth.userId);
 	const [posts, setPosts] = useState<PostType[]>([]);
-	const username = useSelector<RootState, string>(
-		(state) => state.auth.username
-	);
+	const [user, setUser] = useState<User>({
+		username: '',
+		name: '',
+		email: '',
+		url: '',
+		followers: [],
+		following: [],
+		subscribers: [],
+		subscriptions: [],
+	});
+	const { username } = useParams();
 
 	useEffect(() => {
 		try {
 			const fetchUserProfile = async () => {
-				const result = await axios.get<FetchUserProfileData>(
-					`/user/${username}`
-				);
-				setPosts(result.data.posts);
+				try {
+					const result = await axios.get<FetchUserProfileData>(
+						`/user/${username}`
+					);
+					setUser(result.data.user);
+					setPosts(result.data.posts);
+				} catch (err) {
+					history.push('/');
+					console.log(err);
+				}
 			};
 
 			fetchUserProfile();
 		} catch (err) {
 			console.log('ERROR:', err);
 		}
-	}, [username]);
+	}, [username, history]);
 
 	const userPosts = posts.map((post) => {
 		return (
@@ -44,7 +64,25 @@ const Profile = () => {
 		);
 	});
 
-	return <div className={styles.profile}>{userPosts}</div>;
+	return (
+		<div className={styles.profile}>
+			<div className={styles.profileCard}>
+				<ProfileCard
+					name={user.name}
+					username={user.username}
+					email={user.email}
+					userUrl={user.url}
+					numFollowers={user.followers.length}
+					numFollowing={user.following.length}
+					numSubscribers={user.subscribers.length}
+					numSubscriptions={user.subscriptions.length}
+					following={user.followers.includes(userId)}
+					subscribed={user.subscribers.includes(userId)}
+				/>
+			</div>
+			<div className={styles.posts}>{userPosts}</div>
+		</div>
+	);
 };
 
 export default Profile;

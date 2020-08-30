@@ -1,8 +1,87 @@
 .post {
-	width: 50%;
-	margin: auto;
-}
-
-img {
 	width: 100%;
+	max-width: 500px;
+	margin: 0 auto 3rem;
+
+	.heading {
+		padding: 0 0.5rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin: 0 0 0.5rem;
+
+		a {
+			color: var(--color-white);
+			transition: all 0.2s ease-out;
+			display: inline-block;
+
+			&:hover {
+				transform: translateX(0.5rem);
+
+				@media only screen and (hover: none) {
+					transform: none;
+				}
+			}
+		}
+	}
+
+	.price {
+		font-size: 1rem;
+		padding: 0 0.5rem;
+		color: var(--color-blue);
+
+		p {
+			display: inline-block;
+			margin: 0.5rem 0;
+			padding: 0.2rem 0.4rem;
+			border-radius: var(--border-radius-1);
+			background-color: var(--color-white);
+		}
+	}
+
+	.image {
+		background-color: none;
+		border-radius: var(--border-radius-5);
+		box-shadow: var(--box-shadow);
+		margin-bottom: 1.5rem;
+		transition: all 0.2s ease-out;
+
+		&:hover {
+			transform: scale(1.01);
+
+			@media only screen and (hover: none) {
+				transform: none;
+			}
+		}
+
+		img {
+			width: 100%;
+			display: block;
+			border-radius: var(--border-radius-5);
+		}
+	}
+
+	.description {
+		color: var(--color-white);
+		padding: 0 0.5rem;
+
+		a {
+			display: inline-block;
+			transition: all 0.2s ease-out;
+			color: var(--color-light-blue);
+			font-weight: bold;
+
+			&:hover {
+				transform: rotate(5deg) scale(1.05);
+
+				@media only screen and (hover: none) {
+					transform: none;
+				}
+			}
+		}
+	}
+
+	.buttons {
+		padding: 0 0.5rem;
+	}
 }

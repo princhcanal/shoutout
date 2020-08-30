@@ -1,0 +1,22 @@
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 90%;
+	margin: auto;
+
+	.logo {
+		color: var(--color-white);
+		width: 50%;
+	}
+
+	.nav {
+		width: 40%;
+		display: flex;
+		justify-content: space-between;
+
+		a {
+			color: var(--color-white);
+		}
+	}
+}

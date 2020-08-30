@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Post.module.scss';
 
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Card from '../Card/Card';
-import { RootState } from '../../store';
+import Button from '../Button/Button';
 
 export interface PostProps {
 	author: string;
@@ -16,37 +16,35 @@ export interface PostProps {
 }
 
 const Post = (props: PostProps) => {
-	const username = useSelector<RootState, string>(
-		(state) => state.auth.username
-	);
-	const userId = useSelector<RootState, string>((state) => state.auth.userId);
-	const isLoggedIn = useSelector<RootState, boolean>(
-		(state) => state.auth.isLoggedIn
-	);
-
-	const handleTest = () => {
-		console.log(username);
-		console.log(userId);
-		console.log(isLoggedIn);
-	};
-
 	return (
 		<div className={styles.post}>
 			<Card className={styles.card}>
-				<a href={props.url}>
-					<h1>{props.title}</h1>
-				</a>
-				<div className='image'>
-					<img src={props.imageUrl} alt='' />
+				<h3 className={styles.heading}>
+					<a href={props.url}>{props.title}</a>
+					<div className={styles.price}>
+						<p>${props.price}</p>
+					</div>
+				</h3>
+				<div className={styles.image}>
+					<img
+						src={
+							/*props.imageUrl*/ 'https://static.dribbble.com/users/1090020/screenshots/14100191/media/e7b5f3d8284c2344cb2e2e0a2e701218.png'
+						}
+						alt={props.title}
+					/>
 				</div>
-				<div className='description'>
-					<p>{props.description}</p>
-					<p>${props.price}</p>
+				<div className={styles.description}>
+					<p>
+						<Link to={`/profile/${props.author}`}>
+							{props.author}
+						</Link>{' '}
+						{props.description}
+					</p>
 				</div>
-				<div className='buttons'>
-					<button>Add to Cart</button>
-					<button>Add to Wishlist</button>
-					<button onClick={handleTest}>Test</button>
+				<div className={styles.buttons}>
+					<Button>Add to Cart</Button>
+					<Button>Add to Wishlist</Button>
+					{/* <button onClick={handleTest}>Test</button> */}
 				</div>
 			</Card>
 		</div>

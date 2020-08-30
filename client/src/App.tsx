@@ -9,6 +9,7 @@ import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
 import Feed from './pages/Feed/Feed';
 import Profile from './pages/Profile/Profile';
+import Layout from './components/Layout/Layout';
 import { RootState } from './store';
 import * as AuthActions from './store/auth/actions';
 
@@ -34,11 +35,13 @@ const App = () => {
 
 	if (isLoggedIn) {
 		routes = (
-			<Switch>
-				<Route path='/profile' component={Profile} />
-				<Route path='/' component={Feed} />
-				<Redirect to='/' />
-			</Switch>
+			<Layout>
+				<Switch>
+					<Route path='/profile/:username' component={Profile} />
+					<Route path='/' component={Feed} />
+					<Redirect to='/' />
+				</Switch>
+			</Layout>
 		);
 	}
 

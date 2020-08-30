@@ -45,6 +45,7 @@ var post_model_1 = __importDefault(require("../models/post.model"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var UserNotFoundException_1 = __importDefault(require("../exceptions/UserNotFoundException"));
 // TODO: implement subscription service for each user for discounts on products
+// TODO: implement unfollow and unsubscribe
 var UserController = /** @class */ (function () {
     function UserController() {
         var _this = this;
@@ -130,8 +131,52 @@ var UserController = /** @class */ (function () {
                 }
             });
         }); };
+        this.unfollowUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, followingUser, user, index, index, message, numFollowers, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                    case 1:
+                        followingUser = _a.sent();
+                        return [4 /*yield*/, this.user.findById(req.user._id)];
+                    case 2:
+                        user = _a.sent();
+                        if (!followingUser || !user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        if (!followingUser.followers.includes(user._id)) return [3 /*break*/, 4];
+                        index = followingUser.followers.indexOf(user._id);
+                        followingUser.followers.splice(index, 1);
+                        return [4 /*yield*/, followingUser.save()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        if (!user.following.includes(followingUser._id)) return [3 /*break*/, 6];
+                        index = user.following.indexOf(followingUser._id);
+                        user.following.splice(index, 1);
+                        return [4 /*yield*/, user.save()];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6:
+                        message = "User " + username + " unfollowed successfully";
+                        numFollowers = followingUser.followers.length;
+                        res.status(200).json({ message: message, numFollowers: numFollowers });
+                        return [3 /*break*/, 8];
+                    case 7:
+                        err_3 = _a.sent();
+                        console.log(err_3);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/];
+                }
+            });
+        }); };
         this.subscribeUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var username, subscribingUser, user, message, err_3;
+            var username, subscribingUser, user, message, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -171,15 +216,59 @@ var UserController = /** @class */ (function () {
                         res.status(200).json({ message: message });
                         return [3 /*break*/, 8];
                     case 7:
-                        err_3 = _a.sent();
-                        next(err_3);
+                        err_4 = _a.sent();
+                        next(err_4);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.unsubscribeUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, subscribingUser, user, index, index, message, numSubscribers, err_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user.findOne({ username: username })];
+                    case 1:
+                        subscribingUser = _a.sent();
+                        return [4 /*yield*/, this.user.findById(req.user._id)];
+                    case 2:
+                        user = _a.sent();
+                        if (!subscribingUser || !user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        if (!subscribingUser.subscribers.includes(user._id)) return [3 /*break*/, 4];
+                        index = subscribingUser.subscribers.indexOf(user._id);
+                        subscribingUser.subscribers.splice(index, 1);
+                        return [4 /*yield*/, subscribingUser.save()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        if (!user.subscriptions.includes(subscribingUser._id)) return [3 /*break*/, 6];
+                        index = user.subscriptions.indexOf(subscribingUser._id);
+                        user.subscriptions.splice(index, 1);
+                        return [4 /*yield*/, user.save()];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6:
+                        message = "User " + username + " unsubscribed successfully";
+                        numSubscribers = subscribingUser.subscribers.length;
+                        res.status(200).json({ message: message, numSubscribers: numSubscribers });
+                        return [3 /*break*/, 8];
+                    case 7:
+                        err_5 = _a.sent();
+                        console.log(err_5);
                         return [3 /*break*/, 8];
                     case 8: return [2 /*return*/];
                 }
             });
         }); };
         this.getUserPosts = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var username, user, posts, message, err_4;
+            var username, user, posts, message, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -198,15 +287,15 @@ var UserController = /** @class */ (function () {
                         res.status(200).json({ message: message, posts: posts });
                         return [3 /*break*/, 4];
                     case 3:
-                        err_4 = _a.sent();
-                        next(err_4);
+                        err_6 = _a.sent();
+                        next(err_6);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
             });
         }); };
         this.updateUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var userData, user, message, err_5;
+            var userData, user, message, err_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -219,15 +308,15 @@ var UserController = /** @class */ (function () {
                         res.status(200).json({ message: message, user: user });
                         return [3 /*break*/, 3];
                     case 2:
-                        err_5 = _a.sent();
-                        next(err_5);
+                        err_7 = _a.sent();
+                        next(err_7);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
         }); };
         this.getFollowing = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var username, user, followingUsers, following, message, err_6;
+            var username, user, followingUsers, following, message, err_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -255,8 +344,8 @@ var UserController = /** @class */ (function () {
                         });
                         return [3 /*break*/, 3];
                     case 2:
-                        err_6 = _a.sent();
-                        next(err_6);
+                        err_8 = _a.sent();
+                        next(err_8);
                         return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
@@ -272,7 +361,9 @@ var UserController = /** @class */ (function () {
             .all(this.path + "*", auth_middleware_1.default)
             .patch("" + this.path, this.updateUser)
             .post(this.path + "/:username/follow", this.followUser)
-            .post(this.path + "/:username/subscribe", this.subscribeUser);
+            .post(this.path + "/:username/unfollow", this.unfollowUser)
+            .post(this.path + "/:username/subscribe", this.subscribeUser)
+            .post(this.path + "/:username/unsubscribe", this.unsubscribeUser);
     };
     return UserController;
 }());

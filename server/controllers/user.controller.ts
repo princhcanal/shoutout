@@ -5,8 +5,10 @@ import postModel from '../models/post.model';
 import authMiddleware from '../middleware/auth.middleware';
 import UserNotFoundException from '../exceptions/UserNotFoundException';
 import User from '../interfaces/user.interface';
+import { Next } from 'compose-middleware';
 
 // TODO: implement subscription service for each user for discounts on products
+// TODO: implement unfollow and unsubscribe
 class UserController implements Controller {
 	public path = '/user';
 	public router = express.Router();
@@ -26,7 +28,9 @@ class UserController implements Controller {
 			.all(`${this.path}*`, authMiddleware)
 			.patch(`${this.path}`, this.updateUser)
 			.post(`${this.path}/:username/follow`, this.followUser)
-			.post(`${this.path}/:username/subscribe`, this.subscribeUser);
+			.post(`${this.path}/:username/unfollow`, this.unfollowUser)
+			.post(`${this.path}/:username/subscribe`, this.subscribeUser)
+			.post(`${this.path}/:username/unsubscribe`, this.unsubscribeUser);
 	}
 
 	private getUserProfile = async (
@@ -91,6 +95,40 @@ class UserController implements Controller {
 		}
 	};
 
+	private unfollowUser = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const username = req.params.username;
+			let followingUser = await this.user.findOne({ username });
+			let user = await this.user.findById(req.user._id);
+
+			if (!followingUser || !user) {
+				throw new UserNotFoundException(username);
+			}
+
+			if (followingUser.followers.includes(user._id)) {
+				const index = followingUser.followers.indexOf(user._id);
+				followingUser.followers.splice(index, 1);
+				await followingUser.save();
+			}
+
+			if (user.following.includes(followingUser._id)) {
+				const index = user.following.indexOf(followingUser._id);
+				user.following.splice(index, 1);
+				await user.save();
+			}
+
+			const message = `User ${username} unfollowed successfully`;
+			const numFollowers = followingUser.followers.length;
+			res.status(200).json({ message, numFollowers });
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	private subscribeUser = async (
 		req: Request,
 		res: Response,
@@ -126,6 +164,40 @@ class UserController implements Controller {
 			res.status(200).json({ message });
 		} catch (err) {
 			next(err);
+		}
+	};
+
+	private unsubscribeUser = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const username = req.params.username;
+			let subscribingUser = await this.user.findOne({ username });
+			let user = await this.user.findById(req.user._id);
+
+			if (!subscribingUser || !user) {
+				throw new UserNotFoundException(username);
+			}
+
+			if (subscribingUser.subscribers.includes(user._id)) {
+				const index = subscribingUser.subscribers.indexOf(user._id);
+				subscribingUser.subscribers.splice(index, 1);
+				await subscribingUser.save();
+			}
+
+			if (user.subscriptions.includes(subscribingUser._id)) {
+				const index = user.subscriptions.indexOf(subscribingUser._id);
+				user.subscriptions.splice(index, 1);
+				await user.save();
+			}
+
+			const message = `User ${username} unsubscribed successfully`;
+			const numSubscribers = subscribingUser.subscribers.length;
+			res.status(200).json({ message, numSubscribers });
+		} catch (err) {
+			console.log(err);
 		}
 	};
 

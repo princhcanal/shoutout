@@ -1,7 +1,7 @@
 .loginForm {
 	background-color: var(--color-white);
 	padding: 3rem;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-1);
 	width: 50%;
 }
 
@@ -35,7 +35,7 @@
 .button {
 	border: none;
 	padding: 0.5rem 0.7rem;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-1);
 	background-color: var(--color-turquoise);
 	color: var(--color-white);
 }

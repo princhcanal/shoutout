@@ -2,6 +2,7 @@ export interface AuthState {
 	isLoggedIn: boolean;
 	userId: string;
 	username: string;
+	// user: User;
 }
 
 export interface TokenPayload {

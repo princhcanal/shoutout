@@ -2,7 +2,7 @@
 	width: 95%;
 	margin: auto;
 	background-color: var(--color-very-light-blue);
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-1);
 	box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, 0.2);
 }
 
@@ -35,8 +35,8 @@
 .image {
 	width: 40%;
 	background-color: var(--color-beige);
-	border-top-left-radius: var(--border-radius);
-	border-bottom-left-radius: var(--border-radius);
+	border-top-left-radius: var(--border-radius-1);
+	border-bottom-left-radius: var(--border-radius-1);
 	padding: 1rem;
 	display: flex;
 	flex-direction: column;
@@ -74,7 +74,7 @@
 .button {
 	border: none;
 	padding: 0.5rem 0.7rem;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-1);
 	background-color: var(--color-turquoise);
 	color: var(--color-white);
 }
