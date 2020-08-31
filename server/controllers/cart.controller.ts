@@ -113,10 +113,10 @@ class CartController implements Controller {
 		next: NextFunction
 	) => {
 		try {
-			const orderItemId = req.params.id;
+			const prodId = req.params.id;
 			const cart = await this.cart.findOne({ user: req.user._id });
 			const orderItem = await this.orderItem
-				.findById(orderItemId)
+				.findOne({ product: prodId })
 				.populate('product');
 
 			if (!cart) {
@@ -125,17 +125,17 @@ class CartController implements Controller {
 
 			const cartProducts = cart.products as string[];
 
-			if (!orderItem || !cartProducts.includes(orderItemId)) {
-				throw new OrderItemNotFoundException(orderItemId);
+			if (!orderItem || !cartProducts.includes(orderItem._id)) {
+				throw new OrderItemNotFoundException(orderItem?._id as string);
 			}
 
 			const orderItemProduct = orderItem.product as Post;
-			cart.products.splice(cartProducts.indexOf(orderItemId), 1);
+			cart.products.splice(cartProducts.indexOf(orderItem._id), 1);
 			cart.totalPrice -= orderItem.quantity * orderItemProduct.price;
 			await cart.save();
-			await this.orderItem.findByIdAndDelete(orderItemId);
+			await this.orderItem.findByIdAndDelete(orderItem._id);
 
-			const message = `Order item ${orderItemId} deleted from cart successfully`;
+			const message = `Order item ${orderItem._id} deleted from cart successfully`;
 			res.status(200).json({ message, orderItem });
 		} catch (err) {
 			next(err);

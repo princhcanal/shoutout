@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
+import cacheControl from 'express-cache-controller';
 
 import Controller from './interfaces/controller.interface';
 import errorMiddleware from './middleware/error.middleware';
@@ -28,6 +29,11 @@ class App {
 		this.app.use(multerConfig.single('image'));
 		this.app.use(cookieParser());
 		this.app.use('/images', express.static('images'));
+		this.app.use(
+			cacheControl({
+				noCache: true,
+			})
+		);
 		this.app.use((req: Request, res: Response, next: NextFunction) => {
 			res.setHeader(
 				'Access-Control-Allow-Origin',
@@ -39,9 +45,14 @@ class App {
 			);
 			res.setHeader(
 				'Access-Control-Allow-Headers',
-				'Content-Type, Authorization'
+				'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
 			);
 			res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+			if (req.method === 'OPTIONS') {
+				return res.sendStatus(200);
+			}
+
 			next();
 		});
 	}

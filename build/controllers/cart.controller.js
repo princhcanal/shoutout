@@ -151,17 +151,17 @@ var CartController = /** @class */ (function () {
             });
         }); };
         this.removeOrderItem = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var orderItemId, cart, orderItem, cartProducts, orderItemProduct, message, err_4;
+            var prodId, cart, orderItem, cartProducts, orderItemProduct, message, err_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 5, , 6]);
-                        orderItemId = req.params.id;
+                        prodId = req.params.id;
                         return [4 /*yield*/, this.cart.findOne({ user: req.user._id })];
                     case 1:
                         cart = _a.sent();
                         return [4 /*yield*/, this.orderItem
-                                .findById(orderItemId)
+                                .findOne({ product: prodId })
                                 .populate('product')];
                     case 2:
                         orderItem = _a.sent();
@@ -169,19 +169,19 @@ var CartController = /** @class */ (function () {
                             throw new CartNotFoundException_1.default(req.user.username);
                         }
                         cartProducts = cart.products;
-                        if (!orderItem || !cartProducts.includes(orderItemId)) {
-                            throw new OrderItemNotFound_1.default(orderItemId);
+                        if (!orderItem || !cartProducts.includes(orderItem._id)) {
+                            throw new OrderItemNotFound_1.default(orderItem === null || orderItem === void 0 ? void 0 : orderItem._id);
                         }
                         orderItemProduct = orderItem.product;
-                        cart.products.splice(cartProducts.indexOf(orderItemId), 1);
+                        cart.products.splice(cartProducts.indexOf(orderItem._id), 1);
                         cart.totalPrice -= orderItem.quantity * orderItemProduct.price;
                         return [4 /*yield*/, cart.save()];
                     case 3:
                         _a.sent();
-                        return [4 /*yield*/, this.orderItem.findByIdAndDelete(orderItemId)];
+                        return [4 /*yield*/, this.orderItem.findByIdAndDelete(orderItem._id)];
                     case 4:
                         _a.sent();
-                        message = "Order item " + orderItemId + " deleted from cart successfully";
+                        message = "Order item " + orderItem._id + " deleted from cart successfully";
                         res.status(200).json({ message: message, orderItem: orderItem });
                         return [3 /*break*/, 6];
                     case 5:

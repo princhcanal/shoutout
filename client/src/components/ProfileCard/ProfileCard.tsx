@@ -1,20 +1,15 @@
-import React, {
-	useRef,
-	ForwardRefExoticComponent,
-	RefAttributes,
-	useState,
-	useEffect,
-} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from './ProfileCard.module.scss';
 import ButtonStyles from '../Button/Button.module.scss';
 
 import axios from '../../axios';
 import { BigHead } from '@bigheads/core';
+import { useSelector } from 'react-redux';
 
 import Card from '../Card/Card';
-import Button, { ButtonRef, ButtonProps } from '../Button/Button';
-import { useSelector } from 'react-redux';
+import Button, { ButtonRef } from '../Button/Button';
 import { RootState } from '../../store';
+import ButtonHandle from '../../types/buttonHandle';
 
 interface ProfileCardProps {
 	name: string;
@@ -25,33 +20,32 @@ interface ProfileCardProps {
 	numFollowing: number;
 	numSubscribers: number;
 	numSubscriptions: number;
-	following: boolean;
-	subscribed: boolean;
+	isFollowing: boolean;
+	isSubscribed: boolean;
 }
-
-export type Handle<T> = T extends ForwardRefExoticComponent<
-	ButtonProps & RefAttributes<infer T2>
->
-	? T2
-	: never;
 
 const ProfileCard = (props: ProfileCardProps) => {
 	const username = useSelector<RootState, string>(
 		(state) => state.auth.username
 	);
-	let followButton: Handle<typeof Button>;
-	let subscribeButton: Handle<typeof Button>;
+	let followButton: ButtonHandle<typeof Button>;
+	let subscribeButton: ButtonHandle<typeof Button>;
 	const numFollowers = useRef<HTMLElement>(null);
 	const numFollowing = useRef<HTMLElement>(null);
 	const numSubscribers = useRef<HTMLElement>(null);
 	const numSubscribing = useRef<HTMLElement>(null);
-	const [isFollowing, setIsFollowing] = useState<boolean>(props.following);
-	const [isSubscribed, setIsSubscribed] = useState<boolean>(props.subscribed);
+	const [isFollowing, setIsFollowing] = useState<boolean>(props.isFollowing);
+	const [isSubscribed, setIsSubscribed] = useState<boolean>(
+		props.isSubscribed
+	);
 
 	useEffect(() => {
-		setIsFollowing(props.following);
-		setIsSubscribed(props.subscribed);
-	}, [props.following, props.subscribed]);
+		setIsFollowing(props.isFollowing);
+	}, [props.isFollowing]);
+
+	useEffect(() => {
+		setIsSubscribed(props.isSubscribed);
+	}, [props.isSubscribed]);
 
 	const handleFollow = async () => {
 		try {
@@ -110,7 +104,9 @@ const ProfileCard = (props: ProfileCardProps) => {
 				numSubscribers.current.innerText = subscribers.toString();
 				setIsSubscribed(false);
 			}
-		} catch (err) {}
+		} catch (err) {
+			console.log('ERROR:', err);
+		}
 	};
 
 	const image = (
@@ -151,9 +147,9 @@ const ProfileCard = (props: ProfileCardProps) => {
 								isFollowing ? handleUnFollow : handleFollow
 							}
 							ref={(f) => (followButton = f as ButtonRef)}
-							style={props.following ? 'hollow' : undefined}
+							style={props.isFollowing ? 'hollow' : undefined}
 						>
-							{props.following ? 'Following' : 'Follow'}
+							{props.isFollowing ? 'Following' : 'Follow'}
 						</Button>
 						<Button
 							onClick={
@@ -162,9 +158,9 @@ const ProfileCard = (props: ProfileCardProps) => {
 									: handleSubscribe
 							}
 							ref={(s) => (subscribeButton = s as ButtonRef)}
-							style={props.subscribed ? 'hollow' : undefined}
+							style={props.isSubscribed ? 'hollow' : undefined}
 						>
-							{props.subscribed ? 'Subscribed' : 'Subscribe'}
+							{props.isSubscribed ? 'Subscribed' : 'Subscribe'}
 						</Button>
 					</div>
 				)}

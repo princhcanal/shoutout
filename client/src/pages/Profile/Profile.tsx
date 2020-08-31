@@ -12,7 +12,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
 
-// TODO: implement unfollow and unsubscribe
+// TODO: implement edit profile
 const Profile = () => {
 	const history = useHistory();
 	const userId = useSelector<RootState, string>((state) => state.auth.userId);
@@ -54,12 +54,15 @@ const Profile = () => {
 		return (
 			<Post
 				key={post._id}
+				id={post._id}
 				author={username}
 				description={post.description}
 				imageUrl={post.image}
 				price={post.price}
 				title={post.title}
 				url={post.url}
+				isInCart={false}
+				isInWishlist={false}
 			/>
 		);
 	});
@@ -76,8 +79,8 @@ const Profile = () => {
 					numFollowing={user.following.length}
 					numSubscribers={user.subscribers.length}
 					numSubscriptions={user.subscriptions.length}
-					following={user.followers.includes(userId)}
-					subscribed={user.subscribers.includes(userId)}
+					isFollowing={user.followers.includes(userId)}
+					isSubscribed={user.subscribers.includes(userId)}
 				/>
 			</div>
 			<div className={styles.posts}>{userPosts}</div>

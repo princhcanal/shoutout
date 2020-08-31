@@ -43,6 +43,7 @@ var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
+var express_cache_controller_1 = __importDefault(require("express-cache-controller"));
 var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var notFound_middleware_1 = __importDefault(require("./middleware/notFound.middleware"));
 var multerConfig_1 = __importDefault(require("./utils/multerConfig"));
@@ -61,11 +62,17 @@ var App = /** @class */ (function () {
         this.app.use(multerConfig_1.default.single('image'));
         this.app.use(cookie_parser_1.default());
         this.app.use('/images', express_1.default.static('images'));
+        this.app.use(express_cache_controller_1.default({
+            noCache: true,
+        }));
         this.app.use(function (req, res, next) {
             res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
             res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
-            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
             res.setHeader('Access-Control-Allow-Credentials', 'true');
+            if (req.method === 'OPTIONS') {
+                return res.sendStatus(200);
+            }
             next();
         });
     };
