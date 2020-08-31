@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import OrderItem from '../interfaces/orderItem.interface';
+import Post from '../interfaces/post.interface';
 
 const orderItemSchema = new mongoose.Schema(
 	{

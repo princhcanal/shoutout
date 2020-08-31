@@ -12,6 +12,7 @@ import Wishlist from '../../types/wishlist';
 import FetchWishlistData from '../../types/fetchWishlistData';
 
 const Feed = () => {
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [cart, setCart] = useState<Cart>({
 		products: [],
@@ -34,6 +35,7 @@ const Feed = () => {
 					'/wishlist'
 				);
 				setWishlist(wishlist.data.wishlist);
+				setIsLoading(false);
 			};
 
 			fetchFeed();
@@ -67,7 +69,7 @@ const Feed = () => {
 		);
 	});
 
-	return <div className={styles.feed}>{feedPosts}</div>;
+	return <div className={styles.feed}>{!isLoading && feedPosts}</div>;
 };
 
 export default Feed;

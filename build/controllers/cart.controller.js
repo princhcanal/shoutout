@@ -56,6 +56,7 @@ var validation_middleware_1 = __importDefault(require("../middleware/validation.
 var cart_validator_1 = __importDefault(require("../validators/cart.validator"));
 var cart_model_1 = __importDefault(require("../models/cart.model"));
 var orderItem_model_1 = __importDefault(require("../models/orderItem.model"));
+var post_model_1 = __importDefault(require("../models/post.model"));
 var CartNotFoundException_1 = __importDefault(require("../exceptions/CartNotFoundException"));
 var OrderItemNotFound_1 = __importDefault(require("../exceptions/OrderItemNotFound"));
 var CartController = /** @class */ (function () {
@@ -65,25 +66,38 @@ var CartController = /** @class */ (function () {
         this.router = express_1.default.Router();
         this.cart = cart_model_1.default;
         this.orderItem = orderItem_model_1.default;
+        this.product = post_model_1.default;
         this.getCart = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var cart, message, err_1;
+            var cart, cartProducts, productIds, products, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, this.cart
                                 .findOne({ user: req.user._id })
                                 .populate('products')];
                     case 1:
                         cart = _a.sent();
-                        message = 'Cart fetched successfully';
-                        res.status(200).json({ message: message, cart: cart });
-                        return [3 /*break*/, 3];
+                        if (!cart) {
+                            throw new CartNotFoundException_1.default(req.user.username);
+                        }
+                        cartProducts = cart.products;
+                        productIds = cartProducts.map(function (product) { return product.product; });
+                        return [4 /*yield*/, this.product
+                                .find({
+                                _id: { $in: productIds },
+                            })
+                                .populate('author')];
                     case 2:
+                        products = _a.sent();
+                        message = 'Cart fetched successfully';
+                        res.status(200).json({ message: message, cart: cart, products: products });
+                        return [3 /*break*/, 4];
+                    case 3:
                         err_1 = _a.sent();
                         next(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };

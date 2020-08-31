@@ -9,6 +9,8 @@ import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
 import Feed from './pages/Feed/Feed';
 import Profile from './pages/Profile/Profile';
+import Cart from './pages/Cart/Cart';
+import Wishlist from './pages/Wishlist/Wishlist';
 import Layout from './components/Layout/Layout';
 import { RootState } from './store';
 import * as AuthActions from './store/auth/actions';
@@ -38,6 +40,8 @@ const App = () => {
 			<Layout>
 				<Switch>
 					<Route path='/profile/:username' component={Profile} />
+					<Route path='/cart' component={Cart} />
+					<Route path='/wishlist' component={Wishlist} />
 					<Route path='/' component={Feed} />
 					<Redirect to='/' />
 				</Switch>

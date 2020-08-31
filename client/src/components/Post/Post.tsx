@@ -3,11 +3,13 @@ import styles from './Post.module.scss';
 import ButtonStyles from '../Button/Button.module.scss';
 
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from '../../axios';
 
 import Card from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
 import ButtonHandle from '../../types/buttonHandle';
+import { RootState } from '../../store';
 
 export interface PostProps {
 	id: string;
@@ -23,6 +25,9 @@ export interface PostProps {
 
 // TODO: implement createdAt
 const Post = (props: PostProps) => {
+	const username = useSelector<RootState, string>(
+		(state) => state.auth.username
+	);
 	let addToCartButton: ButtonHandle<typeof Button>;
 	let addToWishlistButton: ButtonHandle<typeof Button>;
 	const [isInCart, setIsInCart] = useState<boolean>(props.isInCart);
@@ -97,29 +102,11 @@ const Post = (props: PostProps) => {
 		}
 	};
 
-	return (
-		<Card className={styles.post}>
-			<h3 className={styles.heading}>
-				<a href={props.url}>{props.title}</a>
-				<div className={styles.price}>
-					<p>${props.price}</p>
-				</div>
-			</h3>
-			<div className={styles.image}>
-				<img
-					src={
-						/*props.imageUrl*/ 'https://static.dribbble.com/users/1090020/screenshots/14100191/media/e7b5f3d8284c2344cb2e2e0a2e701218.png'
-					}
-					alt={props.title}
-				/>
-			</div>
-			<div className={styles.description}>
-				<p>
-					<Link to={`/profile/${props.author}`}>{props.author}</Link>{' '}
-					{props.description}
-				</p>
-			</div>
-			<div className={styles.buttons}>
+	let buttons;
+
+	if (!(props.author === username)) {
+		buttons = (
+			<>
 				<Button
 					onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
 					style={isInCart ? 'hollow' : undefined}
@@ -138,7 +125,28 @@ const Post = (props: PostProps) => {
 				>
 					{isInWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
 				</Button>
+			</>
+		);
+	}
+
+	return (
+		<Card className={styles.post}>
+			<h3 className={styles.heading}>
+				<a href={props.url}>{props.title}</a>
+				<div className={styles.price}>
+					<p>${props.price}</p>
+				</div>
+			</h3>
+			<div className={styles.image}>
+				<img src={props.imageUrl} alt={props.title} />
 			</div>
+			<div className={styles.description}>
+				<p>
+					<Link to={`/profile/${props.author}`}>{props.author}</Link>{' '}
+					{props.description}
+				</p>
+			</div>
+			<div className={styles.buttons}>{buttons}</div>
 		</Card>
 	);
 };

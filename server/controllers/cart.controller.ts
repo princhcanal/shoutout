@@ -7,14 +7,17 @@ import validationMiddleware from '../middleware/validation.middleware';
 import cartValidator from '../validators/cart.validator';
 import cartModel from '../models/cart.model';
 import orderItemModel from '../models/orderItem.model';
+import postModel from '../models/post.model';
 import CartNotFoundException from '../exceptions/CartNotFoundException';
 import OrderItemNotFoundException from '../exceptions/OrderItemNotFound';
+import OrderItem from '../interfaces/orderItem.interface';
 
 class CartController implements Controller {
 	public path = '/cart';
 	public router = express.Router();
 	public cart = cartModel;
 	public orderItem = orderItemModel;
+	public product = postModel;
 
 	constructor() {
 		this.initializeRoutes();
@@ -43,8 +46,20 @@ class CartController implements Controller {
 				.findOne({ user: req.user._id })
 				.populate('products');
 
+			if (!cart) {
+				throw new CartNotFoundException(req.user.username);
+			}
+
+			const cartProducts = cart.products as OrderItem[];
+			const productIds = cartProducts.map((product) => product.product);
+			const products = await this.product
+				.find({
+					_id: { $in: productIds },
+				})
+				.populate('author');
+
 			const message = 'Cart fetched successfully';
-			res.status(200).json({ message, cart });
+			res.status(200).json({ message, cart, products });
 		} catch (err) {
 			next(err);
 		}

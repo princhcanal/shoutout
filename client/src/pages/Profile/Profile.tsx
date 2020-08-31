@@ -11,9 +11,17 @@ import FetchUserProfileData from '../../types/fetchUserData';
 import { useParams, useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
+import Cart from '../../types/cart';
+import Wishlist from '../../types/wishlist';
+import FetchCartData from '../../types/fetchCartData';
+import FetchWishlistData from '../../types/fetchWishlistData';
 
 // TODO: implement edit profile
 const Profile = () => {
+	const [profileCardIsLoading, setProfileCardIsLoading] = useState<boolean>(
+		true
+	);
+	const [feedIsLoading, setFeedIsLoading] = useState<boolean>(true);
 	const history = useHistory();
 	const userId = useSelector<RootState, string>((state) => state.auth.userId);
 	const [posts, setPosts] = useState<PostType[]>([]);
@@ -28,6 +36,15 @@ const Profile = () => {
 		subscriptions: [],
 	});
 	const { username } = useParams();
+	const [cart, setCart] = useState<Cart>({
+		products: [],
+		totalPrice: 0,
+		user: '',
+	});
+	const [wishlist, setWishlist] = useState<Wishlist>({
+		products: [],
+		user: '',
+	});
 
 	useEffect(() => {
 		try {
@@ -38,6 +55,7 @@ const Profile = () => {
 					);
 					setUser(result.data.user);
 					setPosts(result.data.posts);
+					setProfileCardIsLoading(false);
 				} catch (err) {
 					history.push('/');
 					console.log(err);
@@ -50,6 +68,32 @@ const Profile = () => {
 		}
 	}, [username, history]);
 
+	useEffect(() => {
+		try {
+			const fetchFeed = async () => {
+				const cart = await axios.get<FetchCartData>('/cart');
+				setCart(cart.data.cart);
+				const wishlist = await axios.get<FetchWishlistData>(
+					'/wishlist'
+				);
+				setWishlist(wishlist.data.wishlist);
+				setFeedIsLoading(false);
+			};
+
+			fetchFeed();
+		} catch (err) {
+			console.log('ERROR:', err);
+		}
+	}, []);
+
+	const cartProductIds = cart.products.map((product) => {
+		return product.product;
+	});
+
+	const wishlistProductIds = wishlist.products.map((product) => {
+		return product._id;
+	});
+
 	const userPosts = posts.map((post) => {
 		return (
 			<Post
@@ -61,8 +105,8 @@ const Profile = () => {
 				price={post.price}
 				title={post.title}
 				url={post.url}
-				isInCart={false}
-				isInWishlist={false}
+				isInCart={cartProductIds.includes(post._id)}
+				isInWishlist={wishlistProductIds.includes(post._id)}
 			/>
 		);
 	});
@@ -70,20 +114,22 @@ const Profile = () => {
 	return (
 		<div className={styles.profile}>
 			<div className={styles.profileCard}>
-				<ProfileCard
-					name={user.name}
-					username={user.username}
-					email={user.email}
-					userUrl={user.url}
-					numFollowers={user.followers.length}
-					numFollowing={user.following.length}
-					numSubscribers={user.subscribers.length}
-					numSubscriptions={user.subscriptions.length}
-					isFollowing={user.followers.includes(userId)}
-					isSubscribed={user.subscribers.includes(userId)}
-				/>
+				{!profileCardIsLoading && (
+					<ProfileCard
+						name={user.name}
+						username={user.username}
+						email={user.email}
+						userUrl={user.url}
+						numFollowers={user.followers.length}
+						numFollowing={user.following.length}
+						numSubscribers={user.subscribers.length}
+						numSubscriptions={user.subscriptions.length}
+						isFollowing={user.followers.includes(userId)}
+						isSubscribed={user.subscribers.includes(userId)}
+					/>
+				)}
 			</div>
-			<div className={styles.posts}>{userPosts}</div>
+			<div className={styles.posts}>{!feedIsLoading && userPosts}</div>
 		</div>
 	);
 };

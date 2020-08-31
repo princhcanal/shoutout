@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 
 import Controller from '../interfaces/controller.interface';
 import wishlistModel from '../models/wishlist.model';
+import postModel from '../models/post.model';
 import authMiddleware from '../middleware/auth.middleware';
 import validationMiddleware from '../middleware/validation.middleware';
 import wishlistValidator from '../validators/wishlist.validator';
@@ -12,6 +13,7 @@ class WishlistController implements Controller {
 	public path = '/wishlist';
 	public router = express.Router();
 	private wishlist = wishlistModel;
+	private products = postModel;
 
 	constructor() {
 		this.initializeRoutes();
@@ -44,6 +46,12 @@ class WishlistController implements Controller {
 			if (!wishlist) {
 				throw new WishlistNotFoundException(req.user.username);
 			}
+
+			const products = await this.products
+				.find({ _id: { $in: wishlist.products } })
+				.populate('author', 'username');
+
+			wishlist.products = products;
 
 			const message = 'Wishlist fetched successfully';
 			res.status(200).json({ message, wishlist });

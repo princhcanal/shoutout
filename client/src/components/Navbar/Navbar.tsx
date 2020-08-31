@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import * as AuthActions from '../../store/auth/actions';
 import { RootState } from '../../store';
+import Button from '../Button/Button';
 
 const Navbar = () => {
 	const history = useHistory();
@@ -29,7 +30,7 @@ const Navbar = () => {
 				<Link to='/wishlist'>Wishlist</Link>
 				<Link to='/cart'>Cart</Link>
 				<Link to={`/profile/${username}`}>Profile</Link>
-				<button onClick={handleLogout}>Logout</button>
+				<Button onClick={handleLogout}>Logout</Button>
 			</nav>
 		</header>
 	);

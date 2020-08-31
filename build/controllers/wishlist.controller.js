@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var wishlist_model_1 = __importDefault(require("../models/wishlist.model"));
+var post_model_1 = __importDefault(require("../models/post.model"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var wishlist_validator_1 = __importDefault(require("../validators/wishlist.validator"));
@@ -52,12 +53,13 @@ var WishlistController = /** @class */ (function () {
         this.path = '/wishlist';
         this.router = express_1.default.Router();
         this.wishlist = wishlist_model_1.default;
+        this.products = post_model_1.default;
         this.getWishlist = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var wishlist, message, err_1;
+            var wishlist, products, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 3, , 4]);
                         return [4 /*yield*/, this.wishlist
                                 .findOne({
                                 user: req.user._id,
@@ -68,14 +70,20 @@ var WishlistController = /** @class */ (function () {
                         if (!wishlist) {
                             throw new WishlistNotFoundException_1.default(req.user.username);
                         }
+                        return [4 /*yield*/, this.products
+                                .find({ _id: { $in: wishlist.products } })
+                                .populate('author', 'username')];
+                    case 2:
+                        products = _a.sent();
+                        wishlist.products = products;
                         message = 'Wishlist fetched successfully';
                         res.status(200).json({ message: message, wishlist: wishlist });
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 4];
+                    case 3:
                         err_1 = _a.sent();
                         next(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         }); };

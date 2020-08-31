@@ -1,4 +1,5 @@
 import OrderItem from './orderItem';
+import Post from './post';
 
 interface Cart {
 	products: OrderItem[];
