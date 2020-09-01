@@ -161,7 +161,12 @@ var AuthController = /** @class */ (function () {
     AuthController.prototype.createToken = function (user) {
         var expiresIn = 60 * 60; // an hour
         var secret = process.env.JWT_SECRET;
-        var tokenData = { _id: user._id, username: user.username };
+        var tokenData = {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            name: user.name,
+        };
         return {
             expiresIn: expiresIn,
             token: jsonwebtoken_1.default.sign(tokenData, secret, { expiresIn: expiresIn }),

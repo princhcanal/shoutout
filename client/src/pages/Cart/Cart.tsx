@@ -3,7 +3,7 @@ import styles from './Cart.module.scss';
 
 import axios from '../../axios';
 
-import CartType from '../../types/cart';
+// import CartType from '../../types/cart';
 import FetchCartData from '../../types/fetchCartData';
 import Wishlist from '../../types/wishlist';
 import PostType from '../../types/post';
@@ -12,11 +12,11 @@ import FetchWishlistData from '../../types/fetchWishlistData';
 
 const Cart = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [cart, setCart] = useState<CartType>({
-		products: [],
-		totalPrice: 0,
-		user: '',
-	});
+	// const [cart, setCart] = useState<CartType>({
+	// 	products: [],
+	// 	totalPrice: 0,
+	// 	user: '',
+	// });
 	const [wishlist, setWishlist] = useState<Wishlist>({
 		products: [],
 		user: '',
@@ -27,7 +27,7 @@ const Cart = () => {
 		const fetchCart = async () => {
 			try {
 				const cart = await axios.get<FetchCartData>('/cart');
-				setCart(cart.data.cart);
+				// setCart(cart.data.cart);
 				setCartProducts(cart.data.products);
 				const wishlist = await axios.get<FetchWishlistData>(
 					'/wishlist'

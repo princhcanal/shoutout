@@ -10,6 +10,7 @@ import Card from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
 import { RootState } from '../../store';
 import ButtonHandle from '../../types/buttonHandle';
+import { Link } from 'react-router-dom';
 
 interface ProfileCardProps {
 	name: string;
@@ -189,6 +190,11 @@ const ProfileCard = (props: ProfileCardProps) => {
 					</div>
 				</div>
 			</div>
+			{username === props.username && (
+				<Link to='/account/edit' className={styles.editProfile}>
+					Edit Profile
+				</Link>
+			)}
 		</Card>
 	);
 };

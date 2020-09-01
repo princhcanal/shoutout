@@ -5,6 +5,7 @@
 	margin: 1rem auto 3rem;
 	text-align: center;
 	padding-bottom: 1rem;
+	position: relative;
 
 	.header {
 		margin-bottom: 2rem;
@@ -33,6 +34,21 @@
 			p {
 				margin: 0.5rem 0;
 			}
+		}
+	}
+
+	.editProfile {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		font-size: 0.8rem;
+
+		&:link,
+		&:visited {
+			color: var(--color-white);
+			border: 1px solid var(--color-white);
+			padding: 0.4rem 0.6rem;
+			border-radius: var(--border-radius-1);
 		}
 	}
 }

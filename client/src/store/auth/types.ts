@@ -2,12 +2,16 @@ export interface AuthState {
 	isLoggedIn: boolean;
 	userId: string;
 	username: string;
+	name: string;
+	email: string;
 	// user: User;
 }
 
 export interface TokenPayload {
 	_id: string;
 	username: string;
+	name: string;
+	email: string;
 	iat: number;
 	exp: number;
 }
@@ -22,6 +26,8 @@ export interface RegisterFormValues {
 	password: string;
 	username: string;
 }
+
+export interface EditProfileFormValues {}
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';

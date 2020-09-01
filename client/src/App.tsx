@@ -11,6 +11,7 @@ import Feed from './pages/Feed/Feed';
 import Profile from './pages/Profile/Profile';
 import Cart from './pages/Cart/Cart';
 import Wishlist from './pages/Wishlist/Wishlist';
+import EditProfile from './pages/EditProfile/EditProfile';
 import Layout from './components/Layout/Layout';
 import { RootState } from './store';
 import * as AuthActions from './store/auth/actions';
@@ -31,7 +32,7 @@ const App = () => {
 			<Route path='/register' component={Register} />
 			<Route path='/login' component={Login} />
 			<Route path='/' component={Landing} />
-			<Redirect to='/' />
+			<Redirect to='/login' />
 		</Switch>
 	);
 
@@ -39,6 +40,7 @@ const App = () => {
 		routes = (
 			<Layout>
 				<Switch>
+					<Route path='/account/edit' component={EditProfile} />
 					<Route path='/profile/:username' component={Profile} />
 					<Route path='/cart' component={Cart} />
 					<Route path='/wishlist' component={Wishlist} />

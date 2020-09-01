@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styles from './Wishlist.module.scss';
 
 import WishlistType from '../../types/wishlist';
-import PostType from '../../types/post';
 import axios from '../../axios';
 import FetchWishlistData from '../../types/fetchWishlistData';
 import Post from '../../components/Post/Post';

@@ -13,6 +13,7 @@ import Card from '../../components/Card/Card';
 import { Link } from 'react-router-dom';
 import * as AuthActions from '../../store/auth/actions';
 import { RegisterFormValues } from '../../store/auth';
+import Button from '../Button/Button';
 
 const RegisterForm = () => {
 	const history = useHistory();
@@ -846,9 +847,7 @@ const RegisterForm = () => {
 								<Link to='/login'>Login</Link>
 							</p>
 							<div className={styles.buttons}>
-								<button type='submit' className={styles.button}>
-									Register
-								</button>
+								<Button type='submit'>Register</Button>
 							</div>
 						</Form>
 					</Formik>

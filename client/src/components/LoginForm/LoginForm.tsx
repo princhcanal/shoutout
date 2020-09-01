@@ -11,6 +11,7 @@ import Cookies from 'js-cookie';
 import * as AuthActions from '../../store/auth/actions';
 import Input from '../Form/Input/Input';
 import { LoginFormValues } from '../../store/auth';
+import Button from '../Button/Button';
 
 // TODO: abstract onSubmit
 const LoginForm = () => {
@@ -76,9 +77,7 @@ const LoginForm = () => {
 							<Link to='/register'>Register</Link>
 						</p>
 						<div className={styles.buttons}>
-							<button type='submit' className={styles.button}>
-								Login
-							</button>
+							<Button type='submit'>Login</Button>
 						</div>
 					</Form>
 				</Formik>

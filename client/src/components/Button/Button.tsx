@@ -2,11 +2,13 @@ import React, { useRef, Ref, useImperativeHandle, forwardRef } from 'react';
 import styles from './Button.module.scss';
 
 type ButtonStyles = 'hollow';
+type ButtonTypes = 'button' | 'submit' | 'reset' | undefined;
 
 export interface ButtonProps {
 	children: any;
 	onClick?: any;
 	style?: ButtonStyles;
+	type?: ButtonTypes;
 }
 
 export interface ButtonRef {
@@ -32,6 +34,7 @@ const Button = forwardRef((props: ButtonProps, ref: Ref<ButtonRef>) => {
 			className={classNames.join(' ')}
 			onClick={props.onClick}
 			ref={buttonRef}
+			type={props.type ? props.type : undefined}
 		>
 			{props.children}
 		</button>

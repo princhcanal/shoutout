@@ -21,6 +21,8 @@ const initialState: AuthState = {
 	isLoggedIn: false,
 	userId: '',
 	username: '',
+	name: '',
+	email: '',
 };
 
 const login = (state: AuthState, action: LoginAction): AuthState => {
@@ -38,12 +40,16 @@ const login = (state: AuthState, action: LoginAction): AuthState => {
 	const tokenPayload = jwtDecode<TokenPayload>(token);
 	const username = tokenPayload.username;
 	const userId = tokenPayload._id;
+	const name = tokenPayload.name;
+	const email = tokenPayload.email;
 
 	return {
 		...state,
 		isLoggedIn: true,
 		username,
 		userId,
+		name,
+		email,
 	};
 };
 
@@ -55,6 +61,8 @@ const logout = (state: AuthState, action: LogoutAction): AuthState => {
 		isLoggedIn: false,
 		userId: '',
 		username: '',
+		name: '',
+		email: '',
 	};
 };
 
