@@ -54,6 +54,7 @@ var express_1 = __importDefault(require("express"));
 var post_model_1 = __importDefault(require("../models/post.model"));
 var PostNotFoundException_1 = __importDefault(require("../exceptions/PostNotFoundException"));
 var NotAuthorizedException_1 = __importDefault(require("../exceptions/NotAuthorizedException"));
+var FileNotFoundException_1 = __importDefault(require("../exceptions/FileNotFoundException"));
 var post_validator_1 = __importDefault(require("../validators/post.validator"));
 var validation_middleware_1 = __importDefault(require("../middleware/validation.middleware"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
@@ -71,6 +72,9 @@ var PostController = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         postData = req.body;
+                        if (!req.file) {
+                            throw new FileNotFoundException_1.default();
+                        }
                         image = process.env.BASE_URL + "/" + req.file.path.replace('\\', '/');
                         createdPost = new this.post(__assign(__assign({}, postData), { image: image, author: req.user._id, url: "" + process.env.BASE_URL + this.path }));
                         return [4 /*yield*/, createdPost.save()];

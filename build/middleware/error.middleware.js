@@ -4,6 +4,7 @@ var errorMiddleware = function (error, req, res, next) {
     var status = error.status || 500;
     var message = error.message || 'Something went wrong';
     var data = error.data;
+    console.log(status, message, data);
     res.status(status).json({ status: status, message: message, data: data });
 };
 exports.default = errorMiddleware;

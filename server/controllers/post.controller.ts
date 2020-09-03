@@ -5,6 +5,7 @@ import Post from '../interfaces/post.interface';
 import postModel from '../models/post.model';
 import PostNotFoundException from '../exceptions/PostNotFoundException';
 import NotAuthorizedException from '../exceptions/NotAuthorizedException';
+import FileNotFoundException from '../exceptions/FileNotFoundException';
 import postValidator from '../validators/post.validator';
 import validationMiddleware from '../middleware/validation.middleware';
 import authMiddleware from '../middleware/auth.middleware';
@@ -44,6 +45,11 @@ class PostController implements Controller {
 	) => {
 		try {
 			const postData: Post = req.body;
+
+			if (!req.file) {
+				throw new FileNotFoundException();
+			}
+
 			const image = `${process.env.BASE_URL}/${req.file.path.replace(
 				'\\',
 				'/'
