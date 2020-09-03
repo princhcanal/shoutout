@@ -5,6 +5,8 @@ import ButtonStyles from '../Button/Button.module.scss';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from '../../axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import Card from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
@@ -100,7 +102,7 @@ const Post = (props: PostProps) => {
 
 	let buttons;
 
-	if (props.post.author.username) {
+	if (props.post.author.username !== username) {
 		buttons = (
 			<>
 				<Button
@@ -130,7 +132,7 @@ const Post = (props: PostProps) => {
 	return (
 		<Card className={styles.post}>
 			<h3 className={styles.heading}>
-				<a href={props.post.url}>{props.post.title}</a>
+				<Link to={`/posts/${props.post._id}`}>{props.post.title}</Link>
 				<div className={styles.price}>
 					<p>${props.post.price}</p>
 				</div>
@@ -152,6 +154,9 @@ const Post = (props: PostProps) => {
 				<p className={styles.date}>{timestamp}</p>
 			</div>
 			<div className={styles.buttons}>{buttons}</div>
+			<div className={styles.editOptions}>
+				<FontAwesomeIcon icon={faEllipsisV} />
+			</div>
 		</Card>
 	);
 };

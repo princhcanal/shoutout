@@ -113,7 +113,7 @@ class PostController implements Controller {
 		try {
 			const id = req.params.id;
 
-			const post = await this.post.findById(id);
+			const post = await this.post.findById(id).populate('author');
 
 			if (!post) {
 				throw new PostNotFoundException(id);

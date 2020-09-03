@@ -134,7 +134,7 @@ var PostController = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         id = req.params.id;
-                        return [4 /*yield*/, this.post.findById(id)];
+                        return [4 /*yield*/, this.post.findById(id).populate('author')];
                     case 1:
                         post = _a.sent();
                         if (!post) {

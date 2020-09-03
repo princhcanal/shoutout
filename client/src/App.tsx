@@ -12,6 +12,7 @@ import Profile from './pages/Profile/Profile';
 import Cart from './pages/Cart/Cart';
 import Wishlist from './pages/Wishlist/Wishlist';
 import EditProfile from './pages/EditProfile/EditProfile';
+import SinglePost from './pages/SinglePost/SinglePost';
 import Layout from './components/Layout/Layout';
 import { RootState } from './store';
 import * as AuthActions from './store/auth/actions';
@@ -42,6 +43,7 @@ const App = () => {
 				<Switch>
 					<Route path='/account/edit' component={EditProfile} />
 					<Route path='/profile/:username' component={Profile} />
+					<Route path='/posts/:id' component={SinglePost} />
 					<Route path='/cart' component={Cart} />
 					<Route path='/wishlist' component={Wishlist} />
 					<Route path='/' component={Feed} />
