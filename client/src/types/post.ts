@@ -8,6 +8,8 @@ interface Post {
 	price: number;
 	image: string;
 	url: string;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export default Post;

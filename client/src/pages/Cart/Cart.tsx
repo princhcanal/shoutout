@@ -47,16 +47,13 @@ const Cart = () => {
 	});
 
 	const cartItems = cartProducts.map((product) => {
+		const date = new Date(product.createdAt);
+
 		return (
 			<Post
 				key={product._id}
-				id={product._id}
-				author={product.author.username}
-				description={product.description}
-				imageUrl={product.image}
-				price={product.price}
-				title={product.title}
-				url={product.url}
+				post={product}
+				date={date}
 				isInCart={true}
 				isInWishlist={wishlistProductIds.includes(product._id)}
 			/>

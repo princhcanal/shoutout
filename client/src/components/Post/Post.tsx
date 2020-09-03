@@ -9,21 +9,17 @@ import axios from '../../axios';
 import Card from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
 import ButtonHandle from '../../types/buttonHandle';
+import PostType from '../../types/post';
 import { RootState } from '../../store';
+import * as date from '../../utils/dates';
 
 export interface PostProps {
-	id: string;
-	author: string;
-	description: string;
-	title: string;
-	price: number;
-	imageUrl: string;
-	url: string;
+	post: PostType;
+	date: Date;
 	isInCart: boolean;
 	isInWishlist: boolean;
 }
 
-// TODO: implement createdAt
 const Post = (props: PostProps) => {
 	const username = useSelector<RootState, string>(
 		(state) => state.auth.username
@@ -46,7 +42,7 @@ const Post = (props: PostProps) => {
 	const handleAddToCart = async () => {
 		try {
 			await axios.post('/cart', {
-				product: props.id,
+				product: props.post._id,
 				quantity: 1,
 			});
 			if (addToCartButton.button) {
@@ -61,7 +57,7 @@ const Post = (props: PostProps) => {
 
 	const handleRemoveFromCart = async () => {
 		try {
-			await axios.delete(`/cart/${props.id}`);
+			await axios.delete(`/cart/${props.post._id}`);
 			if (addToCartButton.button) {
 				addToCartButton.button.innerText = 'Add to Cart';
 				addToCartButton.button.classList.remove(ButtonStyles.hollow);
@@ -75,7 +71,7 @@ const Post = (props: PostProps) => {
 	const handleAddToWishlist = async () => {
 		try {
 			await axios.post('/wishlist', {
-				product: props.id,
+				product: props.post._id,
 			});
 			if (addToWishlistButton.button) {
 				addToWishlistButton.button.innerText = 'Added to Wishlist';
@@ -89,7 +85,7 @@ const Post = (props: PostProps) => {
 
 	const handleRemoveFromWishlist = async () => {
 		try {
-			await axios.delete(`/wishlist/${props.id}`);
+			await axios.delete(`/wishlist/${props.post._id}`);
 			if (addToWishlistButton.button) {
 				addToWishlistButton.button.innerText = 'Add to Wishlist';
 				addToWishlistButton.button.classList.remove(
@@ -104,7 +100,7 @@ const Post = (props: PostProps) => {
 
 	let buttons;
 
-	if (!(props.author === username)) {
+	if (props.post.author.username) {
 		buttons = (
 			<>
 				<Button
@@ -129,22 +125,31 @@ const Post = (props: PostProps) => {
 		);
 	}
 
+	const timestamp = date.getTimestamp(props.date);
+
 	return (
 		<Card className={styles.post}>
 			<h3 className={styles.heading}>
-				<a href={props.url}>{props.title}</a>
+				<a href={props.post.url}>{props.post.title}</a>
 				<div className={styles.price}>
-					<p>${props.price}</p>
+					<p>${props.post.price}</p>
 				</div>
 			</h3>
 			<div className={styles.image}>
-				<img src={props.imageUrl} alt={props.title} />
+				<img src={props.post.image} alt={props.post.title} />
 			</div>
 			<div className={styles.description}>
 				<p>
-					<Link to={`/profile/${props.author}`}>{props.author}</Link>{' '}
-					{props.description}
+					<Link
+						to={`/profile/${
+							props.post.author.username || username
+						}`}
+					>
+						{props.post.author.username || username}
+					</Link>{' '}
+					{props.post.description}
 				</p>
+				<p className={styles.date}>{timestamp}</p>
 			</div>
 			<div className={styles.buttons}>{buttons}</div>
 		</Card>

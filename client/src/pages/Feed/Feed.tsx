@@ -54,16 +54,13 @@ const Feed = () => {
 	});
 
 	const feedPosts = posts.map((post) => {
+		const date = new Date(post.createdAt);
+
 		return (
 			<Post
 				key={post._id}
-				id={post._id}
-				author={post.author.username}
-				description={post.description}
-				imageUrl={post.image}
-				price={post.price}
-				title={post.title}
-				url={post.url}
+				post={post}
+				date={date}
 				isInCart={cartProductIds.includes(post._id)}
 				isInWishlist={wishlistProductIds.includes(post._id)}
 			/>
