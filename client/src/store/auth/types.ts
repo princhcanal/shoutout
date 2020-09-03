@@ -27,7 +27,18 @@ export interface RegisterFormValues {
 	username: string;
 }
 
-export interface EditProfileFormValues {}
+export interface EditProfileFormValues {
+	name?: string;
+	username?: string;
+	email?: string;
+}
+
+export interface CreatePostFormValues {
+	description: string;
+	title: string;
+	price: number;
+	image: any;
+}
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';

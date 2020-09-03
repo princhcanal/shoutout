@@ -5,7 +5,7 @@ import { useField } from 'formik';
 
 import InvalidMessage from '../ValidationMessage/InvalidMessage/InvalidMessage';
 
-type InputType = 'text' | 'email' | 'password';
+type InputType = 'text' | 'email' | 'password' | 'number' | 'file';
 
 interface InputProps {
 	type: InputType;
@@ -14,9 +14,11 @@ interface InputProps {
 	label?: string;
 	className?: string;
 	placeholder?: string;
+	onChange?: any;
+	accept?: string;
 }
 
-const Input = ({ label, ...props }: InputProps) => {
+const Input = ({ label, onChange, ...props }: InputProps) => {
 	const classNames = [styles.input];
 
 	if (props.className) {
@@ -27,8 +29,21 @@ const Input = ({ label, ...props }: InputProps) => {
 
 	return (
 		<div className={classNames.join(' ')}>
-			<label htmlFor={props.name}>{label}</label>
-			<input {...props} {...field} />
+			<label
+				htmlFor={props.name}
+				className={props.type === 'file' ? styles.fileInputLabel : ''}
+			>
+				{label}
+			</label>
+			{props.type === 'file' ? (
+				<input
+					{...props}
+					onChange={onChange}
+					className={styles.fileInput}
+				/>
+			) : (
+				<input {...props} {...field} />
+			)}
 			{meta.touched && meta.error ? (
 				<InvalidMessage className={styles.invalidMessage}>
 					{meta.error}

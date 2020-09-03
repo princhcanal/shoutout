@@ -16,7 +16,6 @@ import Wishlist from '../../types/wishlist';
 import FetchCartData from '../../types/fetchCartData';
 import FetchWishlistData from '../../types/fetchWishlistData';
 
-// TODO: implement edit profile
 const Profile = () => {
 	const [profileCardIsLoading, setProfileCardIsLoading] = useState<boolean>(
 		true

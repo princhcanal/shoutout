@@ -1,0 +1,75 @@
+.createPostForm {
+	width: 40%;
+	max-height: 100vh;
+	margin: auto;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -60rem);
+	z-index: 100;
+	background-color: var(--color-light-blue);
+	transition: all 0.4s ease-out;
+	display: block;
+
+	.input {
+		label {
+			color: var(--color-white);
+		}
+
+		&:not(:last-of-type) {
+			margin-bottom: 1.5rem;
+		}
+	}
+
+	.imagePreview {
+		height: 10rem;
+		max-height: 10rem;
+		text-align: center;
+		margin-bottom: 1rem;
+		display: none;
+
+		img {
+			height: 100%;
+		}
+	}
+
+	.buttons {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+.addPostButtonText {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	font-size: 1.5rem;
+}
+
+.createPostButton {
+	z-index: 100;
+	position: fixed;
+	right: 3rem;
+	bottom: 3rem;
+	border-radius: 50%;
+	overflow: hidden;
+	height: 4rem;
+	width: 4rem;
+	transition: all 0.3s ease-out;
+	transform-origin: center;
+
+	button {
+		height: 100%;
+		width: 100%;
+		background-color: var(--color-light-blue);
+
+		&:hover {
+			transform: none;
+		}
+	}
+}
+
+.center {
+	transform: translate(-50%, -50%);
+}

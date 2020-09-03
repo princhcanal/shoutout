@@ -4,6 +4,7 @@ import styles from './Feed.module.scss';
 import axios from '../../axios';
 
 import Post from '../../components/Post/Post';
+import CreatePostForm from '../../components/CreatePost/CreatePostForm';
 import PostType from '../../types/post';
 import FetchFeedData from '../../types/fetchFeedData';
 import Cart from '../../types/cart';
@@ -69,7 +70,12 @@ const Feed = () => {
 		);
 	});
 
-	return <div className={styles.feed}>{!isLoading && feedPosts}</div>;
+	return (
+		<div className={styles.feed}>
+			<CreatePostForm />
+			{!isLoading && feedPosts}
+		</div>
+	);
 };
 
 export default Feed;

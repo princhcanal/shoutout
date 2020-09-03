@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { Ref, useRef, useImperativeHandle, forwardRef } from 'react';
 
 import styles from './Card.module.scss';
 
-interface CardProps {
+export interface CardProps {
 	children: any;
 	className?: string;
 }
 
-const Card = (props: CardProps) => {
+export interface CardRef {
+	card: HTMLDivElement | null;
+}
+
+const Card = forwardRef((props: CardProps, ref: Ref<CardRef>) => {
+	const cardRef = useRef<HTMLDivElement>(null);
 	const classNames = [styles.card];
+
+	useImperativeHandle(
+		ref,
+		(): CardRef => ({
+			card: cardRef.current,
+		})
+	);
 
 	if (props.className) {
 		classNames.push(...props.className.split(' '));
 	}
 
-	return <div className={classNames.join(' ')}>{props.children}</div>;
-};
+	return (
+		<div className={classNames.join(' ')} ref={cardRef}>
+			{props.children}
+		</div>
+	);
+});
 
 export default Card;
