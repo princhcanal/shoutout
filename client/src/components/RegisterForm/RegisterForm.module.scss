@@ -1,7 +1,7 @@
 .registerForm {
 	width: 95%;
 	margin: auto;
-	background-color: var(--color-very-light-blue);
+	background-color: var(--color-secondary-light-2);
 	border-radius: var(--border-radius-1);
 	box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, 0.2);
 }
@@ -20,7 +20,7 @@
 }
 
 .formHeader {
-	color: var(--color-turquoise);
+	color: var(--color-primary);
 	text-align: center;
 }
 
@@ -29,12 +29,12 @@
 }
 
 .input label {
-	color: var(--color-turquoise);
+	color: var(--color-primary);
 }
 
 .image {
 	width: 40%;
-	background-color: var(--color-beige);
+	background-color: var(--color-tertiary);
 	border-top-left-radius: var(--border-radius-1);
 	border-bottom-left-radius: var(--border-radius-1);
 	padding: 1rem;
@@ -45,7 +45,7 @@
 
 .imageHeader {
 	text-align: center;
-	color: var(--color-turquoise);
+	color: var(--color-primary);
 }
 
 .imagePicture svg {
@@ -60,7 +60,7 @@
 }
 
 .login a {
-	color: var(--color-dark-turquoise);
+	color: var(--color-primary-dark);
 }
 
 .login a:hover {
@@ -75,6 +75,6 @@
 	border: none;
 	padding: 0.5rem 0.7rem;
 	border-radius: var(--border-radius-1);
-	background-color: var(--color-turquoise);
+	background-color: var(--color-primary);
 	color: var(--color-white);
 }

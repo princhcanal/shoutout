@@ -2,7 +2,8 @@
 	width: 100%;
 	max-width: 500px;
 	margin: 0 auto 3rem;
-	background-color: var(--color-turquoise);
+	background-color: var(--color-primary);
+	position: relative;
 
 	.heading {
 		padding: 0 0.5rem;
@@ -29,7 +30,7 @@
 	.price {
 		font-size: 1rem;
 		padding: 0 0.5rem;
-		color: var(--color-blue);
+		color: var(--color-secondary);
 
 		p {
 			display: inline-block;
@@ -55,6 +56,10 @@
 			}
 		}
 
+		&:active {
+			transform: scale(1);
+		}
+
 		img {
 			width: 100%;
 			display: block;
@@ -69,7 +74,7 @@
 		a {
 			display: inline-block;
 			transition: all 0.2s ease-out;
-			color: var(--color-light-blue);
+			color: var(--color-secondary-light-1);
 			font-weight: bold;
 
 			&:hover {
@@ -78,6 +83,10 @@
 				@media only screen and (hover: none) {
 					transform: none;
 				}
+			}
+
+			&:active {
+				transform: rotate(0) scale(1);
 			}
 		}
 	}
@@ -88,5 +97,36 @@
 
 	.buttons {
 		padding: 0 0.5rem;
+	}
+
+	.editOptions {
+		position: absolute;
+		bottom: 1rem;
+		right: 1rem;
+		color: var(--color-white);
+		cursor: pointer;
+		font-size: 1.5rem;
+
+		.editButtons {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			height: 7rem;
+			background-color: #fff;
+			position: absolute;
+			bottom: 2.5rem;
+			right: 0.8rem;
+			transform: scale(0);
+			transform-origin: bottom right;
+			transition: all 0.2s ease-out;
+
+			&.show {
+				transform: scale(1);
+			}
+
+			button {
+				width: 100%;
+			}
+		}
 	}
 }

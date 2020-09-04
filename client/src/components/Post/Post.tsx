@@ -8,12 +8,13 @@ import axios from '../../axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
-import Card from '../Card/Card';
+import Card, { CardRef } from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
 import ButtonHandle from '../../types/buttonHandle';
 import PostType from '../../types/post';
 import { RootState } from '../../store';
 import * as date from '../../utils/dates';
+import CardHandle from '../../types/cardHandle';
 
 export interface PostProps {
 	post: PostType;
@@ -32,6 +33,9 @@ const Post = (props: PostProps) => {
 	const [isInWishlist, setIsInWishlist] = useState<boolean>(
 		props.isInWishlist
 	);
+	const [clickedBody, setClickedBody] = useState<boolean>(false);
+	let editOptionsRef: CardHandle<typeof Card>;
+	let postRef: CardHandle<typeof Card>;
 
 	useEffect(() => {
 		setIsInCart(props.isInCart);
@@ -40,6 +44,25 @@ const Post = (props: PostProps) => {
 	useEffect(() => {
 		setIsInWishlist(props.isInWishlist);
 	}, [props.isInWishlist]);
+
+	useEffect(() => {
+		const body = document.querySelector('body');
+		const onBodyClick = (e: MouseEvent) => {
+			if (!editOptionsRef) return;
+			if (editOptionsRef.card && !clickedBody) {
+				if (editOptionsRef.card.classList.contains(styles.show)) {
+					editOptionsRef.card.classList.remove(styles.show);
+					setClickedBody(true);
+				}
+			}
+		};
+
+		body?.addEventListener('click', onBodyClick);
+
+		return () => {
+			body?.removeEventListener('click', onBodyClick);
+		};
+	});
 
 	const handleAddToCart = async () => {
 		try {
@@ -101,8 +124,9 @@ const Post = (props: PostProps) => {
 	};
 
 	let buttons;
+	const isAuthorized = props.post.author.username === username;
 
-	if (props.post.author.username !== username) {
+	if (!isAuthorized) {
 		buttons = (
 			<>
 				<Button
@@ -129,8 +153,53 @@ const Post = (props: PostProps) => {
 
 	const timestamp = date.getTimestamp(props.date);
 
+	const handleDelete = async () => {
+		try {
+			await axios.delete(`/posts/${props.post._id}`);
+			if (postRef.card) {
+				postRef.card.remove();
+			}
+		} catch (err) {
+			console.log('ERROR:', err);
+		}
+	};
+
+	const handleToggleEditOptions = (
+		e: React.MouseEvent<SVGSVGElement, MouseEvent>
+	) => {
+		if (editOptionsRef.card && !clickedBody) {
+			if (!editOptionsRef.card.classList.contains(styles.show)) {
+				editOptionsRef.card.classList.add(styles.show);
+			} else {
+				editOptionsRef.card.classList.remove(styles.show);
+			}
+		}
+		setClickedBody(false);
+	};
+
+	let editOptions;
+	if (isAuthorized) {
+		editOptions = (
+			<>
+				<FontAwesomeIcon
+					icon={faEllipsisV}
+					onClick={handleToggleEditOptions}
+				/>
+				<Card
+					className={styles.editButtons}
+					ref={(e) => (editOptionsRef = e as CardRef)}
+				>
+					<Button>Edit</Button>
+					<Button onClick={handleDelete} style={true && 'hollow-red'}>
+						Delete
+					</Button>
+				</Card>
+			</>
+		);
+	}
+
 	return (
-		<Card className={styles.post}>
+		<Card className={styles.post} ref={(p) => (postRef = p as CardRef)}>
 			<h3 className={styles.heading}>
 				<Link to={`/posts/${props.post._id}`}>{props.post.title}</Link>
 				<div className={styles.price}>
@@ -142,21 +211,15 @@ const Post = (props: PostProps) => {
 			</div>
 			<div className={styles.description}>
 				<p>
-					<Link
-						to={`/profile/${
-							props.post.author.username || username
-						}`}
-					>
-						{props.post.author.username || username}
+					<Link to={`/profile/${props.post.author.username}`}>
+						{props.post.author.username}
 					</Link>{' '}
 					{props.post.description}
 				</p>
 				<p className={styles.date}>{timestamp}</p>
 			</div>
 			<div className={styles.buttons}>{buttons}</div>
-			<div className={styles.editOptions}>
-				<FontAwesomeIcon icon={faEllipsisV} />
-			</div>
+			<div className={styles.editOptions}>{editOptions}</div>
 		</Card>
 	);
 };

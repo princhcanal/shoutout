@@ -10,18 +10,18 @@
 }
 
 .input label {
-	color: var(--color-turquoise);
+	color: var(--color-primary);
 }
 
 .register {
 	text-align: center;
-	color: var(--color-turquoise);
+	color: var(--color-primary);
 	font-size: 0.8rem;
 	margin-bottom: 1.5rem;
 }
 
 .register a:visited {
-	color: var(--color-light-blue);
+	color: var(--color-secondary-light-1);
 }
 
 .register a:hover {
@@ -36,6 +36,6 @@
 	border: none;
 	padding: 0.5rem 0.7rem;
 	border-radius: var(--border-radius-1);
-	background-color: var(--color-turquoise);
+	background-color: var(--color-primary);
 	color: var(--color-white);
 }

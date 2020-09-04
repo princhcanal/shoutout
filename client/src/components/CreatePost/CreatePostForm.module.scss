@@ -7,7 +7,7 @@
 	top: 50%;
 	transform: translate(-50%, -60rem);
 	z-index: 100;
-	background-color: var(--color-light-blue);
+	background-color: var(--color-secondary-light-1);
 	transition: all 0.4s ease-out;
 	display: block;
 
@@ -62,7 +62,7 @@
 	button {
 		height: 100%;
 		width: 100%;
-		background-color: var(--color-light-blue);
+		background-color: var(--color-secondary-light-1);
 
 		&:hover {
 			transform: none;

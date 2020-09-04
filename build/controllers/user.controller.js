@@ -68,7 +68,9 @@ var UserController = /** @class */ (function () {
                         if (!user) {
                             throw new UserNotFoundException_1.default(username);
                         }
-                        return [4 /*yield*/, this.post.find({ author: user._id })];
+                        return [4 /*yield*/, this.post
+                                .find({ author: user._id })
+                                .populate('author')];
                     case 2:
                         posts = _a.sent();
                         message = "User " + username + " fetched successfully";

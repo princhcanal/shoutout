@@ -26,7 +26,6 @@ const Wishlist = () => {
 				const wishlist = await axios.get<FetchWishlistData>(
 					'/wishlist'
 				);
-				console.log(wishlist);
 				setWishlist(wishlist.data.wishlist);
 				const cart = await axios.get<FetchCartData>('/cart');
 				setCart(cart.data.cart);

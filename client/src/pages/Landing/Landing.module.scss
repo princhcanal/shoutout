@@ -5,14 +5,14 @@
 	background: linear-gradient(
 		to bottom right,
 		var(--color-white),
-		var(--color-light-blue)
+		var(--color-secondary-light-1)
 	);
 }
 
 .text {
 	width: 50%;
 	padding: 0 2rem;
-	color: var(--color-blue);
+	color: var(--color-secondary);
 }
 
 .text h1 {
@@ -44,7 +44,7 @@
 	padding: 0.7rem 1rem;
 	border-radius: 0.7rem;
 	font-size: 1rem;
-	background-color: var(--color-dark-turquoise);
+	background-color: var(--color-primary-dark);
 	color: var(--color-white);
 }
 

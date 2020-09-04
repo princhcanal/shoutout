@@ -12,12 +12,12 @@
 :root {
 	--color-black: #141414;
 	--color-white: #f3f3f3;
-	--color-light-blue: #88ccf1;
-	--color-very-light-blue: #c1dff0;
-	--color-blue: #3587a4;
-	--color-turquoise: #2d898b;
-	--color-dark-turquoise: #2d848a;
-	--color-beige: #fff2e1;
+	--color-primary: #2d898b;
+	--color-primary-dark: #2d848a;
+	--color-secondary: #3587a4;
+	--color-secondary-light-1: #88ccf1;
+	--color-secondary-light-2: #c1dff0;
+	--color-tertiary: #fff2e1;
 
 	--border-radius-1: 0.3rem;
 	--border-radius-2: 0.7rem;
@@ -36,11 +36,11 @@ body {
 	margin: 0;
 	min-height: 100vh;
 	font-family: 'Quicksand';
-	background-color: var(--color-dark-turquoise);
+	background-color: var(--color-primary-dark);
 }
 
 ::selection {
-	background-color: var(--color-turquoise);
+	background-color: var(--color-primary);
 	color: var(--color-white);
 }
 

@@ -48,7 +48,9 @@ class UserController implements Controller {
 				throw new UserNotFoundException(username);
 			}
 
-			const posts = await this.post.find({ author: user._id });
+			const posts = await this.post
+				.find({ author: user._id })
+				.populate('author');
 			const message = `User ${username} fetched successfully`;
 			res.status(200).json({ message, user, posts });
 		} catch (err) {
