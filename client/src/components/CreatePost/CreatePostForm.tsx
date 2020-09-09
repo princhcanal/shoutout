@@ -6,6 +6,9 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from '../../axios';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 import Card, { CardRef } from '../Card/Card';
 import Input from '../Form/Input/Input';
@@ -16,9 +19,6 @@ import backdropStyles from '../Backdrop/Backdrop.module.scss';
 import { CreatePostFormValues } from '../../store/auth';
 import CardHandle from '../../types/cardHandle';
 import BackdropHandle from '../../types/backdropHandle';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 
 // const SUPPORTED_IMAGE_FORMATS = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -64,7 +64,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 	});
 
 	const onSubmit = async (values: CreatePostFormValues) => {
-		let formData = new FormData();
+		const formData = new FormData();
 		formData.append('title', values.title);
 		formData.append('description', values.description);
 		formData.append('price', values.price.toString());
@@ -122,7 +122,6 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 									e: ChangeEvent<HTMLInputElement>
 								) => {
 									if (e.target.files) {
-										console.log(e.target.files[0]);
 										if (e.target.files[0]) {
 											formProps.setFieldValue(
 												'image',
@@ -182,7 +181,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 				</Formik>
 			</Card>
 			<Backdrop
-				onClick={() => {
+				onHide={() => {
 					if (form.card) {
 						form.card.classList.remove(styles.center);
 					}
@@ -192,6 +191,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 					}
 				}}
 				ref={(b) => (backdrop = b as BackdropRef)}
+				showBackdrop={false}
 			/>
 			<div className={styles.createPostButton} ref={createPostButtonRef}>
 				<Button

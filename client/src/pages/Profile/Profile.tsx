@@ -15,6 +15,7 @@ import Cart from '../../types/cart';
 import Wishlist from '../../types/wishlist';
 import FetchCartData from '../../types/fetchCartData';
 import FetchWishlistData from '../../types/fetchWishlistData';
+import EditPostForm from '../../components/EditPostForm/EditPostForm';
 
 const Profile = () => {
 	const [profileCardIsLoading, setProfileCardIsLoading] = useState<boolean>(

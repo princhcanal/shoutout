@@ -3,6 +3,10 @@
 	flex-direction: column;
 	position: relative;
 
+	&:not(:last-of-type) {
+		margin-bottom: 1.5rem;
+	}
+
 	input {
 		border: 1px solid transparent;
 		outline: none;

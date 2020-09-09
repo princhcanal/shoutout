@@ -10,11 +10,13 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import Card, { CardRef } from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
+import EditPostForm, { EditPostFormRef } from '../EditPostForm/EditPostForm';
+import CardHandle from '../../types/cardHandle';
 import ButtonHandle from '../../types/buttonHandle';
 import PostType from '../../types/post';
 import { RootState } from '../../store';
 import * as date from '../../utils/dates';
-import CardHandle from '../../types/cardHandle';
+import EditPostFormHandle from '../../types/editPostFormHandle';
 
 export interface PostProps {
 	post: PostType;
@@ -36,6 +38,7 @@ const Post = (props: PostProps) => {
 	const [clickedBody, setClickedBody] = useState<boolean>(false);
 	let editOptionsRef: CardHandle<typeof Card>;
 	let postRef: CardHandle<typeof Card>;
+	let formRef: EditPostFormHandle<typeof EditPostForm>;
 
 	useEffect(() => {
 		setIsInCart(props.isInCart);
@@ -164,6 +167,10 @@ const Post = (props: PostProps) => {
 		}
 	};
 
+	const handleEdit = () => {
+		formRef.setShowCard(true);
+	};
+
 	const handleToggleEditOptions = (
 		e: React.MouseEvent<SVGSVGElement, MouseEvent>
 	) => {
@@ -189,7 +196,7 @@ const Post = (props: PostProps) => {
 					className={styles.editButtons}
 					ref={(e) => (editOptionsRef = e as CardRef)}
 				>
-					<Button>Edit</Button>
+					<Button onClick={handleEdit}>Edit</Button>
 					<Button onClick={handleDelete} style={true && 'hollow-red'}>
 						Delete
 					</Button>
@@ -199,28 +206,42 @@ const Post = (props: PostProps) => {
 	}
 
 	return (
-		<Card className={styles.post} ref={(p) => (postRef = p as CardRef)}>
-			<h3 className={styles.heading}>
-				<Link to={`/posts/${props.post._id}`}>{props.post.title}</Link>
-				<div className={styles.price}>
-					<p>${props.post.price}</p>
+		<>
+			<Card className={styles.post} ref={(p) => (postRef = p as CardRef)}>
+				<h3 className={styles.heading}>
+					<Link to={`/posts/${props.post._id}`}>
+						{props.post.title}
+					</Link>
+					<div className={styles.price}>
+						<p>${props.post.price}</p>
+					</div>
+				</h3>
+				<div className={styles.image}>
+					<img src={props.post.image} alt={props.post.title} />
 				</div>
-			</h3>
-			<div className={styles.image}>
-				<img src={props.post.image} alt={props.post.title} />
-			</div>
-			<div className={styles.description}>
-				<p>
-					<Link to={`/profile/${props.post.author.username}`}>
-						{props.post.author.username}
-					</Link>{' '}
-					{props.post.description}
-				</p>
-				<p className={styles.date}>{timestamp}</p>
-			</div>
-			<div className={styles.buttons}>{buttons}</div>
-			<div className={styles.editOptions}>{editOptions}</div>
-		</Card>
+				<div className={styles.description}>
+					<p>
+						<Link to={`/profile/${props.post.author.username}`}>
+							{props.post.author.username}
+						</Link>{' '}
+						{props.post.description}
+					</p>
+					<p className={styles.date}>{timestamp}</p>
+				</div>
+				<div className={styles.buttons}>{buttons}</div>
+				<div className={styles.editOptions}>{editOptions}</div>
+			</Card>
+			<EditPostForm
+				ref={(f) => (formRef = f as EditPostFormRef)}
+				initialValues={{
+					description: props.post.description,
+					title: props.post.title,
+					price: props.post.price,
+					image: props.post.image,
+				}}
+				postId={props.post._id}
+			/>
+		</>
 	);
 };
 

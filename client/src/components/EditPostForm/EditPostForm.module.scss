@@ -1,0 +1,40 @@
+.editPostForm {
+	width: 40%;
+	max-height: 100vh;
+	margin: auto;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	background-color: var(--color-secondary-light-1);
+	transition: all 0.4s ease-out;
+	display: block;
+
+	.input {
+		label {
+			color: var(--color-white);
+		}
+	}
+
+	.imagePreview {
+		height: 10rem;
+		max-height: 10rem;
+		text-align: center;
+		margin-bottom: 1rem;
+		display: none;
+
+		img {
+			height: 100%;
+		}
+	}
+
+	.buttons {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+.center {
+	transform: translate(-50%, -50%);
+}

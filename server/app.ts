@@ -69,10 +69,10 @@ class App {
 	}
 
 	private async connectToDatabase() {
-		const { MONGO_URI } = process.env;
+		const { MONGO_URI_LOCAL } = process.env;
 
 		try {
-			await mongoose.connect(MONGO_URI as string, {
+			await mongoose.connect(MONGO_URI_LOCAL as string, {
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
 				useFindAndModify: false,
