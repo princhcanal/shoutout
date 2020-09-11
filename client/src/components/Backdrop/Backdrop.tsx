@@ -40,7 +40,7 @@ const Backdrop = forwardRef((props: BackdropProps, ref: Ref<BackdropRef>) => {
 					if (props.onShow) {
 						props.onShow();
 					}
-				}, 300);
+				}, 10);
 			} else {
 				backdropRef.current.click();
 			}

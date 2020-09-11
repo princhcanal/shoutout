@@ -33,7 +33,7 @@
 
 	&Red {
 		background-color: transparent;
-		color: red;
-		border: 1px solid red;
+		color: var(--color-red);
+		border: 1px solid var(--color-red);
 	}
 }

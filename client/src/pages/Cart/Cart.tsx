@@ -60,7 +60,11 @@ const Cart = () => {
 		);
 	});
 
-	return <div className={styles.cart}>{!isLoading && cartItems}</div>;
+	return (
+		<div className={styles.cart}>
+			<div className={'postContainer'}>{!isLoading && cartItems}</div>
+		</div>
+	);
 };
 
 export default Cart;

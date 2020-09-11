@@ -49,6 +49,7 @@ class WishlistController implements Controller {
 
 			const products = await this.products
 				.find({ _id: { $in: wishlist.products } })
+				.sort({ createdAt: -1 })
 				.populate('author', 'username');
 
 			wishlist.products = products;

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import styles from './CreatePostForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -10,15 +10,11 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-import Card, { CardRef } from '../Card/Card';
+import FloatingCard from '../Card/FloatingCard/FloatingCard';
 import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import Button from '../Button/Button';
-import Backdrop, { BackdropRef } from '../Backdrop/Backdrop';
-import backdropStyles from '../Backdrop/Backdrop.module.scss';
 import { CreatePostFormValues } from '../../store/auth';
-import CardHandle from '../../types/cardHandle';
-import BackdropHandle from '../../types/backdropHandle';
 
 // const SUPPORTED_IMAGE_FORMATS = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -32,6 +28,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 	const username = useSelector<RootState, string>(
 		(state) => state.auth.username
 	);
+	const [showCard, setShowCard] = useState<boolean>(false);
 
 	if (props.className) {
 		classNames.push(...props.className.split(' '));
@@ -40,8 +37,6 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 	const imagePreviewRef = useRef<HTMLImageElement>(null);
 	const imagePreviewDivRef = useRef<HTMLDivElement>(null);
 	const createPostButtonRef = useRef<HTMLDivElement>(null);
-	let form: CardHandle<typeof Card>;
-	let backdrop: BackdropHandle<typeof Backdrop>;
 
 	const initialValues = {
 		description: '',
@@ -78,11 +73,23 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 		}
 	};
 
+	const handleSetShowCard = (showCard: boolean) => {
+		if (
+			createPostButtonRef.current &&
+			createPostButtonRef.current.classList.contains(styles.rotate)
+		) {
+			createPostButtonRef.current.classList.remove(styles.rotate);
+		}
+
+		setShowCard(showCard);
+	};
+
 	return (
 		<>
-			<Card
+			<FloatingCard
 				className={classNames.join(' ')}
-				ref={(f) => (form = f as CardRef)}
+				showCard={showCard}
+				setShowCard={handleSetShowCard}
 			>
 				<Formik
 					initialValues={initialValues}
@@ -179,47 +186,21 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 						</Form>
 					)}
 				</Formik>
-			</Card>
-			<Backdrop
-				onHide={() => {
-					if (form.card) {
-						form.card.classList.remove(styles.center);
-					}
-					if (createPostButtonRef.current) {
-						createPostButtonRef.current.style.transform =
-							'rotate(0)';
-					}
-				}}
-				ref={(b) => (backdrop = b as BackdropRef)}
-				showBackdrop={false}
-			/>
+			</FloatingCard>
 			<div className={styles.createPostButton} ref={createPostButtonRef}>
 				<Button
 					onClick={() => {
-						if (form.card) {
-							if (form.card.classList.contains(styles.center)) {
-								if (createPostButtonRef.current) {
-									createPostButtonRef.current.style.transform =
-										'rotate(0)';
-								}
-								form.card.classList.remove(styles.center);
-								backdrop.backdrop?.click();
+						if (createPostButtonRef.current) {
+							if (showCard) {
+								createPostButtonRef.current.classList.remove(
+									styles.rotate
+								);
+								setShowCard(false);
 							} else {
-								if (createPostButtonRef.current) {
-									createPostButtonRef.current.style.transform =
-										'rotate(405deg)';
-								}
-								form.card.classList.add(styles.center);
-								if (backdrop.backdrop) {
-									backdrop.backdrop.style.display = 'block';
-									setTimeout(() => {
-										if (backdrop.backdrop) {
-											backdrop.backdrop.classList.remove(
-												backdropStyles.hide
-											);
-										}
-									}, 10);
-								}
+								createPostButtonRef.current.classList.add(
+									styles.rotate
+								);
+								setShowCard(true);
 							}
 						}
 					}}

@@ -56,7 +56,11 @@ const Wishlist = () => {
 		);
 	});
 
-	return <div className={styles.wishlist}>{!isLoading && wishlistItems}</div>;
+	return (
+		<div className={styles.wishlist}>
+			<div className={'postContainer'}>{!isLoading && wishlistItems}</div>
+		</div>
+	);
 };
 
 export default Wishlist;

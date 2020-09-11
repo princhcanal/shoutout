@@ -56,6 +56,7 @@ class CartController implements Controller {
 				.find({
 					_id: { $in: productIds },
 				})
+				.sort({ createdAt: -1 })
 				.populate('author');
 
 			const message = 'Cart fetched successfully';

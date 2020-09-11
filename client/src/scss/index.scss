@@ -12,6 +12,7 @@
 :root {
 	--color-black: #141414;
 	--color-white: #f3f3f3;
+	--color-red: #ff0000;
 	--color-primary: #2d898b;
 	--color-primary-dark: #2d848a;
 	--color-secondary: #3587a4;
@@ -30,6 +31,15 @@
 }
 
 html {
+	overflow-x: hidden;
+
+	@media only screen and (max-width: 1000px) {
+		font-size: 90%;
+	}
+
+	@media only screen and (max-width: 600px) {
+		font-size: 80%;
+	}
 }
 
 body {

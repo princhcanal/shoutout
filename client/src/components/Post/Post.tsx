@@ -231,16 +231,18 @@ const Post = (props: PostProps) => {
 				<div className={styles.buttons}>{buttons}</div>
 				<div className={styles.editOptions}>{editOptions}</div>
 			</Card>
-			<EditPostForm
-				ref={(f) => (formRef = f as EditPostFormRef)}
-				initialValues={{
-					description: props.post.description,
-					title: props.post.title,
-					price: props.post.price,
-					image: props.post.image,
-				}}
-				postId={props.post._id}
-			/>
+			{isAuthorized && (
+				<EditPostForm
+					ref={(f) => (formRef = f as EditPostFormRef)}
+					initialValues={{
+						description: props.post.description,
+						title: props.post.title,
+						price: props.post.price,
+						image: props.post.image,
+					}}
+					postId={props.post._id}
+				/>
+			)}
 		</>
 	);
 };

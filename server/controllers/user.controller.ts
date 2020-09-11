@@ -50,6 +50,7 @@ class UserController implements Controller {
 
 			const posts = await this.post
 				.find({ author: user._id })
+				.sort({ createdAt: -1 })
 				.populate('author');
 			const message = `User ${username} fetched successfully`;
 			res.status(200).json({ message, user, posts });

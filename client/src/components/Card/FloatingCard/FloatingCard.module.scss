@@ -10,6 +10,34 @@
 	background-color: var(--color-secondary-light-1);
 	transition: all 0.3s ease-out;
 	display: block;
+
+	@media only screen and (max-width: 900px) {
+		width: 50%;
+	}
+
+	@media only screen and (max-width: 700px) {
+		width: 60%;
+	}
+
+	@media only screen and (max-width: 500px) {
+		width: 80%;
+	}
+
+	@media only screen and (min-height: 800px) {
+		transform: translate(-50%, -70rem);
+	}
+
+	@media only screen and (min-height: 1000px) {
+		transform: translate(-50%, -80rem);
+	}
+
+	@media only screen and (min-height: 1300px) {
+		transform: translate(-50%, -90rem);
+	}
+
+	@media only screen and (min-height: 1500px) {
+		transform: translate(-50%, -100rem);
+	}
 }
 
 .center {

@@ -5,19 +5,47 @@
 	width: 90%;
 	margin: auto;
 
+	@media only screen and (max-width: 800px) {
+		width: 95%;
+	}
+
 	.logo {
 		color: var(--color-white);
 		width: 50%;
+
+		@media only screen and (max-width: 800px) {
+			width: 40%;
+		}
+
+		@media only screen and (max-width: 700px) {
+			width: 80%;
+		}
 	}
 
 	.nav {
-		width: 40%;
+		width: 50%;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 
+		@media only screen and (max-width: 800px) {
+			width: 60%;
+		}
+
+		@media only screen and (max-width: 700px) {
+			display: none;
+		}
+
 		a {
 			color: var(--color-white);
+		}
+	}
+
+	.hamburgerMenu {
+		display: none;
+
+		@media only screen and (max-width: 700px) {
+			display: block;
 		}
 	}
 }

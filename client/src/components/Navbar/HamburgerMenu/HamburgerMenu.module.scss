@@ -1,0 +1,59 @@
+.hamburgerMenu {
+	z-index: 200;
+
+	.icon {
+		color: var(--color-white);
+		font-size: 2rem;
+		margin: auto 0;
+		cursor: pointer;
+	}
+
+	.menu {
+		position: fixed;
+		top: 0;
+		right: -30rem;
+		transition: all 0.3s ease-out;
+		width: 30rem;
+		height: 100vh;
+		background-color: var(--color-primary);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		@media only screen and (max-width: 600px) {
+			right: -25rem;
+			width: 25rem;
+		}
+
+		@media only screen and (max-width: 500px) {
+			right: -23rem;
+			width: 23rem;
+		}
+
+		@media only screen and (max-width: 400px) {
+			right: -18rem;
+			width: 18rem;
+		}
+
+		ul {
+			list-style: none;
+			padding: 0;
+
+			li {
+				text-align: center;
+
+				&:not(:last-of-type) {
+					margin-bottom: 2rem;
+				}
+
+				a {
+					color: var(--color-white);
+				}
+			}
+		}
+	}
+
+	.show {
+		right: 0rem;
+	}
+}

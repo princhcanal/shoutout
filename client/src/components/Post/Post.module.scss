@@ -1,9 +1,13 @@
 .post {
 	width: 100%;
 	max-width: 500px;
-	margin: 0 auto 1rem;
+	margin: 0 1rem 1rem;
 	background-color: var(--color-primary);
 	position: relative;
+
+	@media only screen and (max-width: 550px) {
+		margin: 0 0 1rem;
+	}
 
 	.heading {
 		padding: 0 0.5rem;
@@ -58,6 +62,7 @@
 
 		&:active {
 			transform: scale(1);
+			box-shadow: none;
 		}
 
 		img {

@@ -70,7 +70,7 @@ const Feed = () => {
 	return (
 		<div className={styles.feed}>
 			<CreatePostForm />
-			{!isLoading && feedPosts}
+			<div className={'postContainer'}>{!isLoading && feedPosts}</div>
 		</div>
 	);
 };

@@ -72,6 +72,7 @@ var WishlistController = /** @class */ (function () {
                         }
                         return [4 /*yield*/, this.products
                                 .find({ _id: { $in: wishlist.products } })
+                                .sort({ createdAt: -1 })
                                 .populate('author', 'username')];
                     case 2:
                         products = _a.sent();

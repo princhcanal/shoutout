@@ -70,6 +70,7 @@ var UserController = /** @class */ (function () {
                         }
                         return [4 /*yield*/, this.post
                                 .find({ author: user._id })
+                                .sort({ createdAt: -1 })
                                 .populate('author')];
                     case 2:
                         posts = _a.sent();

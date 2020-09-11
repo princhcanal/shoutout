@@ -87,6 +87,7 @@ var CartController = /** @class */ (function () {
                                 .find({
                                 _id: { $in: productIds },
                             })
+                                .sort({ createdAt: -1 })
                                 .populate('author')];
                     case 2:
                         products = _a.sent();

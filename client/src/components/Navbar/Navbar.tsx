@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as AuthActions from '../../store/auth/actions';
 import { RootState } from '../../store';
 import Button from '../Button/Button';
+import HamburgerMenu from './HamburgerMenu/HamburgerMenu';
 
 const Navbar = () => {
 	const history = useHistory();
@@ -32,6 +33,7 @@ const Navbar = () => {
 				<Link to={`/profile/${username}`}>Profile</Link>
 				<Button onClick={handleLogout}>Logout</Button>
 			</nav>
+			<HamburgerMenu className={styles.hamburgerMenu} />
 		</header>
 	);
 };
