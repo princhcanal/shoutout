@@ -17,6 +17,8 @@ import Layout from './components/Layout/Layout';
 import { RootState } from './store';
 import * as AuthActions from './store/auth/actions';
 
+// TODO: organize file structure: types, forms
+// TODO: fix delete on ubuntu startup
 const App = () => {
 	const dispatch = useDispatch();
 

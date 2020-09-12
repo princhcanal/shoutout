@@ -1,5 +1,5 @@
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
-import { BackdropProps } from '../components/Backdrop/Backdrop';
+import { BackdropProps } from '../../components/Backdrop/Backdrop';
 
 type BackdropHandle<T> = T extends ForwardRefExoticComponent<
 	BackdropProps & RefAttributes<infer T2>

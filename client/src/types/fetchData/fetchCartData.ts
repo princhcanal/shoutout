@@ -1,5 +1,5 @@
-import Cart from './cart';
-import Post from './post';
+import Cart from '../models/cart';
+import Post from '../models/post';
 
 interface FetchCartData {
 	message: string;

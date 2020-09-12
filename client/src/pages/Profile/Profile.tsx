@@ -5,16 +5,16 @@ import axios from '../../axios';
 
 import Post from '../../components/Post/Post';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
-import PostType from '../../types/post';
-import User from '../../types/user';
-import FetchUserProfileData from '../../types/fetchUserData';
+import PostType from '../../types/models/post';
+import User from '../../types/models/user';
+import FetchUserProfileData from '../../types/fetchData/fetchUserData';
 import { useParams, useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
-import Cart from '../../types/cart';
-import Wishlist from '../../types/wishlist';
-import FetchCartData from '../../types/fetchCartData';
-import FetchWishlistData from '../../types/fetchWishlistData';
+import Cart from '../../types/models/cart';
+import Wishlist from '../../types/models/wishlist';
+import FetchCartData from '../../types/fetchData/fetchCartData';
+import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 
 const Profile = () => {
 	const [profileCardIsLoading, setProfileCardIsLoading] = useState<boolean>(

@@ -1,5 +1,5 @@
-import User from './user';
-import Post from './post';
+import User from '../models/user';
+import Post from '../models/post';
 
 interface FetchUserProfileData {
 	message: string;

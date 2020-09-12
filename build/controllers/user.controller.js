@@ -319,7 +319,7 @@ var UserController = /** @class */ (function () {
             });
         }); };
         this.getFollowing = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var username, user, followingUsers, following, message, err_8;
+            var username, user, following, message, err_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -333,13 +333,7 @@ var UserController = /** @class */ (function () {
                         if (!user) {
                             throw new UserNotFoundException_1.default(username);
                         }
-                        followingUsers = user.following;
-                        following = followingUsers.map(function (f) {
-                            return {
-                                username: f.username,
-                                url: f.url,
-                            };
-                        });
+                        following = user.following;
                         message = 'Following fetched successfully';
                         res.status(200).json({
                             message: message,
@@ -354,12 +348,105 @@ var UserController = /** @class */ (function () {
                 }
             });
         }); };
+        this.getFollowers = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, followers, message, err_9;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user
+                                .findOne({ username: username })
+                                .populate('followers')];
+                    case 1:
+                        user = _a.sent();
+                        if (!user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        followers = user.followers;
+                        message = 'Followers fetched successfully';
+                        res.status(200).json({
+                            message: message,
+                            followers: followers,
+                        });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_9 = _a.sent();
+                        next(err_9);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getSubscribing = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, subscribing, message, err_10;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user
+                                .findOne({ username: username })
+                                .populate('subscriptions')];
+                    case 1:
+                        user = _a.sent();
+                        if (!user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        subscribing = user.subscriptions;
+                        message = 'Subscriptions fetched successfully';
+                        res.status(200).json({
+                            message: message,
+                            subscribing: subscribing,
+                        });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_10 = _a.sent();
+                        next(err_10);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getSubscribers = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, user, subscribers, message, err_11;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        username = req.params.username;
+                        return [4 /*yield*/, this.user
+                                .findOne({ username: username })
+                                .populate('subscribers')];
+                    case 1:
+                        user = _a.sent();
+                        if (!user) {
+                            throw new UserNotFoundException_1.default(username);
+                        }
+                        subscribers = user.subscribers;
+                        message = 'Subscribers fetched successfully';
+                        res.status(200).json({
+                            message: message,
+                            subscribers: subscribers,
+                        });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_11 = _a.sent();
+                        next(err_11);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
         this.initializeRoutes();
     }
     UserController.prototype.initializeRoutes = function () {
         this.router.get(this.path + "/:username", this.getUserProfile);
-        this.router.get(this.path + "/:username/following", this.getFollowing);
         this.router.get(this.path + "/:username/posts", this.getUserPosts);
+        this.router.get(this.path + "/:username/following", this.getFollowing);
+        this.router.get(this.path + "/:username/followers", this.getFollowers);
+        this.router.get(this.path + "/:username/subscribing", this.getSubscribing);
+        this.router.get(this.path + "/:username/subscribers", this.getSubscribers);
         this.router
             .all(this.path + "*", auth_middleware_1.default)
             .patch("" + this.path, this.updateUser)

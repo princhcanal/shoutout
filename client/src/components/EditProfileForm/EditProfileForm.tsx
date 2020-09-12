@@ -10,7 +10,7 @@ import Card from '../Card/Card';
 import Input from '../Form/Input/Input';
 import { EditProfileFormValues } from '../../store/auth';
 import Button from '../Button/Button';
-import User from '../../types/user';
+import User from '../../types/models/user';
 
 interface EditProfileFormProps {
 	user: User;

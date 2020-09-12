@@ -4,11 +4,11 @@ import styles from './Cart.module.scss';
 import axios from '../../axios';
 
 // import CartType from '../../types/cart';
-import FetchCartData from '../../types/fetchCartData';
-import Wishlist from '../../types/wishlist';
-import PostType from '../../types/post';
+import FetchCartData from '../../types/fetchData/fetchCartData';
+import Wishlist from '../../types/models/wishlist';
+import PostType from '../../types/models/post';
+import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 import Post from '../../components/Post/Post';
-import FetchWishlistData from '../../types/fetchWishlistData';
 
 const Cart = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);

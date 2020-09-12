@@ -11,12 +11,12 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import Card, { CardRef } from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
 import EditPostForm, { EditPostFormRef } from '../EditPostForm/EditPostForm';
-import CardHandle from '../../types/cardHandle';
-import ButtonHandle from '../../types/buttonHandle';
-import PostType from '../../types/post';
+import CardHandle from '../../types/handles/cardHandle';
+import ButtonHandle from '../../types/handles/buttonHandle';
+import PostType from '../../types/models/post';
 import { RootState } from '../../store';
 import * as date from '../../utils/dates';
-import EditPostFormHandle from '../../types/editPostFormHandle';
+import EditPostFormHandle from '../../types/handles/editPostFormHandle';
 
 export interface PostProps {
 	post: PostType;

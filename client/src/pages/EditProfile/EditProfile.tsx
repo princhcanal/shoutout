@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './EditProfile.module.scss';
 
 import EditProfileForm from '../../components/EditProfileForm/EditProfileForm';
-import User from '../../types/user';
-import FetchUserProfileData from '../../types/fetchUserData';
+import User from '../../types/models/user';
+import FetchUserProfileData from '../../types/fetchData/fetchUserData';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import axios from '../../axios';

@@ -1,5 +1,5 @@
-import Wishlist from './wishlist';
-import Post from './post';
+import Wishlist from '../models/wishlist';
+import Post from '../models/post';
 
 interface FetchWishlistData {
 	message: string;

@@ -8,9 +8,9 @@ import React, {
 import styles from './FloatingCard.module.scss';
 
 import Card, { CardRef } from '../Card';
-import CardHandle from '../../../types/cardHandle';
+import CardHandle from '../../../types/handles/cardHandle';
 import Backdrop, { BackdropRef } from '../../Backdrop/Backdrop';
-import BackdropHandle from '../../../types/backdropHandle';
+import BackdropHandle from '../../../types/handles/backdropHandle';
 
 export interface FloatingCardProps {
 	children: any;

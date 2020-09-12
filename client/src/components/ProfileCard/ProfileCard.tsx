@@ -5,12 +5,15 @@ import ButtonStyles from '../Button/Button.module.scss';
 import axios from '../../axios';
 import { BigHead } from '@bigheads/core';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Card from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
 import { RootState } from '../../store';
-import ButtonHandle from '../../types/buttonHandle';
-import { Link } from 'react-router-dom';
+import ButtonHandle from '../../types/handles/buttonHandle';
+import FetchConnectionData from '../../types/fetchData/fetchConnectionData';
+import FloatingCard from '../Card/FloatingCard/FloatingCard';
+import User from '../../types/models/user';
 
 interface ProfileCardProps {
 	name: string;
@@ -39,6 +42,11 @@ const ProfileCard = (props: ProfileCardProps) => {
 	const [isSubscribed, setIsSubscribed] = useState<boolean>(
 		props.isSubscribed
 	);
+	const [showCard, setShowCard] = useState<boolean>(false);
+	const [isConnectionLoading, setIsConnectionLoading] = useState<boolean>(
+		true
+	);
+	const [connections, setConnections] = useState<User[]>([]);
 
 	useEffect(() => {
 		setIsFollowing(props.isFollowing);
@@ -110,6 +118,31 @@ const ProfileCard = (props: ProfileCardProps) => {
 		}
 	};
 
+	type Connections =
+		| 'followers'
+		| 'following'
+		| 'subscribers'
+		| 'subscribing';
+
+	const handleGetConnections = async (connection: Connections) => {
+		try {
+			setIsConnectionLoading(true);
+			const connectionData = await axios.get<FetchConnectionData>(
+				`/user/${props.username}/${connection}`
+			);
+			const connections = connectionData.data[connection];
+			console.log(connections);
+			if (connections) {
+				setConnections(connections);
+				setIsConnectionLoading(false);
+			}
+		} catch (err) {
+			console.log('ERROR:', err);
+		} finally {
+			setShowCard(true);
+		}
+	};
+
 	const image = (
 		<BigHead
 			accessory='roundGlasses'
@@ -134,6 +167,15 @@ const ProfileCard = (props: ProfileCardProps) => {
 			skinTone='light'
 		/>
 	);
+
+	const connectionList = connections.map((connection) => (
+		<li key={connection.username}>
+			<Link to={`/profile/${connection.username}`}>
+				<strong>{connection.username}</strong>
+				<em>{connection.name}</em>
+			</Link>
+		</li>
+	));
 
 	return (
 		<Card className={styles.profileCard}>
@@ -168,21 +210,33 @@ const ProfileCard = (props: ProfileCardProps) => {
 			</div>
 			<div className={styles.text}>
 				<div className={styles.connections}>
-					<div className={styles.connection}>
+					<div
+						className={styles.connection}
+						onClick={() => handleGetConnections('followers')}
+					>
 						<strong ref={numFollowers}>{props.numFollowers}</strong>
 						<p>Followers</p>
 					</div>
-					<div className={styles.connection}>
+					<div
+						className={styles.connection}
+						onClick={() => handleGetConnections('following')}
+					>
 						<strong ref={numFollowing}>{props.numFollowing}</strong>
 						<p>Following</p>
 					</div>
-					<div className={styles.connection}>
+					<div
+						className={styles.connection}
+						onClick={() => handleGetConnections('subscribers')}
+					>
 						<strong ref={numSubscribers}>
 							{props.numSubscribers}
 						</strong>
 						<p>Subscribers</p>
 					</div>
-					<div className={styles.connection}>
+					<div
+						className={styles.connection}
+						onClick={() => handleGetConnections('subscribing')}
+					>
 						<strong ref={numSubscribing}>
 							{props.numSubscriptions}
 						</strong>
@@ -195,6 +249,14 @@ const ProfileCard = (props: ProfileCardProps) => {
 					Edit Profile
 				</Link>
 			)}
+			<FloatingCard showCard={showCard} setShowCard={setShowCard}>
+				<ul
+					className={styles.connectionList}
+					onClick={() => setShowCard(false)}
+				>
+					{!isConnectionLoading && connectionList}
+				</ul>
+			</FloatingCard>
 		</Card>
 	);
 };

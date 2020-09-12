@@ -1,5 +1,5 @@
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
-import { ButtonProps } from '../components/Button/Button';
+import { ButtonProps } from '../../components/Button/Button';
 
 type ButtonHandle<T> = T extends ForwardRefExoticComponent<
 	ButtonProps & RefAttributes<infer T2>

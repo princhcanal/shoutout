@@ -5,12 +5,12 @@ import axios from '../../axios';
 
 import Post from '../../components/Post/Post';
 import CreatePostForm from '../../components/CreatePost/CreatePostForm';
-import PostType from '../../types/post';
-import FetchFeedData from '../../types/fetchFeedData';
-import Cart from '../../types/cart';
-import FetchCartData from '../../types/fetchCartData';
-import Wishlist from '../../types/wishlist';
-import FetchWishlistData from '../../types/fetchWishlistData';
+import PostType from '../../types/models/post';
+import FetchFeedData from '../../types/fetchData/fetchFeedData';
+import Cart from '../../types/models/cart';
+import FetchCartData from '../../types/fetchData/fetchCartData';
+import Wishlist from '../../types/models/wishlist';
+import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 
 const Feed = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);

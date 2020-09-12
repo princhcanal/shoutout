@@ -5,12 +5,12 @@ import axios from '../../axios';
 import { useParams } from 'react-router-dom';
 
 import Post from '../../components/Post/Post';
-import PostType from '../../types/post';
-import FetchPostData from '../../types/fetchPostData';
-import Cart from '../../types/cart';
-import Wishlist from '../../types/wishlist';
-import FetchCartData from '../../types/fetchCartData';
-import FetchWishlistData from '../../types/fetchWishlistData';
+import PostType from '../../types/models/post';
+import FetchPostData from '../../types/fetchData/fetchPostData';
+import Cart from '../../types/models/cart';
+import Wishlist from '../../types/models/wishlist';
+import FetchCartData from '../../types/fetchData/fetchCartData';
+import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 
 const SinglePost = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);

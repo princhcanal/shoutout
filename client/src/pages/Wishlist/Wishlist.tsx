@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Wishlist.module.scss';
 
-import WishlistType from '../../types/wishlist';
+import WishlistType from '../../types/models/wishlist';
 import axios from '../../axios';
-import FetchWishlistData from '../../types/fetchWishlistData';
+import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 import Post from '../../components/Post/Post';
-import Cart from '../../types/cart';
-import FetchCartData from '../../types/fetchCartData';
+import Cart from '../../types/models/cart';
+import FetchCartData from '../../types/fetchData/fetchCartData';
 
 const Wishlist = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);

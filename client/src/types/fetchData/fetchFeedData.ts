@@ -1,4 +1,4 @@
-import Post from './post';
+import Post from '../models/post';
 
 interface FetchFeedData {
 	message: string;

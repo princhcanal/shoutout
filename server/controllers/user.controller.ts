@@ -21,8 +21,17 @@ class UserController implements Controller {
 
 	private initializeRoutes() {
 		this.router.get(`${this.path}/:username`, this.getUserProfile);
-		this.router.get(`${this.path}/:username/following`, this.getFollowing);
 		this.router.get(`${this.path}/:username/posts`, this.getUserPosts);
+		this.router.get(`${this.path}/:username/following`, this.getFollowing);
+		this.router.get(`${this.path}/:username/followers`, this.getFollowers);
+		this.router.get(
+			`${this.path}/:username/subscribing`,
+			this.getSubscribing
+		);
+		this.router.get(
+			`${this.path}/:username/subscribers`,
+			this.getSubscribers
+		);
 
 		this.router
 			.all(`${this.path}*`, authMiddleware)
@@ -260,18 +269,93 @@ class UserController implements Controller {
 				throw new UserNotFoundException(username);
 			}
 
-			const followingUsers = user.following as User[];
-			const following = followingUsers.map((f: User) => {
-				return {
-					username: f.username,
-					url: f.url,
-				};
-			});
+			const following = user.following as User[];
 
 			const message = 'Following fetched successfully';
 			res.status(200).json({
 				message,
 				following,
+			});
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	private getFollowers = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const username = req.params.username;
+			const user = await this.user
+				.findOne({ username })
+				.populate('followers');
+
+			if (!user) {
+				throw new UserNotFoundException(username);
+			}
+
+			const followers = user.followers as User[];
+
+			const message = 'Followers fetched successfully';
+			res.status(200).json({
+				message,
+				followers,
+			});
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	private getSubscribing = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const username = req.params.username;
+			const user = await this.user
+				.findOne({ username })
+				.populate('subscriptions');
+
+			if (!user) {
+				throw new UserNotFoundException(username);
+			}
+
+			const subscribing = user.subscriptions as User[];
+
+			const message = 'Subscriptions fetched successfully';
+			res.status(200).json({
+				message,
+				subscribing,
+			});
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	private getSubscribers = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const username = req.params.username;
+			const user = await this.user
+				.findOne({ username })
+				.populate('subscribers');
+
+			if (!user) {
+				throw new UserNotFoundException(username);
+			}
+
+			const subscribers = user.subscribers as User[];
+
+			const message = 'Subscribers fetched successfully';
+			res.status(200).json({
+				message,
+				subscribers,
 			});
 		} catch (err) {
 			next(err);
