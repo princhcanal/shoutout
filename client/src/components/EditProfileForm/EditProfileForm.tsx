@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './EditProfileForm.module.scss';
 
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from '../../axios';
@@ -11,6 +12,7 @@ import Input from '../Form/Input/Input';
 import { EditProfileFormValues } from '../../store/auth';
 import Button from '../Button/Button';
 import User from '../../types/models/user';
+import * as AuthActions from '../../store/auth/actions';
 
 interface EditProfileFormProps {
 	user: User;
@@ -19,6 +21,7 @@ interface EditProfileFormProps {
 const EditProfileForm = (props: EditProfileFormProps) => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const history = useHistory();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if (props.user.username !== '') {
@@ -37,7 +40,8 @@ const EditProfileForm = (props: EditProfileFormProps) => {
 	const onSubmit = async (values: EditProfileFormValues) => {
 		try {
 			await axios.patch('/user', values);
-			history.push(`/profile/${props.user.username}`);
+			dispatch(AuthActions.setUsername(values.username as string));
+			history.push(`/profile/${values.username as string}`);
 		} catch (err) {
 			console.log('ERROR:', err);
 		}

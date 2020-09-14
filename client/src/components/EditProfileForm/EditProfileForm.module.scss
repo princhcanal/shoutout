@@ -1,2 +1,17 @@
 .editProfileForm {
+	width: 50%;
+	background-color: var(--color-secondary-light-1);
+
+	@media only screen and (max-width: 900px) {
+		width: 70%;
+
+		@media only screen and (max-width: 600px) {
+			width: 90%;
+		}
+	}
+
+	.buttons {
+		display: flex;
+		flex-direction: column;
+	}
 }

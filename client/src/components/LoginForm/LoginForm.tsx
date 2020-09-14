@@ -13,7 +13,6 @@ import Input from '../Form/Input/Input';
 import { LoginFormValues } from '../../store/auth';
 import Button from '../Button/Button';
 
-// TODO: abstract onSubmit
 const LoginForm = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();

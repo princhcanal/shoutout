@@ -55,9 +55,12 @@ class PostController implements Controller {
 				'/'
 			)}`;
 
+			const imagePath = req.file.path;
+
 			let createdPost = new this.post({
 				...postData,
 				image,
+				imagePath,
 				author: req.user._id,
 				url: `${process.env.BASE_URL}${this.path}`,
 			});
@@ -95,7 +98,7 @@ class PostController implements Controller {
 				throw new NotAuthorizedException();
 			}
 
-			deleteFile(post.image);
+			deleteFile(post.imagePath);
 			await this.post.findByIdAndDelete(id);
 
 			const message = 'Post deleted successfully';

@@ -41,6 +41,11 @@ const FloatingCard = forwardRef(
 
 		useEffect(() => {
 			setShowCard(props.showCard);
+			if (props.showCard) {
+				if (cardRef && cardRef.card) {
+					cardRef.card.classList.add(styles.center);
+				}
+			}
 		}, [props.showCard, setShowCard]);
 
 		return (

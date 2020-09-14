@@ -8,7 +8,6 @@ import User from '../interfaces/user.interface';
 import { Next } from 'compose-middleware';
 
 // TODO: implement subscription service for each user for discounts on products
-// TODO: implement unfollow and unsubscribe
 class UserController implements Controller {
 	public path = '/user';
 	public router = express.Router();

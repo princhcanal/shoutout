@@ -42,6 +42,7 @@ const login = (state: AuthState, action: LoginAction): AuthState => {
 	const userId = tokenPayload._id;
 	const name = tokenPayload.name;
 	const email = tokenPayload.email;
+	console.log(tokenPayload.username);
 
 	return {
 		...state,

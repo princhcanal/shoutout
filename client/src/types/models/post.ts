@@ -7,6 +7,7 @@ interface Post {
 	title: string;
 	price: number;
 	image: string;
+	imagePath: string;
 	url: string;
 	createdAt: string;
 	updatedAt: string;

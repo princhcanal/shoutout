@@ -125,21 +125,20 @@ const ProfileCard = (props: ProfileCardProps) => {
 		| 'subscribing';
 
 	const handleGetConnections = async (connection: Connections) => {
+		setShowCard(true);
+		setIsConnectionLoading(true);
+
 		try {
-			setIsConnectionLoading(true);
 			const connectionData = await axios.get<FetchConnectionData>(
 				`/user/${props.username}/${connection}`
 			);
 			const connections = connectionData.data[connection];
-			console.log(connections);
 			if (connections) {
 				setConnections(connections);
 				setIsConnectionLoading(false);
 			}
 		} catch (err) {
 			console.log('ERROR:', err);
-		} finally {
-			setShowCard(true);
 		}
 	};
 

@@ -56,7 +56,7 @@ const HamburgerMenu = (props: HamburgerMenuProps) => {
 							<Link to='/cart'>Cart</Link>
 						</li>
 						<li>
-							<Link to={`profile/${username}`}>Profile</Link>
+							<Link to={`/profile/${username}`}>Profile</Link>
 						</li>
 					</ul>
 				</div>

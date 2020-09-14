@@ -45,7 +45,6 @@ var post_model_1 = __importDefault(require("../models/post.model"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var UserNotFoundException_1 = __importDefault(require("../exceptions/UserNotFoundException"));
 // TODO: implement subscription service for each user for discounts on products
-// TODO: implement unfollow and unsubscribe
 var UserController = /** @class */ (function () {
     function UserController() {
         var _this = this;

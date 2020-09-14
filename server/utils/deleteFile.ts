@@ -1,10 +1,12 @@
 import path from 'path';
 import fs from 'fs';
 
-const deleteFile = (filePath: string) => {
+const deleteFile = async (filePath: string) => {
 	filePath = path.join(filePath);
 	fs.unlink(filePath, (err: NodeJS.ErrnoException | null) => {
-		console.error('clearImageError:', err);
+		if (err) {
+			console.error('clearImageError:', err);
+		}
 	});
 };
 

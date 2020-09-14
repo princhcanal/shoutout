@@ -14,6 +14,7 @@ var postSchema = new mongoose_1.default.Schema({
     title: { type: String, required: true },
     price: { type: Number, required: true },
     image: { type: String, required: true },
+    imagePath: { type: String, required: true },
     url: { type: String, required: true },
 }, { timestamps: true });
 var postModel = mongoose_1.default.model('Post', postSchema);
