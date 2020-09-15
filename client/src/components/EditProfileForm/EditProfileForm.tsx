@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './EditProfileForm.module.scss';
 
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from '../../axios';
@@ -13,6 +13,9 @@ import { EditProfileFormValues } from '../../store/auth';
 import Button from '../Button/Button';
 import User from '../../types/models/user';
 import * as AuthActions from '../../store/auth/actions';
+import { showErrorMessage } from '../../utils/errors';
+import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
+import { RootState } from '../../store';
 
 interface EditProfileFormProps {
 	user: User;
@@ -22,6 +25,9 @@ const EditProfileForm = (props: EditProfileFormProps) => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const history = useHistory();
 	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		if (props.user.username !== '') {
@@ -43,7 +49,7 @@ const EditProfileForm = (props: EditProfileFormProps) => {
 			dispatch(AuthActions.setUsername(values.username as string));
 			history.push(`/profile/${values.username as string}`);
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 

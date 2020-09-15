@@ -4,9 +4,11 @@ import styles from './EditProfile.module.scss';
 import EditProfileForm from '../../components/EditProfileForm/EditProfileForm';
 import User from '../../types/models/user';
 import FetchUserProfileData from '../../types/fetchData/fetchUserData';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import axios from '../../axios';
+import { showErrorMessage } from '../../utils/errors';
+import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 
 const EditProfile = () => {
 	const username = useSelector<RootState, string>(
@@ -22,6 +24,10 @@ const EditProfile = () => {
 		subscribers: [],
 		subscriptions: [],
 	});
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		try {
@@ -38,7 +44,7 @@ const EditProfile = () => {
 
 			fetchUserProfile();
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	}, [username]);
 

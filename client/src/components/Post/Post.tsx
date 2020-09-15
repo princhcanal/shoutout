@@ -3,7 +3,7 @@ import styles from './Post.module.scss';
 import ButtonStyles from '../Button/Button.module.scss';
 
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from '../../axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
@@ -17,6 +17,8 @@ import PostType from '../../types/models/post';
 import { RootState } from '../../store';
 import * as date from '../../utils/dates';
 import EditPostFormHandle from '../../types/handles/editPostFormHandle';
+import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
+import { showErrorMessage } from '../../utils/errors';
 
 export interface PostProps {
 	post: PostType;
@@ -36,6 +38,11 @@ const Post = (props: PostProps) => {
 		props.isInWishlist
 	);
 	const [clickedBody, setClickedBody] = useState<boolean>(false);
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
+
 	let editOptionsRef: CardHandle<typeof Card>;
 	let postRef: CardHandle<typeof Card>;
 	let formRef: EditPostFormHandle<typeof EditPostForm>;
@@ -79,7 +86,7 @@ const Post = (props: PostProps) => {
 				setIsInCart(true);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -92,7 +99,7 @@ const Post = (props: PostProps) => {
 				setIsInCart(false);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -107,7 +114,7 @@ const Post = (props: PostProps) => {
 				setIsInWishlist(true);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -122,7 +129,7 @@ const Post = (props: PostProps) => {
 				setIsInWishlist(false);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -163,7 +170,7 @@ const Post = (props: PostProps) => {
 				postRef.card.remove();
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 

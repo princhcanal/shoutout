@@ -10,11 +10,13 @@ import User from '../../types/models/user';
 import FetchUserProfileData from '../../types/fetchData/fetchUserData';
 import { useParams, useHistory } from 'react-router-dom';
 import { RootState } from '../../store';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Cart from '../../types/models/cart';
 import Wishlist from '../../types/models/wishlist';
 import FetchCartData from '../../types/fetchData/fetchCartData';
 import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
+import { showErrorMessage } from '../../utils/errors';
+import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 
 const Profile = () => {
 	const [profileCardIsLoading, setProfileCardIsLoading] = useState<boolean>(
@@ -44,6 +46,10 @@ const Profile = () => {
 		products: [],
 		user: '',
 	});
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		try {
@@ -63,7 +69,7 @@ const Profile = () => {
 
 			fetchUserProfile();
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	}, [username, history]);
 
@@ -81,7 +87,7 @@ const Profile = () => {
 
 			fetchFeed();
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	}, []);
 

@@ -7,6 +7,10 @@ import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 import Post from '../../components/Post/Post';
 import Cart from '../../types/models/cart';
 import FetchCartData from '../../types/fetchData/fetchCartData';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
+import { showErrorMessage } from '../../utils/errors';
 
 const Wishlist = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,6 +23,10 @@ const Wishlist = () => {
 		totalPrice: 0,
 		user: '',
 	});
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		const fetchWishlist = async () => {
@@ -31,7 +39,7 @@ const Wishlist = () => {
 				setCart(cart.data.cart);
 				setIsLoading(false);
 			} catch (err) {
-				console.log('ERROR:', err);
+				showErrorMessage(err, errorMessageRef, dispatch);
 			}
 		};
 

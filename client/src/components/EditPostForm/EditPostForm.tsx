@@ -5,7 +5,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from '../../axios';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 
 import FloatingCard from '../Card/FloatingCard/FloatingCard';
@@ -13,6 +13,8 @@ import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import Button from '../Button/Button';
 import { CreatePostFormValues } from '../../store/auth';
+import { showErrorMessage } from '../../utils/errors';
+import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
 
 export interface EditPostFormProps {
 	className?: string;
@@ -32,6 +34,10 @@ const EditPostForm = forwardRef(
 		);
 		const [showCard, setShowCard] = useState<boolean>(false);
 		const classNames = [styles.editPostForm];
+		const dispatch = useDispatch();
+		const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+			(state) => state.error.errorMessageRef
+		);
 
 		useImperativeHandle(
 			ref,
@@ -67,7 +73,7 @@ const EditPostForm = forwardRef(
 				await axios.patch(`/posts/${props.postId}`, formData);
 				history.push(`/profile/${username}`);
 			} catch (err) {
-				console.log('ERROR:', err);
+				showErrorMessage(err, errorMessageRef, dispatch);
 			}
 		};
 

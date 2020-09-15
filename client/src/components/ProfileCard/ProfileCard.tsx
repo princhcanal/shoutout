@@ -4,7 +4,7 @@ import ButtonStyles from '../Button/Button.module.scss';
 
 import axios from '../../axios';
 import { BigHead } from '@bigheads/core';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Card from '../Card/Card';
@@ -14,6 +14,8 @@ import ButtonHandle from '../../types/handles/buttonHandle';
 import FetchConnectionData from '../../types/fetchData/fetchConnectionData';
 import FloatingCard from '../Card/FloatingCard/FloatingCard';
 import User from '../../types/models/user';
+import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
+import { showErrorMessage } from '../../utils/errors';
 
 interface ProfileCardProps {
 	name: string;
@@ -47,6 +49,10 @@ const ProfileCard = (props: ProfileCardProps) => {
 		true
 	);
 	const [connections, setConnections] = useState<User[]>([]);
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		setIsFollowing(props.isFollowing);
@@ -67,7 +73,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 				setIsFollowing(true);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -82,7 +88,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 				setIsFollowing(false);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -98,7 +104,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 				setIsSubscribed(true);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -114,7 +120,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 				setIsSubscribed(false);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
@@ -138,7 +144,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 				setIsConnectionLoading(false);
 			}
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 

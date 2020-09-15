@@ -3,25 +3,27 @@ import styles from './Cart.module.scss';
 
 import axios from '../../axios';
 
-// import CartType from '../../types/cart';
 import FetchCartData from '../../types/fetchData/fetchCartData';
 import Wishlist from '../../types/models/wishlist';
 import PostType from '../../types/models/post';
 import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 import Post from '../../components/Post/Post';
+import { showErrorMessage } from '../../utils/errors';
+import { useDispatch, useSelector } from 'react-redux';
+import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
+import { RootState } from '../../store';
 
 const Cart = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	// const [cart, setCart] = useState<CartType>({
-	// 	products: [],
-	// 	totalPrice: 0,
-	// 	user: '',
-	// });
 	const [wishlist, setWishlist] = useState<Wishlist>({
 		products: [],
 		user: '',
 	});
 	const [cartProducts, setCartProducts] = useState<PostType[]>([]);
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		const fetchCart = async () => {
@@ -35,7 +37,7 @@ const Cart = () => {
 				setWishlist(wishlist.data.wishlist);
 				setIsLoading(false);
 			} catch (err) {
-				console.log('ERROR:', err);
+				showErrorMessage(err, errorMessageRef, dispatch);
 			}
 		};
 

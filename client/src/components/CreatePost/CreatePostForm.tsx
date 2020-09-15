@@ -7,7 +7,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import axios from '../../axios';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 
 import FloatingCard from '../Card/FloatingCard/FloatingCard';
@@ -15,6 +15,9 @@ import Input from '../Form/Input/Input';
 import TextArea from '../Form/TextArea/TextArea';
 import Button from '../Button/Button';
 import { CreatePostFormValues } from '../../store/auth';
+import * as ErrorActions from '../../store/error/actions';
+import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
+import { showErrorMessage } from '../../utils/errors';
 
 // const SUPPORTED_IMAGE_FORMATS = ['image/jpeg', 'image/jpg', 'image/png'];
 
@@ -29,6 +32,10 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 		(state) => state.auth.username
 	);
 	const [showCard, setShowCard] = useState<boolean>(false);
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	if (props.className) {
 		classNames.push(...props.className.split(' '));
@@ -69,7 +76,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 			await axios.post('/posts', formData);
 			history.push(`/profile/${username}`);
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 

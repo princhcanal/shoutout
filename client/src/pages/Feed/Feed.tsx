@@ -11,6 +11,10 @@ import Cart from '../../types/models/cart';
 import FetchCartData from '../../types/fetchData/fetchCartData';
 import Wishlist from '../../types/models/wishlist';
 import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
+import { showErrorMessage } from '../../utils/errors';
 
 const Feed = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -24,6 +28,10 @@ const Feed = () => {
 		products: [],
 		user: '',
 	});
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		try {
@@ -41,7 +49,7 @@ const Feed = () => {
 
 			fetchFeed();
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	}, []);
 

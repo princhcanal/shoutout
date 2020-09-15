@@ -11,6 +11,10 @@ import Cart from '../../types/models/cart';
 import Wishlist from '../../types/models/wishlist';
 import FetchCartData from '../../types/fetchData/fetchCartData';
 import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
+import { showErrorMessage } from '../../utils/errors';
 
 const SinglePost = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -25,6 +29,10 @@ const SinglePost = () => {
 		user: '',
 	});
 	const { id } = useParams();
+	const dispatch = useDispatch();
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	useEffect(() => {
 		try {
@@ -42,7 +50,7 @@ const SinglePost = () => {
 
 			fetchPost();
 		} catch (err) {
-			console.log('ERROR:', err);
+			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	}, [id]);
 

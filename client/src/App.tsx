@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useEffect, useRef } from 'react';
 import './scss/App.scss';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -14,14 +14,30 @@ import Wishlist from './pages/Wishlist/Wishlist';
 import EditProfile from './pages/EditProfile/EditProfile';
 import SinglePost from './pages/SinglePost/SinglePost';
 import Layout from './components/Layout/Layout';
+import ErrorMessage, {
+	ErrorMessageRef,
+} from './components/ErrorMessage/ErrorMessage';
 import { RootState } from './store';
 import * as AuthActions from './store/auth/actions';
+import * as ErrorActions from './store/error/actions';
+import ErrorMessageHandle from './types/handles/errorMessageHandle';
 
+// TODO: add loaders
+// TODO: add 0 posts, connections
+// TODO: add 404 page
 const App = () => {
 	const dispatch = useDispatch();
+	const showError = useSelector<RootState, boolean>(
+		(state) => state.error.showError
+	);
+	const errorMessage = useSelector<RootState, string>(
+		(state) => state.error.errorMessage
+	);
+	let errorMessageRef: ErrorMessageHandle<typeof ErrorMessage>;
 
 	useLayoutEffect(() => {
 		dispatch(AuthActions.login());
+		dispatch(ErrorActions.setErrorMessageRef(errorMessageRef));
 	});
 
 	const isLoggedIn = useSelector<RootState, boolean>(
@@ -53,7 +69,14 @@ const App = () => {
 		);
 	}
 
-	return <div className='App'>{routes}</div>;
+	return (
+		<div className='App'>
+			{routes}
+			<ErrorMessage ref={(e) => (errorMessageRef = e as ErrorMessageRef)}>
+				{errorMessage}
+			</ErrorMessage>
+		</div>
+	);
 };
 
 export default App;
