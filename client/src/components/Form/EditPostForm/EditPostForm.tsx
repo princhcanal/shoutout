@@ -3,18 +3,18 @@ import styles from './EditPostForm.module.scss';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import axios from '../../axios';
+import axios from '../../../axios';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 
-import FloatingCard from '../Card/FloatingCard/FloatingCard';
-import Input from '../Form/Input/Input';
-import TextArea from '../Form/TextArea/TextArea';
-import Button from '../Button/Button';
-import { CreatePostFormValues } from '../../store/auth';
-import { showErrorMessage } from '../../utils/errors';
-import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
+import FloatingCard from '../../Card/FloatingCard/FloatingCard';
+import Input from '../../Form/Input/Input';
+import TextArea from '../../Form/TextArea/TextArea';
+import Button from '../../Button/Button';
+import { CreatePostFormValues } from '../../../store/auth';
+import { showErrorMessage } from '../../../utils/errors';
+import { ErrorMessageRef } from '../../ErrorMessage/ErrorMessage';
 
 export interface EditPostFormProps {
 	className?: string;

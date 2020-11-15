@@ -8,10 +8,12 @@ import Wishlist from '../../types/models/wishlist';
 import PostType from '../../types/models/post';
 import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 import Post from '../../components/Post/Post';
+import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
 import { showErrorMessage } from '../../utils/errors';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 import { RootState } from '../../store';
+import NoCartItems from '../../components/NoData/NoCartItems/NoCartItems';
 
 const Cart = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -29,7 +31,6 @@ const Cart = () => {
 		const fetchCart = async () => {
 			try {
 				const cart = await axios.get<FetchCartData>('/cart');
-				// setCart(cart.data.cart);
 				setCartProducts(cart.data.products);
 				const wishlist = await axios.get<FetchWishlistData>(
 					'/wishlist'
@@ -42,7 +43,7 @@ const Cart = () => {
 		};
 
 		fetchCart();
-	}, []);
+	}, [dispatch, errorMessageRef]);
 
 	const wishlistProductIds = wishlist.products.map((product) => {
 		return product._id;
@@ -64,7 +65,15 @@ const Cart = () => {
 
 	return (
 		<div className={styles.cart}>
-			<div className={'postContainer'}>{!isLoading && cartItems}</div>
+			<div className={'postContainer'}>
+				{isLoading ? (
+					<PostSkeleton />
+				) : cartItems.length > 0 ? (
+					cartItems
+				) : (
+					<NoCartItems />
+				)}
+			</div>
 		</div>
 	);
 };

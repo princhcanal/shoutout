@@ -31,6 +31,7 @@ class UserController implements Controller {
 			`${this.path}/:username/subscribers`,
 			this.getSubscribers
 		);
+		this.router.get(`${this.path}`, this.getAllUsers);
 
 		this.router
 			.all(`${this.path}*`, authMiddleware)
@@ -355,6 +356,27 @@ class UserController implements Controller {
 			res.status(200).json({
 				message,
 				subscribers,
+			});
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	private getAllUsers = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const username = req.query.username as string;
+			const users = await this.user
+				.findOne({ username })
+				.select('username name url');
+
+			const message = 'Users fetched successfully';
+			res.status(200).json({
+				message,
+				users,
 			});
 		} catch (err) {
 			next(err);

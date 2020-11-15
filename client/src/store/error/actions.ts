@@ -1,8 +1,3 @@
-import { RefObject } from 'react';
-
-import { Action } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-
 import {
 	ErrorActionTypes,
 	SHOW_ERROR_MESSAGE,

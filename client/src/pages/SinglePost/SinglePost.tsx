@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 import { showErrorMessage } from '../../utils/errors';
+import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
 
 const SinglePost = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -52,7 +53,7 @@ const SinglePost = () => {
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
-	}, [id]);
+	}, [id, dispatch, errorMessageRef]);
 
 	const cartProductIds = cart.products.map((product) => {
 		return product.product;
@@ -64,15 +65,19 @@ const SinglePost = () => {
 
 	return (
 		<div className={styles.singlePost}>
-			{!isLoading && post && (
-				<Post
-					key={post._id}
-					post={post}
-					date={new Date(post.createdAt)}
-					isInCart={cartProductIds.includes(post._id)}
-					isInWishlist={wishlistProductIds.includes(post._id)}
-				/>
-			)}
+			<div className='postContainer'>
+				{!isLoading && post ? (
+					<Post
+						key={post._id}
+						post={post}
+						date={new Date(post.createdAt)}
+						isInCart={cartProductIds.includes(post._id)}
+						isInWishlist={wishlistProductIds.includes(post._id)}
+					/>
+				) : (
+					<PostSkeleton />
+				)}
+			</div>
 		</div>
 	);
 };

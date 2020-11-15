@@ -4,7 +4,7 @@
 	position: relative;
 
 	&:not(:last-of-type) {
-		margin-bottom: 1.5rem;
+		margin-bottom: 1rem;
 	}
 
 	input {
@@ -13,6 +13,7 @@
 		border-radius: var(--border-radius-1);
 		padding: 0.4rem;
 		background-color: #eee;
+		margin-bottom: 0.5rem;
 	}
 
 	input:focus {
@@ -23,11 +24,6 @@
 		margin-bottom: 0.5rem;
 	}
 
-	.invalidMessage {
-		position: absolute;
-		bottom: -1.2rem;
-	}
-
 	.fileInput {
 		display: none;
 	}
@@ -35,10 +31,14 @@
 	.fileInputLabel {
 		cursor: pointer;
 		text-align: center;
-		background-color: var(--color-secondary);
+		background-color: var(--color-primary);
 		padding: 0.4rem 0.6rem;
 		border-radius: var(--border-radius-1);
-		width: 50%;
-		margin: 0 auto;
+		width: 100%;
+		margin: 0 auto 0.5rem;
+	}
+
+	.center {
+		text-align: center;
 	}
 }

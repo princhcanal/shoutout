@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect, useRef } from 'react';
+import React, { useLayoutEffect } from 'react';
 import './scss/App.scss';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
@@ -13,6 +13,7 @@ import Cart from './pages/Cart/Cart';
 import Wishlist from './pages/Wishlist/Wishlist';
 import EditProfile from './pages/EditProfile/EditProfile';
 import SinglePost from './pages/SinglePost/SinglePost';
+import NotFound from './pages/NotFound/NotFound';
 import Layout from './components/Layout/Layout';
 import ErrorMessage, {
 	ErrorMessageRef,
@@ -22,14 +23,11 @@ import * as AuthActions from './store/auth/actions';
 import * as ErrorActions from './store/error/actions';
 import ErrorMessageHandle from './types/handles/errorMessageHandle';
 
-// TODO: add loaders
+// TODO: style landing page
 // TODO: add 0 posts, connections
 // TODO: add 404 page
 const App = () => {
 	const dispatch = useDispatch();
-	const showError = useSelector<RootState, boolean>(
-		(state) => state.error.showError
-	);
 	const errorMessage = useSelector<RootState, string>(
 		(state) => state.error.errorMessage
 	);
@@ -62,8 +60,9 @@ const App = () => {
 					<Route path='/posts/:id' component={SinglePost} />
 					<Route path='/cart' component={Cart} />
 					<Route path='/wishlist' component={Wishlist} />
-					<Route path='/' component={Feed} />
-					<Redirect to='/' />
+					<Route path='/' exact component={Feed} />
+					<Route path='/404' component={NotFound} />
+					<Redirect to='/404' />
 				</Switch>
 			</Layout>
 		);

@@ -25,6 +25,10 @@ const Input = ({ label, onChange, ...props }: InputProps) => {
 		classNames.push(...props.className.split(' '));
 	}
 
+	if (props.type === 'file') {
+		classNames.push(styles.center);
+	}
+
 	const [field, meta] = useField(props);
 
 	return (

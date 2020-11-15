@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './EditProfile.module.scss';
 
-import EditProfileForm from '../../components/EditProfileForm/EditProfileForm';
+import EditProfileForm from '../../components/Form/EditProfileForm/EditProfileForm';
 import User from '../../types/models/user';
 import FetchUserProfileData from '../../types/fetchData/fetchUserData';
 import { useSelector, useDispatch } from 'react-redux';
@@ -46,7 +46,7 @@ const EditProfile = () => {
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
-	}, [username]);
+	}, [username, dispatch, errorMessageRef]);
 
 	return (
 		<div className={styles.editProfile}>

@@ -4,7 +4,7 @@ import styles from './Feed.module.scss';
 import axios from '../../axios';
 
 import Post from '../../components/Post/Post';
-import CreatePostForm from '../../components/CreatePost/CreatePostForm';
+import CreatePostForm from '../../components/Form/CreatePostForm/CreatePostForm';
 import PostType from '../../types/models/post';
 import FetchFeedData from '../../types/fetchData/fetchFeedData';
 import Cart from '../../types/models/cart';
@@ -15,6 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 import { showErrorMessage } from '../../utils/errors';
+import SearchUser from '../../components/Form/SearchUser/SearchUser';
+import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
+import NoPosts from '../../components/NoData/NoPosts/NoPosts';
 
 const Feed = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -51,7 +54,7 @@ const Feed = () => {
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
-	}, []);
+	}, [dispatch, errorMessageRef]);
 
 	const cartProductIds = cart.products.map((product) => {
 		return product.product;
@@ -78,7 +81,16 @@ const Feed = () => {
 	return (
 		<div className={styles.feed}>
 			<CreatePostForm />
-			<div className={'postContainer'}>{!isLoading && feedPosts}</div>
+			<SearchUser />
+			<div className={'postContainer'}>
+				{isLoading ? (
+					<PostSkeleton />
+				) : feedPosts.length > 0 ? (
+					feedPosts
+				) : (
+					<NoPosts />
+				)}
+			</div>
 		</div>
 	);
 };

@@ -16,6 +16,7 @@ import FloatingCard from '../Card/FloatingCard/FloatingCard';
 import User from '../../types/models/user';
 import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
 import { showErrorMessage } from '../../utils/errors';
+import ConnectionLoader from '../Loader/SkeletonLoader/ConnectionLoader/ConnectionLoader';
 
 interface ProfileCardProps {
 	name: string;
@@ -259,7 +260,11 @@ const ProfileCard = (props: ProfileCardProps) => {
 					className={styles.connectionList}
 					onClick={() => setShowCard(false)}
 				>
-					{!isConnectionLoading && connectionList}
+					{isConnectionLoading ? (
+						<ConnectionLoader />
+					) : (
+						connectionList
+					)}
 				</ul>
 			</FloatingCard>
 		</Card>

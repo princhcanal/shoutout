@@ -17,6 +17,9 @@ import FetchCartData from '../../types/fetchData/fetchCartData';
 import FetchWishlistData from '../../types/fetchData/fetchWishlistData';
 import { showErrorMessage } from '../../utils/errors';
 import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
+import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
+import ProfileCardSkeleton from '../../components/Loader/SkeletonLoader/ProfileCardSkeleton/ProfileCardSkeleton';
+import NoPosts from '../../components/NoData/NoPosts/NoPosts';
 
 const Profile = () => {
 	const [profileCardIsLoading, setProfileCardIsLoading] = useState<boolean>(
@@ -71,7 +74,7 @@ const Profile = () => {
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
-	}, [username, history]);
+	}, [username, history, dispatch, errorMessageRef]);
 
 	useEffect(() => {
 		try {
@@ -89,7 +92,7 @@ const Profile = () => {
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
-	}, []);
+	}, [dispatch, errorMessageRef]);
 
 	const cartProductIds = cart.products.map((product) => {
 		return product.product;
@@ -116,7 +119,9 @@ const Profile = () => {
 	return (
 		<div className={styles.profile}>
 			<div className={styles.profileCard}>
-				{!profileCardIsLoading && (
+				{profileCardIsLoading ? (
+					<ProfileCardSkeleton />
+				) : (
 					<ProfileCard
 						name={user.name}
 						username={user.username}
@@ -133,7 +138,13 @@ const Profile = () => {
 			</div>
 			<div className={styles.posts}>
 				<div className={'postContainer'}>
-					{!feedIsLoading && userPosts}
+					{feedIsLoading ? (
+						<PostSkeleton />
+					) : userPosts.length > 0 ? (
+						userPosts
+					) : (
+						<NoPosts />
+					)}
 				</div>
 			</div>
 		</div>

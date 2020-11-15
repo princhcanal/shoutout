@@ -10,7 +10,7 @@ var validationResultMiddleware = function (req, res, next) {
     try {
         var errors = express_validator_1.validationResult(req);
         if (!errors.isEmpty()) {
-            var error = new HttpException_1.default(422, 'Post creation failed', {
+            var error = new HttpException_1.default(422, 'Wrong Credentials', {
                 errors: errors.array(),
             });
             throw error;

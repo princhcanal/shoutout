@@ -7,7 +7,7 @@ const validationResultMiddleware = (req: Request, res: Response, next: any) => {
 	try {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			const error = new HttpException(422, 'Post creation failed', {
+			const error = new HttpException(422, 'Wrong Credentials', {
 				errors: errors.array(),
 			});
 

@@ -1,21 +1,30 @@
 import React from 'react';
 import styles from './LoginForm.module.scss';
 
-import axios from '../../axios';
-import { useDispatch } from 'react-redux';
+import axios from '../../../axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { RootState } from '../../../store';
+import { ErrorMessageRef } from '../../ErrorMessage/ErrorMessage';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Cookies from 'js-cookie';
 
-import * as AuthActions from '../../store/auth/actions';
-import Input from '../Form/Input/Input';
-import { LoginFormValues } from '../../store/auth';
-import Button from '../Button/Button';
+import * as AuthActions from '../../../store/auth/actions';
+import Input from '../../Form/Input/Input';
+import { LoginFormValues } from '../../../store/auth';
+import Button, { ButtonRef } from '../../Button/Button';
+import ButtonHandle from '../../../types/handles/buttonHandle';
+import { showErrorMessage } from '../../../utils/errors';
 
 const LoginForm = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
+	let submitRef: ButtonHandle<typeof Button>;
+
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	const initialValues = {
 		email: '',
@@ -29,6 +38,10 @@ const LoginForm = () => {
 
 	const onSubmit = async (values: LoginFormValues) => {
 		try {
+			if (submitRef.button) {
+				submitRef.button.innerText = 'Loading...';
+			}
+
 			const res = await axios.post('/auth/login', values);
 			const expires = 1 / 24;
 			Cookies.set('Authorization', res.data.token.token, { expires });
@@ -41,7 +54,10 @@ const LoginForm = () => {
 				history.replace('/login');
 			}
 		} catch (err) {
-			console.log(err);
+			if (submitRef.button) {
+				submitRef.button.innerText = 'Login';
+			}
+			showErrorMessage(err, errorMessageRef, dispatch);
 			history.replace('/login');
 		}
 	};
@@ -76,7 +92,12 @@ const LoginForm = () => {
 							<Link to='/register'>Register</Link>
 						</p>
 						<div className={styles.buttons}>
-							<Button type='submit'>Login</Button>
+							<Button
+								type='submit'
+								ref={(s) => (submitRef = s as ButtonRef)}
+							>
+								Login
+							</Button>
 						</div>
 					</Form>
 				</Formik>

@@ -437,6 +437,32 @@ var UserController = /** @class */ (function () {
                 }
             });
         }); };
+        this.getAllUsers = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var username, users, message, err_12;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        username = req.query.username;
+                        return [4 /*yield*/, this.user
+                                .findOne({ username: username })
+                                .select('username name url')];
+                    case 1:
+                        users = _a.sent();
+                        message = 'Users fetched successfully';
+                        res.status(200).json({
+                            message: message,
+                            users: users,
+                        });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_12 = _a.sent();
+                        next(err_12);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
         this.initializeRoutes();
     }
     UserController.prototype.initializeRoutes = function () {
@@ -446,6 +472,7 @@ var UserController = /** @class */ (function () {
         this.router.get(this.path + "/:username/followers", this.getFollowers);
         this.router.get(this.path + "/:username/subscribing", this.getSubscribing);
         this.router.get(this.path + "/:username/subscribers", this.getSubscribers);
+        this.router.get("" + this.path, this.getAllUsers);
         this.router
             .all(this.path + "*", auth_middleware_1.default)
             .patch("" + this.path, this.updateUser)

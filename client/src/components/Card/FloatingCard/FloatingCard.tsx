@@ -25,7 +25,7 @@ export interface FloatingCardRef {
 
 const FloatingCard = forwardRef(
 	(props: FloatingCardProps, ref: Ref<FloatingCardRef>) => {
-		let cardRef: CardHandle<typeof Card>;
+		let cardRef: CardHandle<typeof Card> = { card: null };
 		let backdropRef: BackdropHandle<typeof Backdrop>;
 		const classNames = [styles.floatingCard];
 		const [showCard, setShowCard] = useState<boolean>(false);
@@ -46,7 +46,7 @@ const FloatingCard = forwardRef(
 					cardRef.card.classList.add(styles.center);
 				}
 			}
-		}, [props.showCard, setShowCard]);
+		}, [props.showCard, cardRef]);
 
 		return (
 			<>

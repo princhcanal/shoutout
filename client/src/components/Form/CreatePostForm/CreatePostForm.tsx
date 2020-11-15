@@ -5,19 +5,18 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import axios from '../../axios';
+import axios from '../../../axios';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 
-import FloatingCard from '../Card/FloatingCard/FloatingCard';
-import Input from '../Form/Input/Input';
-import TextArea from '../Form/TextArea/TextArea';
-import Button from '../Button/Button';
-import { CreatePostFormValues } from '../../store/auth';
-import * as ErrorActions from '../../store/error/actions';
-import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
-import { showErrorMessage } from '../../utils/errors';
+import FloatingCard from '../../Card/FloatingCard/FloatingCard';
+import Input from '../../Form/Input/Input';
+import TextArea from '../../Form/TextArea/TextArea';
+import Button from '../../Button/Button';
+import { CreatePostFormValues } from '../../../store/auth';
+import { ErrorMessageRef } from '../../ErrorMessage/ErrorMessage';
+import { showErrorMessage } from '../../../utils/errors';
 
 // const SUPPORTED_IMAGE_FORMATS = ['image/jpeg', 'image/jpg', 'image/png'];
 

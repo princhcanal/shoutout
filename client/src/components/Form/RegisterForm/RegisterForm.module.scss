@@ -1,9 +1,21 @@
 .registerForm {
 	width: 95%;
-	margin: auto;
+	margin: 2rem auto;
 	background-color: var(--color-secondary-light-2);
 	border-radius: var(--border-radius-1);
 	box-shadow: 1rem 1rem 4rem rgba(0, 0, 0, 0.2);
+
+	@media only screen and (max-width: 900px) {
+		width: 60%;
+	}
+
+	@media only screen and (max-width: 700px) {
+		width: 70%;
+	}
+
+	@media only screen and (max-width: 500px) {
+		width: 90%;
+	}
 }
 
 .card {
@@ -17,6 +29,11 @@
 	display: flex;
 	flex-direction: column;
 	padding: 3rem 7rem;
+
+	@media only screen and (max-width: 900px) {
+		width: 100%;
+		padding: 1rem;
+	}
 }
 
 .formHeader {
@@ -35,12 +52,15 @@
 .image {
 	width: 40%;
 	background-color: var(--color-tertiary);
-	border-top-left-radius: var(--border-radius-1);
-	border-bottom-left-radius: var(--border-radius-1);
+	border-radius: var(--border-radius-1);
 	padding: 1rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
+
+	@media only screen and (max-width: 900px) {
+		display: none;
+	}
 }
 
 .imageHeader {

@@ -1,23 +1,32 @@
 import React from 'react';
 import styles from './RegisterForm.module.scss';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { RootState } from '../../../store';
+import { ErrorMessageRef } from '../../ErrorMessage/ErrorMessage';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import axios from '../../axios';
+import axios from '../../../axios';
 import Cookies from 'js-cookie';
 
-import Input from '../Form/Input/Input';
-import Card from '../../components/Card/Card';
+import Input from '../../Form/Input/Input';
+import Card from '../../../components/Card/Card';
 import { Link } from 'react-router-dom';
-import * as AuthActions from '../../store/auth/actions';
-import { RegisterFormValues } from '../../store/auth';
-import Button from '../Button/Button';
+import * as AuthActions from '../../../store/auth/actions';
+import { RegisterFormValues } from '../../../store/auth';
+import Button, { ButtonRef } from '../../Button/Button';
+import ButtonHandle from '../../../types/handles/buttonHandle';
+import { showErrorMessage } from '../../../utils/errors';
 
 const RegisterForm = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
+	let submitRef: ButtonHandle<typeof Button>;
+
+	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
+		(state) => state.error.errorMessageRef
+	);
 
 	const initialValues = {
 		email: '',
@@ -36,6 +45,10 @@ const RegisterForm = () => {
 
 	const onSubmit = async (values: RegisterFormValues) => {
 		try {
+			if (submitRef.button) {
+				submitRef.button.innerText = 'Loading...';
+			}
+
 			const res = await axios.post('/auth/register', values);
 			const expires = 1 / 24;
 			Cookies.set('Authorization', res.data.token.token, { expires });
@@ -48,7 +61,11 @@ const RegisterForm = () => {
 				history.replace('/register');
 			}
 		} catch (err) {
-			console.log(err);
+			if (submitRef.button) {
+				submitRef.button.innerText = 'Register';
+			}
+
+			showErrorMessage(err, errorMessageRef, dispatch);
 			history.replace('/register');
 		}
 	};
@@ -847,7 +864,12 @@ const RegisterForm = () => {
 								<Link to='/login'>Login</Link>
 							</p>
 							<div className={styles.buttons}>
-								<Button type='submit'>Register</Button>
+								<Button
+									type='submit'
+									ref={(s) => (submitRef = s as ButtonRef)}
+								>
+									Register
+								</Button>
 							</div>
 						</Form>
 					</Formik>

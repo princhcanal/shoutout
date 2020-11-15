@@ -37,9 +37,9 @@ const Backdrop = forwardRef((props: BackdropProps, ref: Ref<BackdropRef>) => {
 					if (backdropRef.current) {
 						backdropRef.current.classList.remove(styles.hide);
 					}
-					if (props.onShow) {
-						props.onShow();
-					}
+					// if (props.onShow) {
+					// 	props.onShow();
+					// }
 				}, 10);
 			} else {
 				backdropRef.current.click();

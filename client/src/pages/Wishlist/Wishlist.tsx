@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 import { showErrorMessage } from '../../utils/errors';
+import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
+import NoWishlistItems from '../../components/NoData/NoWishListItems/NoWishlistItems';
 
 const Wishlist = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -44,7 +46,7 @@ const Wishlist = () => {
 		};
 
 		fetchWishlist();
-	}, []);
+	}, [dispatch, errorMessageRef]);
 
 	const cartProductIds = cart.products.map((product) => {
 		return product.product;
@@ -66,7 +68,15 @@ const Wishlist = () => {
 
 	return (
 		<div className={styles.wishlist}>
-			<div className={'postContainer'}>{!isLoading && wishlistItems}</div>
+			<div className={'postContainer'}>
+				{isLoading ? (
+					<PostSkeleton />
+				) : wishlistItems.length > 0 ? (
+					wishlistItems
+				) : (
+					<NoWishlistItems />
+				)}
+			</div>
 		</div>
 	);
 };

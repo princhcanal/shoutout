@@ -10,7 +10,9 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 import Card, { CardRef } from '../Card/Card';
 import Button, { ButtonRef } from '../Button/Button';
-import EditPostForm, { EditPostFormRef } from '../EditPostForm/EditPostForm';
+import EditPostForm, {
+	EditPostFormRef,
+} from '../Form/EditPostForm/EditPostForm';
 import CardHandle from '../../types/handles/cardHandle';
 import ButtonHandle from '../../types/handles/buttonHandle';
 import PostType from '../../types/models/post';
@@ -215,14 +217,14 @@ const Post = (props: PostProps) => {
 	return (
 		<>
 			<Card className={styles.post} ref={(p) => (postRef = p as CardRef)}>
-				<h3 className={styles.heading}>
+				<div className={styles.heading}>
 					<Link to={`/posts/${props.post._id}`}>
-						{props.post.title}
+						<h2>{props.post.title}</h2>
 					</Link>
 					<div className={styles.price}>
 						<p>${props.post.price}</p>
 					</div>
-				</h3>
+				</div>
 				<div className={styles.image}>
 					<img src={props.post.image} alt={props.post.title} />
 				</div>

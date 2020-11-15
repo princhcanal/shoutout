@@ -5,8 +5,8 @@
 	position: fixed;
 	left: 50%;
 	top: 50%;
-	transform: translate(-50%, -60rem);
-	z-index: 100;
+	transform: translate(-50%, -80rem);
+	z-index: 1000;
 	background-color: var(--color-secondary-light-1);
 	transition: all 0.3s ease-out;
 	display: block;
@@ -24,7 +24,7 @@
 	}
 
 	@media only screen and (min-height: 800px) {
-		transform: translate(-50%, -70rem);
+		transform: translate(-50%, -80rem);
 	}
 
 	@media only screen and (min-height: 1000px) {

@@ -5,17 +5,17 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import axios from '../../axios';
+import axios from '../../../axios';
 
-import Card from '../Card/Card';
-import Input from '../Form/Input/Input';
-import { EditProfileFormValues } from '../../store/auth';
-import Button from '../Button/Button';
-import User from '../../types/models/user';
-import * as AuthActions from '../../store/auth/actions';
-import { showErrorMessage } from '../../utils/errors';
-import { ErrorMessageRef } from '../ErrorMessage/ErrorMessage';
-import { RootState } from '../../store';
+import Card from '../../Card/Card';
+import Input from '../../Form/Input/Input';
+import { EditProfileFormValues } from '../../../store/auth';
+import Button from '../../Button/Button';
+import User from '../../../types/models/user';
+import * as AuthActions from '../../../store/auth/actions';
+import { showErrorMessage } from '../../../utils/errors';
+import { ErrorMessageRef } from '../../ErrorMessage/ErrorMessage';
+import { RootState } from '../../../store';
 
 interface EditProfileFormProps {
 	user: User;
@@ -55,7 +55,9 @@ const EditProfileForm = (props: EditProfileFormProps) => {
 
 	return (
 		<Card className={styles.editProfileForm}>
-			{!isLoading && (
+			{isLoading ? (
+				''
+			) : (
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
