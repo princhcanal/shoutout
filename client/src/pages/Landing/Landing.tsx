@@ -7,7 +7,7 @@ const Landing = () => {
 	return (
 		<div className={styles.landing}>
 			<div className={styles.text}>
-				<h1>Checkout-My</h1>
+				<h1>Shoutout</h1>
 				<p>
 					Lorem ipsum, dolor sit amet consectetur adipisicing elit.
 					Adipisci, quisquam! Quas omnis quod explicabo cum vitae

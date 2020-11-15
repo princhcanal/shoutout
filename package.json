@@ -1,5 +1,5 @@
 {
-	"name": "checkout-my",
+	"name": "shoutout",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
@@ -13,14 +13,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/princhcanal/checkout-my.git"
+		"url": "git+https://github.com/princhcanal/shoutout.git"
 	},
 	"author": "Princh Harold Canal",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/princhcanal/checkout-my/issues"
+		"url": "https://github.com/princhcanal/shoutout/issues"
 	},
-	"homepage": "https://github.com/princhcanal/checkout-my#readme",
+	"homepage": "https://github.com/princhcanal/shoutout#readme",
 	"dependencies": {
 		"@types/bcryptjs": "^2.4.2",
 		"@types/body-parser": "^1.19.0",

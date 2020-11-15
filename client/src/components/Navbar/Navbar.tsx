@@ -24,7 +24,7 @@ const Navbar = () => {
 	return (
 		<header className={styles.navbar}>
 			<div className={styles.logo}>
-				<h1>Checkout-My</h1>
+				<h1>Shoutout</h1>
 			</div>
 			<nav className={styles.nav}>
 				<Link to='/'>Home</Link>
