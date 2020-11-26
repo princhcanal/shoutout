@@ -47,6 +47,7 @@ const App = () => {
 			<Route path='/register' component={Register} />
 			<Route path='/login' component={Login} />
 			<Route path='/' component={Landing} />
+			<Route path='/404' component={NotFound} />
 			<Redirect to='/login' />
 		</Switch>
 	);

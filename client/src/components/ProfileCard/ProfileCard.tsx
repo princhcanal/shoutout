@@ -262,8 +262,10 @@ const ProfileCard = (props: ProfileCardProps) => {
 				>
 					{isConnectionLoading ? (
 						<ConnectionLoader />
-					) : (
+					) : connectionList.length > 0 ? (
 						connectionList
+					) : (
+						<p>No user found</p>
 					)}
 				</ul>
 			</FloatingCard>

@@ -88,15 +88,15 @@ var App = /** @class */ (function () {
     };
     App.prototype.connectToDatabase = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var MONGO_URI_LOCAL, err_1;
+            var MONGO_URI, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        MONGO_URI_LOCAL = process.env.MONGO_URI_LOCAL;
+                        MONGO_URI = process.env.MONGO_URI;
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, mongoose_1.default.connect(MONGO_URI_LOCAL, {
+                        return [4 /*yield*/, mongoose_1.default.connect(MONGO_URI, {
                                 useNewUrlParser: true,
                                 useUnifiedTopology: true,
                                 useFindAndModify: false,
