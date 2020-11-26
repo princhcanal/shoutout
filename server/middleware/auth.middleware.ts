@@ -12,6 +12,8 @@ const authMiddleware = async (
 ) => {
 	const cookies = req.cookies;
 
+	console.log('COOKIES:', cookies);
+
 	if (cookies && cookies.Authorization) {
 		const secret = process.env.JWT_SECRET as string;
 
