@@ -24,7 +24,6 @@ import * as ErrorActions from './store/error/actions';
 import ErrorMessageHandle from './types/handles/errorMessageHandle';
 
 // TODO: style landing page
-// TODO: add 0 posts, connections
 // TODO: add 404 page
 const App = () => {
 	const dispatch = useDispatch();

@@ -44,7 +44,10 @@ const LoginForm = () => {
 
 			const res = await axios.post('/auth/login', values);
 			const expires = 1 / 24;
-			Cookies.set('Authorization', res.data.token.token, { expires });
+			Cookies.set('Authorization', res.data.token.token, {
+				expires,
+				path: '/',
+			});
 			const token = Cookies.get('Authorization');
 
 			if (token) {
