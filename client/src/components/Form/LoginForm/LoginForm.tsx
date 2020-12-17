@@ -46,7 +46,6 @@ const LoginForm = () => {
 			const expires = 1 / 24;
 			Cookies.set('Authorization', res.data.token.token, {
 				expires,
-				path: '/',
 			});
 			const token = Cookies.get('Authorization');
 
