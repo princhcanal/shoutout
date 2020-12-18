@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// FIXME: insecure login
 var app_1 = __importDefault(require("./app"));
 require("dotenv/config");
 var validateEnv_1 = require("./utils/validateEnv");

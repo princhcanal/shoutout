@@ -55,10 +55,14 @@ class AuthController implements Controller {
 			}
 
 			const hashedPassword = await bcrypt.hash(userData.password, 10);
+			const baseUrl =
+				process.env.NODE_ENV === 'production'
+					? process.env.BASE_URL_PROD
+					: process.env.BASE_URL_DEV;
 			let user = await this.user.create({
 				...userData,
 				password: hashedPassword,
-				url: `${process.env.BASE_URL}/user/${userData.username}`,
+				url: `${baseUrl}/user/${userData.username}`,
 			});
 			const cart = new this.cart({
 				user: user._id,

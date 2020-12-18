@@ -31,6 +31,10 @@ class PayController implements Controller {
 		next: NextFunction
 	) => {
 		try {
+			const baseUrl =
+				process.env.NODE_ENV === 'production'
+					? process.env.BASE_URL_PROD
+					: process.env.BASE_URL_DEV;
 			const session = await this.stripe.checkout.sessions.create({
 				payment_method_types: ['card'],
 				line_items: [
@@ -46,8 +50,8 @@ class PayController implements Controller {
 					},
 				],
 				mode: 'payment',
-				success_url: `${process.env.BASE_URL}${this.path}/success`,
-				cancel_url: `${process.env.BASE_URL}${this.path}/cancel`,
+				success_url: `${baseUrl}${this.path}/success`,
+				cancel_url: `${baseUrl}${this.path}/cancel`,
 			});
 
 			const message = 'Stripe session created successfully';

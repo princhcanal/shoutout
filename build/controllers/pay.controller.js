@@ -52,11 +52,14 @@ var PayController = /** @class */ (function () {
             typescript: true,
         });
         this.createCheckoutSession = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var session, message, err_1;
+            var baseUrl, session, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
+                        baseUrl = process.env.NODE_ENV === 'production'
+                            ? process.env.BASE_URL_PROD
+                            : process.env.BASE_URL_DEV;
                         return [4 /*yield*/, this.stripe.checkout.sessions.create({
                                 payment_method_types: ['card'],
                                 line_items: [
@@ -72,8 +75,8 @@ var PayController = /** @class */ (function () {
                                     },
                                 ],
                                 mode: 'payment',
-                                success_url: "" + process.env.BASE_URL + this.path + "/success",
-                                cancel_url: "" + process.env.BASE_URL + this.path + "/cancel",
+                                success_url: "" + baseUrl + this.path + "/success",
+                                cancel_url: "" + baseUrl + this.path + "/cancel",
                             })];
                     case 1:
                         session = _a.sent();

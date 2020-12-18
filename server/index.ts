@@ -1,3 +1,4 @@
+// FIXME: insecure login
 import App from './app';
 import 'dotenv/config';
 import { validateEnv } from './utils/validateEnv';

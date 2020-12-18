@@ -1,3 +1,5 @@
+// FIXME: create post controller in production
+
 import express, { Request, Response, NextFunction } from 'express';
 
 import Controller from '../interfaces/controller.interface';
@@ -50,10 +52,12 @@ class PostController implements Controller {
 				throw new FileNotFoundException();
 			}
 
-			const image = `${process.env.BASE_URL}/${req.file.path.replace(
-				'\\',
-				'/'
-			)}`;
+			const baseUrl =
+				process.env.NODE_ENV === 'production'
+					? process.env.BASE_URL_PROD
+					: process.env.BASE_URL_DEV;
+
+			const image = `${baseUrl}/${req.file.path.replace('\\', '/')}`;
 
 			const imagePath = req.file.path;
 
@@ -62,14 +66,14 @@ class PostController implements Controller {
 				image,
 				imagePath,
 				author: req.user._id,
-				url: `${process.env.BASE_URL}${this.path}`,
+				url: `${baseUrl}${this.path}`,
 			});
 			createdPost = await createdPost.save();
 
 			const post = await this.post.findByIdAndUpdate(
 				createdPost._id,
 				{
-					url: `${process.env.BASE_URL}${this.path}/${createdPost._id}`,
+					url: `${baseUrl}${this.path}/${createdPost._id}`,
 				},
 				{ new: true }
 			);

@@ -1,1 +1,0 @@
-{"version":3,"file":"InvalidFileTypeException.js","sourceRoot":"","sources":["../../src/exceptions/InvalidFileTypeException.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA,kEAA4C;AAE5C;IAAuC,4CAAa;IACnD;eACC,kBAAM,GAAG,EAAE,mBAAmB,CAAC;IAChC,CAAC;IACF,+BAAC;AAAD,CAAC,AAJD,CAAuC,uBAAa,GAInD;AAED,kBAAe,wBAAwB,CAAC"}
