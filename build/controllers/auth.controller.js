@@ -69,7 +69,7 @@ var AuthController = /** @class */ (function () {
         this.cart = cart_model_1.default;
         this.wishlist = wishlist_model_1.default;
         this.register = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var userData, existingUser, hashedPassword, baseUrl, user, cart, wishlist, token, message, err_1;
+            var userData, existingUser, hashedPassword, user, cart, wishlist, token, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -86,10 +86,7 @@ var AuthController = /** @class */ (function () {
                         return [4 /*yield*/, bcryptjs_1.default.hash(userData.password, 10)];
                     case 2:
                         hashedPassword = _a.sent();
-                        baseUrl = process.env.NODE_ENV === 'production'
-                            ? process.env.BASE_URL_PROD
-                            : process.env.BASE_URL_DEV;
-                        return [4 /*yield*/, this.user.create(__assign(__assign({}, userData), { password: hashedPassword, url: baseUrl + "/user/" + userData.username }))];
+                        return [4 /*yield*/, this.user.create(__assign(__assign({}, userData), { password: hashedPassword, url: process.env.BASE_URL + "/user/" + userData.username }))];
                     case 3:
                         user = _a.sent();
                         cart = new this.cart({
