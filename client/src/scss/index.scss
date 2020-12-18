@@ -75,3 +75,12 @@ button {
 a {
 	text-decoration: none;
 }
+
+// prevents zoom on inputs
+@media only screen and (max-width: 767px) {
+	input,
+	select,
+	textarea {
+		font-size: 16px;
+	}
+}
