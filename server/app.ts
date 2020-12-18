@@ -36,10 +36,12 @@ class App {
 			})
 		);
 		this.app.use((req: Request, res: Response, next: NextFunction) => {
-			res.setHeader(
-				'Access-Control-Allow-Origin',
-				'http://localhost:3000'
-			);
+			let origin = 'http://localhost:3000';
+			if (process.env.NODE_ENV === 'production') {
+				origin = 'https://shoutout-by-princh.herokuapp.com';
+			}
+
+			res.setHeader('Access-Control-Allow-Origin', origin);
 			res.setHeader(
 				'Access-Control-Allow-Methods',
 				'OPTIONS, GET, POST, PUT, PATCH, DELETE'
