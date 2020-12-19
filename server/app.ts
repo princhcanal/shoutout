@@ -38,17 +38,17 @@ class App {
 		this.app.use((req: Request, res: Response, next: NextFunction) => {
 			let origin = 'http://localhost:3000';
 			if (process.env.NODE_ENV === 'production') {
-				origin = 'https://shoutout-by-princh.herokuapp.com';
+				origin = 'http://shoutout-by-princh.herokuapp.com';
 			}
 
+			res.setHeader(
+				'Access-Control-Allow-Headers',
+				'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Access-Control-Allow-Origin, Access-Control-Allow-Credentials'
+			);
 			res.setHeader('Access-Control-Allow-Origin', origin);
 			res.setHeader(
 				'Access-Control-Allow-Methods',
 				'OPTIONS, GET, POST, PUT, PATCH, DELETE'
-			);
-			res.setHeader(
-				'Access-Control-Allow-Headers',
-				'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
 			);
 			res.setHeader('Access-Control-Allow-Credentials', 'true');
 
