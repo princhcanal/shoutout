@@ -62,7 +62,6 @@ var App = /** @class */ (function () {
         this.app.use(body_parser_1.default.json());
         this.app.use(multerConfig_1.default.single('image'));
         this.app.use(cookie_parser_1.default());
-        this.app.use('/images', express_1.default.static('images'));
         this.app.use(express_cache_controller_1.default({
             noCache: true,
         }));
@@ -90,6 +89,7 @@ var App = /** @class */ (function () {
         controllers.forEach(function (controller) {
             _this.app.use('/api/', controller.router);
         });
+        this.app.use('/images', express_1.default.static('images'));
         if (process.env.NODE_ENV === 'production') {
             this.app.use(express_1.default.static('client/build'));
             this.app.get('*', function (req, res) {

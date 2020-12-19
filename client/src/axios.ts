@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let baseURL = 'http://localhost:5000/api';
 if (process.env.NODE_ENV === 'production') {
-	baseURL = 'https://shoutout-by-princh.herokuapp.com/api';
+	baseURL = 'http://shoutout-by-princh.herokuapp.com/api';
 }
 
 const axiosInstance = axios.create({

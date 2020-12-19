@@ -29,7 +29,6 @@ class App {
 		this.app.use(bodyParser.json());
 		this.app.use(multerConfig.single('image'));
 		this.app.use(cookieParser());
-		this.app.use('/images', express.static('images'));
 		this.app.use(
 			cacheControl({
 				noCache: true,
@@ -69,6 +68,7 @@ class App {
 		controllers.forEach((controller: Controller) => {
 			this.app.use('/api/', controller.router);
 		});
+		this.app.use('/images', express.static('images'));
 
 		if (process.env.NODE_ENV === 'production') {
 			this.app.use(express.static('client/build'));

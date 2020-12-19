@@ -61,8 +61,8 @@ const App = () => {
 					<Route path='/cart' component={Cart} />
 					<Route path='/wishlist' component={Wishlist} />
 					<Route path='/' exact component={Feed} />
-					<Route path='/404' component={NotFound} />
-					<Redirect to='/404' />
+					{/* <Route path='/404' component={NotFound} />
+					<Redirect to='/404' /> */}
 				</Switch>
 			</Layout>
 		);
