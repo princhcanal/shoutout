@@ -70,20 +70,20 @@ class App {
 		});
 		this.app.use('/images', express.static('images'));
 
-		if (process.env.NODE_ENV === 'production') {
-			this.app.use(express.static('client/build'));
-			this.app.get('*', (req: Request, res: Response) => {
-				res.sendFile(
-					path.resolve(
-						__dirname,
-						'..',
-						'client',
-						'build',
-						'index.html'
-					)
-				);
-			});
-		}
+		// if (process.env.NODE_ENV === 'production') {
+		// 	this.app.use(express.static('client/build'));
+		// 	this.app.get('*', (req: Request, res: Response) => {
+		// 		res.sendFile(
+		// 			path.resolve(
+		// 				__dirname,
+		// 				'..',
+		// 				'client',
+		// 				'build',
+		// 				'index.html'
+		// 			)
+		// 		);
+		// 	});
+		// }
 	}
 
 	private async connectToDatabase() {
