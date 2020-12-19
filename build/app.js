@@ -44,6 +44,7 @@ var body_parser_1 = __importDefault(require("body-parser"));
 var cookie_parser_1 = __importDefault(require("cookie-parser"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var express_cache_controller_1 = __importDefault(require("express-cache-controller"));
+var path_1 = __importDefault(require("path"));
 var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var notFound_middleware_1 = __importDefault(require("./middleware/notFound.middleware"));
 var multerConfig_1 = __importDefault(require("./utils/multerConfig"));
@@ -61,6 +62,7 @@ var App = /** @class */ (function () {
         this.app.use(body_parser_1.default.json());
         this.app.use(multerConfig_1.default.single('image'));
         this.app.use(cookie_parser_1.default());
+        this.app.use('/images', express_1.default.static('images'));
         this.app.use(express_cache_controller_1.default({
             noCache: true,
         }));
@@ -88,21 +90,12 @@ var App = /** @class */ (function () {
         controllers.forEach(function (controller) {
             _this.app.use('/api/', controller.router);
         });
-        this.app.use('/images', express_1.default.static('images'));
-        // if (process.env.NODE_ENV === 'production') {
-        // 	this.app.use(express.static('client/build'));
-        // 	this.app.get('*', (req: Request, res: Response) => {
-        // 		res.sendFile(
-        // 			path.resolve(
-        // 				__dirname,
-        // 				'..',
-        // 				'client',
-        // 				'build',
-        // 				'index.html'
-        // 			)
-        // 		);
-        // 	});
-        // }
+        if (process.env.NODE_ENV === 'production') {
+            this.app.use(express_1.default.static('client/build'));
+            this.app.get('*', function (req, res) {
+                res.sendFile(path_1.default.resolve(__dirname, '..', 'client', 'build', 'index.html'));
+            });
+        }
     };
     App.prototype.connectToDatabase = function () {
         return __awaiter(this, void 0, void 0, function () {
