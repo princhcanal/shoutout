@@ -1,6 +1,3 @@
-// FIXME: create post controller in production
-// try adding html file to images
-
 import express, { Request, Response, NextFunction } from 'express';
 
 import Controller from '../interfaces/controller.interface';
