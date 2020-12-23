@@ -31,7 +31,7 @@ interface ProfileCardProps {
 	isSubscribed: boolean;
 }
 
-type Actions = 'follow' | 'unfollow';
+type Actions = 'follow' | 'unfollow' | 'subscribe' | 'unsubscribe';
 
 const ProfileCard = (props: ProfileCardProps) => {
 	const username = useSelector<RootState, string>(
@@ -68,63 +68,46 @@ const ProfileCard = (props: ProfileCardProps) => {
 	const handleConnection = async (action: Actions) => {
 		try {
 			await axios.post(`/user/${props.username}/${action}`);
-			let button;
-			let numConnections;
+			let button: HTMLButtonElement | null = null;
+			let numConnections: HTMLElement | null = null;
+
 			if (action === 'follow' || action === 'unfollow') {
 				button = followButton.button;
 				numConnections = numFollowers.current;
+			} else if (action === 'subscribe' || action === 'unsubscribe') {
+				button = subscribeButton.button;
+				numConnections = numSubscribers.current;
 			}
+
 			if (button && numConnections) {
 				let connections = parseInt(numConnections.innerText);
-				let buttonInnerText;
 				if (action === 'follow') {
 					connections += 1;
 					button.innerText = 'Unfollow';
 					button.classList.add(ButtonStyles.hollow);
+					setIsFollowing(true);
 				} else if (action === 'unfollow') {
 					connections -= 1;
 					button.innerText = 'Follow';
 					button.classList.remove(ButtonStyles.hollow);
+					setIsFollowing(false);
+				} else if (action === 'subscribe') {
+					connections += 1;
+					button.innerText = 'Unsubscribe';
+					button.classList.add(ButtonStyles.hollow);
+					setIsSubscribed(true);
+				} else if (action === 'unsubscribe') {
+					connections -= 1;
+					button.innerText = 'Subscribe';
+					button.classList.remove(ButtonStyles.hollow);
+					setIsSubscribed(false);
 				}
-				setIsFollowing(!isFollowing);
 				numConnections.innerText = connections.toString();
 			}
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
-
-	// const handleSubscribe = async () => {
-	// 	try {
-	// 		await axios.post(`/user/${props.username}/subscribe`);
-	// 		if (subscribeButton.button && numSubscribers.current) {
-	// 			const subscribers =
-	// 				parseInt(numSubscribers.current.innerText) + 1;
-	// 			subscribeButton.button.innerText = 'Subscribed';
-	// 			subscribeButton.button.classList.add(ButtonStyles.hollow);
-	// 			numSubscribers.current.innerText = subscribers.toString();
-	// 			setIsSubscribed(true);
-	// 		}
-	// 	} catch (err) {
-	// 		showErrorMessage(err, errorMessageRef, dispatch);
-	// 	}
-	// };
-
-	// const handleUnsubscribe = async () => {
-	// 	try {
-	// 		await axios.post(`/user/${props.username}/unsubscribe`);
-	// 		if (subscribeButton.button && numSubscribers.current) {
-	// 			const subscribers =
-	// 				parseInt(numSubscribers.current.innerText) - 1;
-	// 			subscribeButton.button.innerText = 'Subscribe';
-	// 			subscribeButton.button.classList.remove(ButtonStyles.hollow);
-	// 			numSubscribers.current.innerText = subscribers.toString();
-	// 			setIsSubscribed(false);
-	// 		}
-	// 	} catch (err) {
-	// 		showErrorMessage(err, errorMessageRef, dispatch);
-	// 	}
-	// };
 
 	type Connections =
 		| 'followers'
@@ -185,10 +168,16 @@ const ProfileCard = (props: ProfileCardProps) => {
 	));
 
 	let handleFollowCallback;
+	let handleSubscribeCallback;
 	if (isFollowing) {
 		handleFollowCallback = () => handleConnection('unfollow');
 	} else {
 		handleFollowCallback = () => handleConnection('follow');
+	}
+	if (isSubscribed) {
+		handleSubscribeCallback = () => handleConnection('unsubscribe');
+	} else {
+		handleSubscribeCallback = () => handleConnection('subscribe');
 	}
 
 	return (
@@ -200,26 +189,19 @@ const ProfileCard = (props: ProfileCardProps) => {
 				{!(props.username === username) && (
 					<div className={styles.connectButtons}>
 						<Button
-							onClick={
-								// isFollowing ? handleUnFollow : handleFollow
-								handleFollowCallback
-							}
+							onClick={handleFollowCallback}
 							ref={(f) => (followButton = f as ButtonRef)}
 							style={props.isFollowing ? 'hollow' : undefined}
 						>
 							{props.isFollowing ? 'Following' : 'Follow'}
 						</Button>
-						{/* <Button
-							onClick={
-								isSubscribed
-									? handleUnsubscribe
-									: handleSubscribe
-							}
+						<Button
+							onClick={handleSubscribeCallback}
 							ref={(s) => (subscribeButton = s as ButtonRef)}
 							style={props.isSubscribed ? 'hollow' : undefined}
 						>
 							{props.isSubscribed ? 'Subscribed' : 'Subscribe'}
-						</Button> */}
+						</Button>
 					</div>
 				)}
 			</div>
@@ -239,7 +221,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 						<strong ref={numFollowing}>{props.numFollowing}</strong>
 						<p>Following</p>
 					</div>
-					{/* <div
+					<div
 						className={styles.connection}
 						onClick={() => handleGetConnections('subscribers')}
 					>
@@ -256,7 +238,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 							{props.numSubscriptions}
 						</strong>
 						<p>Subscriptions</p>
-					</div> */}
+					</div>
 				</div>
 			</div>
 			{username === props.username && (

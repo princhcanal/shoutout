@@ -222,7 +222,7 @@ const Post = (props: PostProps) => {
 						<h2>{props.post.title}</h2>
 					</Link>
 					<div className={styles.price}>
-						<p>${props.post.price}</p>
+						<p>${props.post.price.toFixed(2)}</p>
 					</div>
 				</div>
 				<div className={styles.image}>

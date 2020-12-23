@@ -8,6 +8,8 @@ import validationMiddleware from '../middleware/validation.middleware';
 import wishlistValidator from '../validators/wishlist.validator';
 import WishlistNotFoundException from '../exceptions/WishlistNotFoundException';
 import WishlistItemNotFoundException from '../exceptions/WishlistItemNotFoundException';
+import User from '../interfaces/user.interface';
+import discount from '../utils/discount';
 
 class WishlistController implements Controller {
 	public path = '/wishlist';
@@ -47,10 +49,20 @@ class WishlistController implements Controller {
 				throw new WishlistNotFoundException(req.user.username);
 			}
 
-			const products = await this.products
+			let products = await this.products
 				.find({ _id: { $in: wishlist.products } })
 				.sort({ createdAt: -1 })
 				.populate('author', 'username');
+
+			products = products.map((product) => {
+				const author = product.author as User;
+				if (
+					req.user.subscriptions.includes(author._id as string & User)
+				) {
+					product.price *= discount;
+				}
+				return product;
+			});
 
 			wishlist.products = products;
 

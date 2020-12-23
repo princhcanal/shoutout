@@ -93,7 +93,7 @@ const Cart = () => {
 				) : (
 					<NoCartItems />
 				)}
-				<Button onClick={checkout} style='bright'>
+				<Button onClick={checkout} style={true && 'bright'}>
 					Checkout
 				</Button>
 				<Card className={styles.note}>

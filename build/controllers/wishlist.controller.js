@@ -47,6 +47,7 @@ var validation_middleware_1 = __importDefault(require("../middleware/validation.
 var wishlist_validator_1 = __importDefault(require("../validators/wishlist.validator"));
 var WishlistNotFoundException_1 = __importDefault(require("../exceptions/WishlistNotFoundException"));
 var WishlistItemNotFoundException_1 = __importDefault(require("../exceptions/WishlistItemNotFoundException"));
+var discount_1 = __importDefault(require("../utils/discount"));
 var WishlistController = /** @class */ (function () {
     function WishlistController() {
         var _this = this;
@@ -76,6 +77,13 @@ var WishlistController = /** @class */ (function () {
                                 .populate('author', 'username')];
                     case 2:
                         products = _a.sent();
+                        products = products.map(function (product) {
+                            var author = product.author;
+                            if (req.user.subscriptions.includes(author._id)) {
+                                product.price *= discount_1.default;
+                            }
+                            return product;
+                        });
                         wishlist.products = products;
                         message = 'Wishlist fetched successfully';
                         res.status(200).json({ message: message, wishlist: wishlist });

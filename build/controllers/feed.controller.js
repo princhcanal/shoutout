@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var post_model_1 = __importDefault(require("../models/post.model"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
+var discount_1 = __importDefault(require("../utils/discount"));
 var FeedController = /** @class */ (function () {
     function FeedController() {
         var _this = this;
@@ -68,6 +69,13 @@ var FeedController = /** @class */ (function () {
                                 .limit(10)];
                     case 1:
                         posts = _a.sent();
+                        posts = posts.map(function (post) {
+                            var author = post.author;
+                            if (req.user.subscriptions.includes(author._id)) {
+                                post.price *= discount_1.default;
+                            }
+                            return post;
+                        });
                         message = 'Feed fetched successfully';
                         res.status(200).json({ message: message, posts: posts });
                         return [3 /*break*/, 3];

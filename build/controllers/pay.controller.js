@@ -46,7 +46,7 @@ var cart_model_1 = __importDefault(require("../models/cart.model"));
 var orderItem_model_1 = __importDefault(require("../models/orderItem.model"));
 var post_model_1 = __importDefault(require("../models/post.model"));
 var CartNotFoundException_1 = __importDefault(require("../exceptions/CartNotFoundException"));
-// TODO: implement subscription
+var discount_1 = __importDefault(require("../utils/discount"));
 var PayController = /** @class */ (function () {
     function PayController() {
         var _this = this;
@@ -82,6 +82,13 @@ var PayController = /** @class */ (function () {
                                 .sort({ createdAt: -1 })];
                     case 2:
                         products = _a.sent();
+                        products = products.map(function (product) {
+                            var author = product.author;
+                            if (req.user.subscriptions.includes(author._id)) {
+                                product.price *= discount_1.default;
+                            }
+                            return product;
+                        });
                         lineItems = products.map(function (product) { return ({
                             price_data: {
                                 currency: 'usd',

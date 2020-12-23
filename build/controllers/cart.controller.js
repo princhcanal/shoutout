@@ -59,6 +59,7 @@ var orderItem_model_1 = __importDefault(require("../models/orderItem.model"));
 var post_model_1 = __importDefault(require("../models/post.model"));
 var CartNotFoundException_1 = __importDefault(require("../exceptions/CartNotFoundException"));
 var OrderItemNotFound_1 = __importDefault(require("../exceptions/OrderItemNotFound"));
+var discount_1 = __importDefault(require("../utils/discount"));
 var CartController = /** @class */ (function () {
     function CartController() {
         var _this = this;
@@ -91,6 +92,13 @@ var CartController = /** @class */ (function () {
                                 .populate('author')];
                     case 2:
                         products = _a.sent();
+                        products = products.map(function (product) {
+                            var author = product.author;
+                            if (req.user.subscriptions.includes(author._id)) {
+                                product.price *= discount_1.default;
+                            }
+                            return product;
+                        });
                         message = 'Cart fetched successfully';
                         res.status(200).json({ message: message, cart: cart, products: products });
                         return [3 /*break*/, 4];

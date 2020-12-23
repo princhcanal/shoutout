@@ -8,8 +8,9 @@ import orderItemModel from '../models/orderItem.model';
 import postModel from '../models/post.model';
 import CartNotFoundException from '../exceptions/CartNotFoundException';
 import OrderItem from '../interfaces/orderItem.interface';
+import User from '../interfaces/user.interface';
+import discount from '../utils/discount';
 
-// TODO: implement subscription
 class PayController implements Controller {
 	public path = '/pay';
 	public router = express.Router();
@@ -50,11 +51,22 @@ class PayController implements Controller {
 
 			const cartProducts = cart.products as OrderItem[];
 			const productIds = cartProducts.map((product) => product.product);
-			const products = await this.product
+			let products = await this.product
 				.find({
 					_id: { $in: productIds },
 				})
 				.sort({ createdAt: -1 });
+
+			products = products.map((product) => {
+				const author = product.author as User;
+				if (
+					req.user.subscriptions.includes(author._id as string & User)
+				) {
+					product.price *= discount;
+				}
+				return product;
+			});
+
 			const lineItems:
 				| Stripe.Checkout.SessionCreateParams.LineItem[]
 				| undefined = products.map((product) => ({

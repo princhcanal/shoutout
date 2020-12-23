@@ -11,6 +11,8 @@ import postModel from '../models/post.model';
 import CartNotFoundException from '../exceptions/CartNotFoundException';
 import OrderItemNotFoundException from '../exceptions/OrderItemNotFound';
 import OrderItem from '../interfaces/orderItem.interface';
+import User from '../interfaces/user.interface';
+import discount from '../utils/discount';
 
 class CartController implements Controller {
 	public path = '/cart';
@@ -52,12 +54,22 @@ class CartController implements Controller {
 
 			const cartProducts = cart.products as OrderItem[];
 			const productIds = cartProducts.map((product) => product.product);
-			const products = await this.product
+			let products = await this.product
 				.find({
 					_id: { $in: productIds },
 				})
 				.sort({ createdAt: -1 })
 				.populate('author');
+
+			products = products.map((product) => {
+				const author = product.author as User;
+				if (
+					req.user.subscriptions.includes(author._id as string & User)
+				) {
+					product.price *= discount;
+				}
+				return product;
+			});
 
 			const message = 'Cart fetched successfully';
 			res.status(200).json({ message, cart, products });
