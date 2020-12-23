@@ -7,7 +7,6 @@ import UserNotFoundException from '../exceptions/UserNotFoundException';
 import User from '../interfaces/user.interface';
 import { Next } from 'compose-middleware';
 
-// TODO: implement order
 // TODO: implement subscription service for each user for discounts on products
 class UserController implements Controller {
 	public path = '/user';

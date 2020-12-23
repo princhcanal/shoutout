@@ -31,6 +31,8 @@ interface ProfileCardProps {
 	isSubscribed: boolean;
 }
 
+type Actions = 'follow' | 'unfollow';
+
 const ProfileCard = (props: ProfileCardProps) => {
 	const username = useSelector<RootState, string>(
 		(state) => state.auth.username
@@ -63,67 +65,66 @@ const ProfileCard = (props: ProfileCardProps) => {
 		setIsSubscribed(props.isSubscribed);
 	}, [props.isSubscribed]);
 
-	const handleFollow = async () => {
+	const handleConnection = async (action: Actions) => {
 		try {
-			await axios.post(`/user/${props.username}/follow`);
-			if (followButton.button && numFollowers.current) {
-				const followers = parseInt(numFollowers.current.innerText) + 1;
-				followButton.button.innerText = 'Following';
-				followButton.button.classList.add(ButtonStyles.hollow);
-				numFollowers.current.innerText = followers.toString();
-				setIsFollowing(true);
+			await axios.post(`/user/${props.username}/${action}`);
+			let button;
+			let numConnections;
+			if (action === 'follow' || action === 'unfollow') {
+				button = followButton.button;
+				numConnections = numFollowers.current;
+			}
+			if (button && numConnections) {
+				let connections = parseInt(numConnections.innerText);
+				let buttonInnerText;
+				if (action === 'follow') {
+					connections += 1;
+					button.innerText = 'Unfollow';
+					button.classList.add(ButtonStyles.hollow);
+				} else if (action === 'unfollow') {
+					connections -= 1;
+					button.innerText = 'Follow';
+					button.classList.remove(ButtonStyles.hollow);
+				}
+				setIsFollowing(!isFollowing);
+				numConnections.innerText = connections.toString();
 			}
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
 
-	const handleUnFollow = async () => {
-		try {
-			await axios.post(`/user/${props.username}/unfollow`);
-			if (followButton.button && numFollowers.current) {
-				const followers = parseInt(numFollowers.current.innerText) - 1;
-				followButton.button.innerText = 'Follow';
-				followButton.button.classList.remove(ButtonStyles.hollow);
-				numFollowers.current.innerText = followers.toString();
-				setIsFollowing(false);
-			}
-		} catch (err) {
-			showErrorMessage(err, errorMessageRef, dispatch);
-		}
-	};
+	// const handleSubscribe = async () => {
+	// 	try {
+	// 		await axios.post(`/user/${props.username}/subscribe`);
+	// 		if (subscribeButton.button && numSubscribers.current) {
+	// 			const subscribers =
+	// 				parseInt(numSubscribers.current.innerText) + 1;
+	// 			subscribeButton.button.innerText = 'Subscribed';
+	// 			subscribeButton.button.classList.add(ButtonStyles.hollow);
+	// 			numSubscribers.current.innerText = subscribers.toString();
+	// 			setIsSubscribed(true);
+	// 		}
+	// 	} catch (err) {
+	// 		showErrorMessage(err, errorMessageRef, dispatch);
+	// 	}
+	// };
 
-	const handleSubscribe = async () => {
-		try {
-			await axios.post(`/user/${props.username}/subscribe`);
-			if (subscribeButton.button && numSubscribers.current) {
-				const subscribers =
-					parseInt(numSubscribers.current.innerText) + 1;
-				subscribeButton.button.innerText = 'Subscribed';
-				subscribeButton.button.classList.add(ButtonStyles.hollow);
-				numSubscribers.current.innerText = subscribers.toString();
-				setIsSubscribed(true);
-			}
-		} catch (err) {
-			showErrorMessage(err, errorMessageRef, dispatch);
-		}
-	};
-
-	const handleUnsubscribe = async () => {
-		try {
-			await axios.post(`/user/${props.username}/unsubscribe`);
-			if (subscribeButton.button && numSubscribers.current) {
-				const subscribers =
-					parseInt(numSubscribers.current.innerText) - 1;
-				subscribeButton.button.innerText = 'Subscribe';
-				subscribeButton.button.classList.remove(ButtonStyles.hollow);
-				numSubscribers.current.innerText = subscribers.toString();
-				setIsSubscribed(false);
-			}
-		} catch (err) {
-			showErrorMessage(err, errorMessageRef, dispatch);
-		}
-	};
+	// const handleUnsubscribe = async () => {
+	// 	try {
+	// 		await axios.post(`/user/${props.username}/unsubscribe`);
+	// 		if (subscribeButton.button && numSubscribers.current) {
+	// 			const subscribers =
+	// 				parseInt(numSubscribers.current.innerText) - 1;
+	// 			subscribeButton.button.innerText = 'Subscribe';
+	// 			subscribeButton.button.classList.remove(ButtonStyles.hollow);
+	// 			numSubscribers.current.innerText = subscribers.toString();
+	// 			setIsSubscribed(false);
+	// 		}
+	// 	} catch (err) {
+	// 		showErrorMessage(err, errorMessageRef, dispatch);
+	// 	}
+	// };
 
 	type Connections =
 		| 'followers'
@@ -183,6 +184,13 @@ const ProfileCard = (props: ProfileCardProps) => {
 		</li>
 	));
 
+	let handleFollowCallback;
+	if (isFollowing) {
+		handleFollowCallback = () => handleConnection('unfollow');
+	} else {
+		handleFollowCallback = () => handleConnection('follow');
+	}
+
 	return (
 		<Card className={styles.profileCard}>
 			<div className={styles.header}>
@@ -193,14 +201,15 @@ const ProfileCard = (props: ProfileCardProps) => {
 					<div className={styles.connectButtons}>
 						<Button
 							onClick={
-								isFollowing ? handleUnFollow : handleFollow
+								// isFollowing ? handleUnFollow : handleFollow
+								handleFollowCallback
 							}
 							ref={(f) => (followButton = f as ButtonRef)}
 							style={props.isFollowing ? 'hollow' : undefined}
 						>
 							{props.isFollowing ? 'Following' : 'Follow'}
 						</Button>
-						<Button
+						{/* <Button
 							onClick={
 								isSubscribed
 									? handleUnsubscribe
@@ -210,7 +219,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 							style={props.isSubscribed ? 'hollow' : undefined}
 						>
 							{props.isSubscribed ? 'Subscribed' : 'Subscribe'}
-						</Button>
+						</Button> */}
 					</div>
 				)}
 			</div>
@@ -230,7 +239,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 						<strong ref={numFollowing}>{props.numFollowing}</strong>
 						<p>Following</p>
 					</div>
-					<div
+					{/* <div
 						className={styles.connection}
 						onClick={() => handleGetConnections('subscribers')}
 					>
@@ -247,7 +256,7 @@ const ProfileCard = (props: ProfileCardProps) => {
 							{props.numSubscriptions}
 						</strong>
 						<p>Subscriptions</p>
-					</div>
+					</div> */}
 				</div>
 			</div>
 			{username === props.username && (

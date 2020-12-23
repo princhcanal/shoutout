@@ -42,49 +42,74 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var stripe_1 = __importDefault(require("stripe"));
+var cart_model_1 = __importDefault(require("../models/cart.model"));
+var orderItem_model_1 = __importDefault(require("../models/orderItem.model"));
+var post_model_1 = __importDefault(require("../models/post.model"));
+var CartNotFoundException_1 = __importDefault(require("../exceptions/CartNotFoundException"));
+// TODO: implement subscription
 var PayController = /** @class */ (function () {
     function PayController() {
         var _this = this;
         this.path = '/pay';
         this.router = express_1.default.Router();
+        this.cart = cart_model_1.default;
+        this.orderItem = orderItem_model_1.default;
+        this.product = post_model_1.default;
         this.stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
             apiVersion: '2020-03-02',
             typescript: true,
         });
         this.createCheckoutSession = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var session, message, err_1;
+            var cart, cartProducts, productIds, products, lineItems, session, message, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, this.cart
+                                .findOne({ user: req.user._id })
+                                .populate('products')];
+                    case 1:
+                        cart = _a.sent();
+                        if (!cart) {
+                            throw new CartNotFoundException_1.default(req.user.username);
+                        }
+                        cartProducts = cart.products;
+                        productIds = cartProducts.map(function (product) { return product.product; });
+                        return [4 /*yield*/, this.product
+                                .find({
+                                _id: { $in: productIds },
+                            })
+                                .sort({ createdAt: -1 })];
+                    case 2:
+                        products = _a.sent();
+                        lineItems = products.map(function (product) { return ({
+                            price_data: {
+                                currency: 'usd',
+                                product_data: {
+                                    name: product.title,
+                                    images: [product.image],
+                                },
+                                unit_amount: product.price * 100,
+                            },
+                            quantity: 1,
+                        }); });
                         return [4 /*yield*/, this.stripe.checkout.sessions.create({
                                 payment_method_types: ['card'],
-                                line_items: [
-                                    {
-                                        price_data: {
-                                            currency: 'usd',
-                                            product_data: {
-                                                name: 'T-shirt',
-                                            },
-                                            unit_amount: 2000,
-                                        },
-                                        quantity: 1,
-                                    },
-                                ],
+                                line_items: lineItems,
                                 mode: 'payment',
-                                success_url: "" + process.env.BASE_URL + this.path + "/success",
-                                cancel_url: "" + process.env.BASE_URL + this.path + "/cancel",
+                                success_url: process.env.BASE_URL_CLIENT + "/pay/success",
+                                cancel_url: process.env.BASE_URL_CLIENT + "/pay/cancel",
                             })];
-                    case 1:
+                    case 3:
                         session = _a.sent();
                         message = 'Stripe session created successfully';
                         res.status(201).json({ message: message, session: session });
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 5];
+                    case 4:
                         err_1 = _a.sent();
                         next(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); };
