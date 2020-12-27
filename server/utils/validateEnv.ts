@@ -12,5 +12,6 @@ export const validateEnv = () => {
 		BASE_URL_CLIENT: str(),
 		STRIPE_SECRET_KEY: str(),
 		STRIPE_PUBLISHABLE_KEY: str(),
+		STRIPE_WEBHOOK_SECRET: str(),
 	});
 };

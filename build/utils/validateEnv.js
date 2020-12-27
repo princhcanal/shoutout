@@ -14,6 +14,7 @@ exports.validateEnv = function () {
         BASE_URL_CLIENT: envalid_1.str(),
         STRIPE_SECRET_KEY: envalid_1.str(),
         STRIPE_PUBLISHABLE_KEY: envalid_1.str(),
+        STRIPE_WEBHOOK_SECRET: envalid_1.str(),
     });
 };
 //# sourceMappingURL=validateEnv.js.map
