@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
 		email: { type: String, required: true },
 		password: { type: String, required: true },
 		url: { type: String, required: true },
+		subscription: { type: String, required: true, default: 'None' },
 		followers: [
 			{
 				type: mongoose.Schema.Types.ObjectId,

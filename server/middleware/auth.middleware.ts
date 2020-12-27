@@ -20,7 +20,7 @@ const authMiddleware = async (
 				cookies.Authorization,
 				secret
 			) as TokenData;
-			const id = verificationResponse._id;
+			const id = verificationResponse.userId;
 			const user = await userModel.findById(id);
 
 			if (!user) {

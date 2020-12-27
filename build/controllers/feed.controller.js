@@ -73,6 +73,9 @@ var FeedController = /** @class */ (function () {
                             var author = post.author;
                             if (req.user.subscriptions.includes(author._id)) {
                                 post.price *= discount_1.default;
+                                if (req.user.subscription === 'Premium') {
+                                    post.price *= 0.25;
+                                }
                             }
                             return post;
                         });

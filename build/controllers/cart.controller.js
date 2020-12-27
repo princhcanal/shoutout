@@ -96,6 +96,9 @@ var CartController = /** @class */ (function () {
                             var author = product.author;
                             if (req.user.subscriptions.includes(author._id)) {
                                 product.price *= discount_1.default;
+                                if (req.user.subscription === 'Premium') {
+                                    product.price *= 0.25;
+                                }
                             }
                             return product;
                         });

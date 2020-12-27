@@ -55,7 +55,7 @@ var authMiddleware = function (req, res, next) { return __awaiter(void 0, void 0
             case 1:
                 _a.trys.push([1, 3, , 4]);
                 verificationResponse = jsonwebtoken_1.default.verify(cookies.Authorization, secret);
-                id = verificationResponse._id;
+                id = verificationResponse.userId;
                 return [4 /*yield*/, user_model_1.default.findById(id)];
             case 2:
                 user = _a.sent();

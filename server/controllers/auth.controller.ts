@@ -114,11 +114,12 @@ class AuthController implements Controller {
 	private createToken(user: User): Token {
 		const expiresIn = 60 * 60; // an hour
 		const secret = process.env.JWT_SECRET as string;
+		const { username, name, email } = user;
 		const tokenData: TokenData = {
-			_id: user._id,
-			username: user.username,
-			email: user.email,
-			name: user.name,
+			userId: user._id,
+			username,
+			email,
+			name,
 		};
 
 		return {

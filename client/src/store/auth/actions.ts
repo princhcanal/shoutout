@@ -9,6 +9,7 @@ import {
 	SET_IS_LOGGED_IN,
 	SET_USER_ID,
 	SET_USERNAME,
+	SET_SUBSCRIPTION,
 } from './types';
 import { RootState } from '..';
 
@@ -58,5 +59,12 @@ export const setUsername = (username: string): AuthActionTypes => {
 	return {
 		type: SET_USERNAME,
 		username,
+	};
+};
+
+export const setSubscription = (subscription: string): AuthActionTypes => {
+	return {
+		type: SET_SUBSCRIPTION,
+		subscription,
 	};
 };

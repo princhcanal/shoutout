@@ -17,6 +17,9 @@ import { RootState } from '../../store';
 import NoCartItems from '../../components/NoData/NoCartItems/NoCartItems';
 import Button from '../../components/Button/Button';
 import Card from '../../components/Card/Card';
+const STRIPE_PK =
+	'pk_test_51HCfR6F38j4MOFesQcpNmFtbdDI2ycw98qfIceAWijhgdAwwqLTLDKNtCTW4QEHnWkNYcdqMBXrlPXP3ndAuQeKO00OIenhGPr';
+const stripePromise = loadStripe(STRIPE_PK);
 
 const Cart = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -68,10 +71,8 @@ const Cart = () => {
 
 	const checkout = async () => {
 		try {
-			const STRIPE_PK =
-				'pk_test_51HCfR6F38j4MOFesQcpNmFtbdDI2ycw98qfIceAWijhgdAwwqLTLDKNtCTW4QEHnWkNYcdqMBXrlPXP3ndAuQeKO00OIenhGPr';
-			const stripe = await loadStripe(STRIPE_PK);
 			const session = await axios.post('/pay/create-checkout-session');
+			const stripe = await stripePromise;
 			const redirect = await stripe?.redirectToCheckout({
 				sessionId: session.data.session.id,
 			});

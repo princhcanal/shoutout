@@ -34,6 +34,7 @@ const Profile = () => {
 		name: '',
 		email: '',
 		url: '',
+		subscription: '',
 		followers: [],
 		following: [],
 		subscribers: [],

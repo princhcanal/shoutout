@@ -14,6 +14,7 @@ var feed_controller_1 = __importDefault(require("./controllers/feed.controller")
 var pay_controller_1 = __importDefault(require("./controllers/pay.controller"));
 var cart_controller_1 = __importDefault(require("./controllers/cart.controller"));
 var wishlist_controller_1 = __importDefault(require("./controllers/wishlist.controller"));
+var webhook_controller_1 = __importDefault(require("./controllers/webhook.controller"));
 validateEnv_1.validateEnv();
 var port = parseInt(process.env.PORT) || 5000;
 var app = new app_1.default([
@@ -24,6 +25,7 @@ var app = new app_1.default([
     new pay_controller_1.default(),
     new cart_controller_1.default(),
     new wishlist_controller_1.default(),
+    new webhook_controller_1.default(),
 ], port);
 app.listen();
 //# sourceMappingURL=index.js.map

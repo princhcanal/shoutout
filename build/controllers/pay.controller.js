@@ -45,8 +45,10 @@ var stripe_1 = __importDefault(require("stripe"));
 var cart_model_1 = __importDefault(require("../models/cart.model"));
 var orderItem_model_1 = __importDefault(require("../models/orderItem.model"));
 var post_model_1 = __importDefault(require("../models/post.model"));
+var user_model_1 = __importDefault(require("../models/user.model"));
 var CartNotFoundException_1 = __importDefault(require("../exceptions/CartNotFoundException"));
 var discount_1 = __importDefault(require("../utils/discount"));
+var AlreadySubscribedException_1 = __importDefault(require("../exceptions/AlreadySubscribedException"));
 var PayController = /** @class */ (function () {
     function PayController() {
         var _this = this;
@@ -55,6 +57,7 @@ var PayController = /** @class */ (function () {
         this.cart = cart_model_1.default;
         this.orderItem = orderItem_model_1.default;
         this.product = post_model_1.default;
+        this.user = user_model_1.default;
         this.stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
             apiVersion: '2020-03-02',
             typescript: true,
@@ -86,6 +89,9 @@ var PayController = /** @class */ (function () {
                             var author = product.author;
                             if (req.user.subscriptions.includes(author._id)) {
                                 product.price *= discount_1.default;
+                                if (req.user.subscription === 'Premium') {
+                                    product.price *= 0.25;
+                                }
                             }
                             return product;
                         });
@@ -104,8 +110,8 @@ var PayController = /** @class */ (function () {
                                 payment_method_types: ['card'],
                                 line_items: lineItems,
                                 mode: 'payment',
-                                success_url: process.env.BASE_URL_CLIENT + "/pay/success",
-                                cancel_url: process.env.BASE_URL_CLIENT + "/pay/cancel",
+                                success_url: process.env.BASE_URL_CLIENT + "/pay-status?success=true",
+                                cancel_url: process.env.BASE_URL_CLIENT + "/pay-status?canceled=true",
                             })];
                     case 3:
                         session = _a.sent();
@@ -120,12 +126,102 @@ var PayController = /** @class */ (function () {
                 }
             });
         }); };
+        this.createSubscriptionSession = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var priceId, session, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        priceId = req.body.priceId;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        if (req.user.subscription !== 'None') {
+                            throw new AlreadySubscribedException_1.default(req.user.username, 'Shoutout Premium');
+                        }
+                        return [4 /*yield*/, this.stripe.checkout.sessions.create({
+                                mode: 'subscription',
+                                payment_method_types: ['card'],
+                                line_items: [
+                                    {
+                                        price: priceId,
+                                        // For metered billing, do not pass quantity
+                                        quantity: 1,
+                                    },
+                                ],
+                                // {CHECKOUT_SESSION_ID} is a string literal; do not change it!
+                                // the actual Session ID is returned in the query parameter when your customer
+                                // is redirected to the success page.
+                                success_url: process.env.BASE_URL_CLIENT + "/subscription-success?session_id={CHECKOUT_SESSION_ID}",
+                                cancel_url: process.env.BASE_URL_CLIENT + "/subscription-cancel",
+                            })];
+                    case 2:
+                        session = _a.sent();
+                        res.status(201).json({ sessionId: session.id });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_2 = _a.sent();
+                        next(err_2);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.getCheckoutSession = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var sessionId, session;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sessionId = req.query.sessionId;
+                        return [4 /*yield*/, this.stripe.checkout.sessions.retrieve(sessionId)];
+                    case 1:
+                        session = _a.sent();
+                        // const user = this.user.findByIdAndUpdate(req.user, {
+                        // 	subscription: 'Shoutout Premium',
+                        // });
+                        res.status(200).json({ session: session });
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.createPortalSession = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+            var sessionId, checkoutSession, returnUrl, customer, portalSession, url, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        sessionId = req.body.sessionId;
+                        return [4 /*yield*/, this.stripe.checkout.sessions.retrieve(sessionId)];
+                    case 1:
+                        checkoutSession = _a.sent();
+                        returnUrl = process.env.BASE_URL_CLIENT;
+                        customer = checkoutSession.customer;
+                        customer = customer;
+                        return [4 /*yield*/, this.stripe.billingPortal.sessions.create({
+                                customer: customer,
+                                return_url: returnUrl,
+                            })];
+                    case 2:
+                        portalSession = _a.sent();
+                        url = portalSession.url;
+                        res.status(201).json({ url: url });
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_3 = _a.sent();
+                        next(err_3);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        }); };
         this.initializeRoutes();
     }
     PayController.prototype.initializeRoutes = function () {
         this.router
             .all(this.path + "*", auth_middleware_1.default)
-            .post(this.path + "/create-checkout-session", this.createCheckoutSession);
+            .post(this.path + "/create-checkout-session", this.createCheckoutSession)
+            .post(this.path + "/create-subscription-session", this.createSubscriptionSession)
+            .get(this.path + "/checkout-session", this.getCheckoutSession)
+            .post(this.path + "/customer-portal", this.createPortalSession);
     };
     return PayController;
 }());

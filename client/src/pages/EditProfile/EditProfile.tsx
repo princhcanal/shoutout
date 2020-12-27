@@ -19,6 +19,7 @@ const EditProfile = () => {
 		name: '',
 		email: '',
 		url: '',
+		subscription: '',
 		followers: [],
 		following: [],
 		subscribers: [],

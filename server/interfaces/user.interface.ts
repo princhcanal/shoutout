@@ -5,6 +5,7 @@ interface User {
 	email: string;
 	password: string;
 	url: string;
+	subscription: string;
 	followers: string[] | User[];
 	following: string[] | User[];
 	subscriptions: string[] | User[];

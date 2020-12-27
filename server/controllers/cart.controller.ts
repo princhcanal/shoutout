@@ -67,6 +67,9 @@ class CartController implements Controller {
 					req.user.subscriptions.includes(author._id as string & User)
 				) {
 					product.price *= discount;
+					if (req.user.subscription === 'Premium') {
+						product.price *= 0.25;
+					}
 				}
 				return product;
 			});

@@ -15,6 +15,8 @@ import {
 	SetUsernameAction,
 	SET_USERNAME,
 	TokenPayload,
+	SetSubscriptionAction,
+	SET_SUBSCRIPTION,
 } from './types';
 
 const initialState: AuthState = {
@@ -23,6 +25,7 @@ const initialState: AuthState = {
 	username: '',
 	name: '',
 	email: '',
+	subscription: '',
 };
 
 const login = (state: AuthState, action: LoginAction): AuthState => {
@@ -38,10 +41,7 @@ const login = (state: AuthState, action: LoginAction): AuthState => {
 	}
 
 	const tokenPayload = jwtDecode<TokenPayload>(token);
-	const username = tokenPayload.username;
-	const userId = tokenPayload._id;
-	const name = tokenPayload.name;
-	const email = tokenPayload.email;
+	const { username, name, email, userId } = tokenPayload;
 
 	return {
 		...state,
@@ -93,6 +93,16 @@ const setUsername = (
 	};
 };
 
+const setSubscription = (
+	state: AuthState,
+	action: SetSubscriptionAction
+): AuthState => {
+	return {
+		...state,
+		subscription: action.subscription,
+	};
+};
+
 export const authReducer = (
 	state: AuthState = initialState,
 	action: AuthActionTypes
@@ -108,6 +118,8 @@ export const authReducer = (
 			return setUserId(state, action);
 		case SET_USERNAME:
 			return setUsername(state, action);
+		case SET_SUBSCRIPTION:
+			return setSubscription(state, action);
 		default:
 			return state;
 	}

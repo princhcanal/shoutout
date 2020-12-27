@@ -9,6 +9,7 @@ import FeedController from './controllers/feed.controller';
 import PayController from './controllers/pay.controller';
 import CartController from './controllers/cart.controller';
 import WishlistController from './controllers/wishlist.controller';
+import WebhookController from './controllers/webhook.controller';
 import User from './interfaces/user.interface';
 
 declare global {
@@ -32,6 +33,7 @@ const app = new App(
 		new PayController(),
 		new CartController(),
 		new WishlistController(),
+		new WebhookController(),
 	],
 	port
 );

@@ -7,7 +7,6 @@ import UserNotFoundException from '../exceptions/UserNotFoundException';
 import User from '../interfaces/user.interface';
 import { Next } from 'compose-middleware';
 
-// TODO: implement subscription service for each user for discounts on products
 class UserController implements Controller {
 	public path = '/user';
 	public router = express.Router();
@@ -246,6 +245,7 @@ class UserController implements Controller {
 				userData,
 				{ new: true }
 			);
+			console.log('Updated user:', user);
 			const message = 'User updated successfully';
 
 			res.status(200).json({ message, user });

@@ -10,6 +10,10 @@ import errorMiddleware from './middleware/error.middleware';
 import notFoundMiddleware from './middleware/notFound.middleware';
 import multerConfig from './utils/multerConfig';
 
+// TODO: find free image hosting if possible
+// TODO: implement Shoutout Premium and Shoutout Gold
+// TODO: figure out how to use axios in server with authentication
+// TODO: implement pagination
 class App {
 	public app: express.Application;
 	public port: number;
@@ -25,6 +29,7 @@ class App {
 	}
 
 	private initializeMiddlewares() {
+		this.app.use('/api/stripe-webhook', bodyParser.raw({ type: '*/*' }));
 		this.app.use(bodyParser.urlencoded({ extended: true }));
 		this.app.use(bodyParser.json());
 		this.app.use(multerConfig.single('image'));

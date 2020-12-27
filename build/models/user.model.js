@@ -10,6 +10,7 @@ var userSchema = new mongoose_1.default.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     url: { type: String, required: true },
+    subscription: { type: String, required: true, default: 'None' },
     followers: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,

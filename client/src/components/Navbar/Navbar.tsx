@@ -15,6 +15,9 @@ const Navbar = () => {
 	const username = useSelector<RootState, string>(
 		(state) => state.auth.username
 	);
+	const subscription = useSelector<RootState, string>(
+		(state) => state.auth.subscription
+	);
 
 	const handleLogout = () => {
 		dispatch(AuthActions.logout());
@@ -30,6 +33,9 @@ const Navbar = () => {
 				<Link to='/'>Home</Link>
 				<Link to='/wishlist'>Wishlist</Link>
 				<Link to='/cart'>Cart</Link>
+				{subscription === 'None' && (
+					<Link to='/subscribe'>Subscribe</Link>
+				)}
 				<Link to={`/profile/${username}`}>Profile</Link>
 				<Button onClick={handleLogout}>Logout</Button>
 			</nav>

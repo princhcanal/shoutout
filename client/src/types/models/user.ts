@@ -3,6 +3,7 @@ interface User {
 	name: string;
 	email: string;
 	url: string;
+	subscription: string;
 	followers: string[];
 	following: string[];
 	subscriptions: string[];

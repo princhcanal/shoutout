@@ -48,6 +48,10 @@ var path_1 = __importDefault(require("path"));
 var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var notFound_middleware_1 = __importDefault(require("./middleware/notFound.middleware"));
 var multerConfig_1 = __importDefault(require("./utils/multerConfig"));
+// TODO: find free image hosting if possible
+// TODO: implement Shoutout Premium and Shoutout Gold
+// TODO: figure out how to use axios in server with authentication
+// TODO: implement pagination
 var App = /** @class */ (function () {
     function App(controllers, port) {
         this.app = express_1.default();
@@ -58,6 +62,7 @@ var App = /** @class */ (function () {
         this.initializeErrorHandling();
     }
     App.prototype.initializeMiddlewares = function () {
+        this.app.use('/api/stripe-webhook', body_parser_1.default.raw({ type: '*/*' }));
         this.app.use(body_parser_1.default.urlencoded({ extended: true }));
         this.app.use(body_parser_1.default.json());
         this.app.use(multerConfig_1.default.single('image'));
