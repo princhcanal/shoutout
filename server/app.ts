@@ -10,8 +10,6 @@ import errorMiddleware from './middleware/error.middleware';
 import notFoundMiddleware from './middleware/notFound.middleware';
 import multerConfig from './utils/multerConfig';
 
-// TODO: find free image hosting if possible
-// TODO: implement Shoutout Premium and Shoutout Gold
 // TODO: figure out how to use axios in server with authentication
 // TODO: implement pagination
 class App {

@@ -53,7 +53,7 @@ var WebhookController = /** @class */ (function () {
         });
         this.user = user_model_1.default;
         this.listenStripeWebhook = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var event, _a, paymentIntent, paymentMethod;
+            var event, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -66,36 +66,18 @@ var WebhookController = /** @class */ (function () {
                         _a = event.type;
                         switch (_a) {
                             case 'checkout.session.completed': return [3 /*break*/, 1];
-                            case 'payment_intent.succeeded': return [3 /*break*/, 3];
-                            case 'payment_method.attached': return [3 /*break*/, 4];
-                            case 'payment_intent.created': return [3 /*break*/, 5];
                         }
-                        return [3 /*break*/, 6];
-                    case 1:
-                        console.log('SUBSCRIBED!!!!!!!');
-                        return [4 /*yield*/, this.user.findByIdAndUpdate(req.user._id, {
-                                subscription: 'Premium',
-                            })];
+                        return [3 /*break*/, 3];
+                    case 1: return [4 /*yield*/, this.user.findByIdAndUpdate(req.user._id, {
+                            subscription: 'Premium',
+                        })];
                     case 2:
                         _b.sent();
-                        return [3 /*break*/, 7];
+                        return [3 /*break*/, 4];
                     case 3:
-                        paymentIntent = event.data.object;
-                        // Then define and call a method to handle the successful payment intent.
-                        // handlePaymentIntentSucceeded(paymentIntent);
-                        return [3 /*break*/, 7];
-                    case 4:
-                        paymentMethod = event.data.object;
-                        // Then define and call a method to handle the successful attachment of a PaymentMethod.
-                        // handlePaymentMethodAttached(paymentMethod);
-                        return [3 /*break*/, 7];
-                    case 5:
-                        console.log('it works');
-                        return [3 /*break*/, 7];
-                    case 6:
                         console.log("Unhandled event type " + event.type);
-                        _b.label = 7;
-                    case 7:
+                        _b.label = 4;
+                    case 4:
                         // Return a res to acknowledge receipt of the event
                         res.json({ received: true });
                         return [2 /*return*/];

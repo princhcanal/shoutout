@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import { v2 as cloudinary } from 'cloudinary';
 
 import Controller from '../interfaces/controller.interface';
 import Post from '../interfaces/post.interface';
@@ -62,14 +63,21 @@ class PostController implements Controller {
 				image,
 				imagePath,
 				author: req.user._id,
+				cloudinaryPublicId: 'hello',
 				url: `${process.env.BASE_URL}${this.path}`,
 			});
 			createdPost = await createdPost.save();
+
+			const { secure_url, public_id } = await cloudinary.uploader.upload(
+				createdPost.imagePath
+			);
 
 			const post = await this.post.findByIdAndUpdate(
 				createdPost._id,
 				{
 					url: `${process.env.BASE_URL}${this.path}/${createdPost._id}`,
+					image: secure_url,
+					cloudinaryPublicId: public_id,
 				},
 				{ new: true }
 			);
@@ -93,6 +101,8 @@ class PostController implements Controller {
 			if (!post) {
 				throw new PostNotFoundException(id);
 			}
+
+			cloudinary.uploader.destroy(post.cloudinaryPublicId);
 
 			if (post.author.toString() !== req.user._id.toString()) {
 				throw new NotAuthorizedException();

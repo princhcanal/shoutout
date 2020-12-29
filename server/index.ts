@@ -2,6 +2,7 @@
 import App from './app';
 import 'dotenv/config';
 import { validateEnv } from './utils/validateEnv';
+import { v2 as cloudinary } from 'cloudinary';
 import PostController from './controllers/post.controller';
 import AuthController from './controllers/auth.controller';
 import UserController from './controllers/user.controller';
@@ -21,6 +22,12 @@ declare global {
 }
 
 validateEnv();
+
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const port = parseInt(process.env.PORT as string) || 5000;
 

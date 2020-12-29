@@ -7,6 +7,7 @@ interface Post {
 	price: number;
 	image: string;
 	imagePath: string;
+	cloudinaryPublicId: string;
 	url: string;
 }
 

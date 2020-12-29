@@ -14,6 +14,7 @@ const postSchema = new mongoose.Schema(
 		price: { type: Number, required: true },
 		image: { type: String, required: true },
 		imagePath: { type: String, required: true },
+		cloudinaryPublicId: { type: String, required: true },
 		url: { type: String, required: true },
 	},
 	{ timestamps: true }

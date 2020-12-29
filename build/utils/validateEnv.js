@@ -15,6 +15,12 @@ exports.validateEnv = function () {
         STRIPE_SECRET_KEY: envalid_1.str(),
         STRIPE_PUBLISHABLE_KEY: envalid_1.str(),
         STRIPE_WEBHOOK_SECRET: envalid_1.str(),
+        IMGUR_CLIENT_ID: envalid_1.str(),
+        IMGUR_SECRET: envalid_1.str(),
+        CLOUDINARY_API_KEY: envalid_1.str(),
+        CLOUDINARY_API_SECRET: envalid_1.str(),
+        CLOUDINARY_CLOUD_NAME: envalid_1.str(),
+        CLOUDINARY_URL: envalid_1.str(),
     });
 };
 //# sourceMappingURL=validateEnv.js.map

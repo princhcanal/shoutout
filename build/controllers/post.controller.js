@@ -51,6 +51,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var cloudinary_1 = require("cloudinary");
 var post_model_1 = __importDefault(require("../models/post.model"));
 var PostNotFoundException_1 = __importDefault(require("../exceptions/PostNotFoundException"));
 var NotAuthorizedException_1 = __importDefault(require("../exceptions/NotAuthorizedException"));
@@ -66,11 +67,11 @@ var PostController = /** @class */ (function () {
         this.router = express_1.default.Router();
         this.post = post_model_1.default;
         this.createPost = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-            var postData, image, imagePath, createdPost, post, message, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var postData, image, imagePath, createdPost, _a, secure_url, public_id, post, message, err_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
+                        _b.trys.push([0, 4, , 5]);
                         postData = req.body;
                         if (!req.file) {
                             throw new FileNotFoundException_1.default();
@@ -78,23 +79,28 @@ var PostController = /** @class */ (function () {
                         image = process.env.BASE_URL + "/" + req.file.path.replace('\\', '/');
                         imagePath = req.file.path;
                         createdPost = new this.post(__assign(__assign({}, postData), { image: image,
-                            imagePath: imagePath, author: req.user._id, url: "" + process.env.BASE_URL + this.path }));
+                            imagePath: imagePath, author: req.user._id, cloudinaryPublicId: 'hello', url: "" + process.env.BASE_URL + this.path }));
                         return [4 /*yield*/, createdPost.save()];
                     case 1:
-                        createdPost = _a.sent();
+                        createdPost = _b.sent();
+                        return [4 /*yield*/, cloudinary_1.v2.uploader.upload(createdPost.imagePath)];
+                    case 2:
+                        _a = _b.sent(), secure_url = _a.secure_url, public_id = _a.public_id;
                         return [4 /*yield*/, this.post.findByIdAndUpdate(createdPost._id, {
                                 url: "" + process.env.BASE_URL + this.path + "/" + createdPost._id,
+                                image: secure_url,
+                                cloudinaryPublicId: public_id,
                             }, { new: true })];
-                    case 2:
-                        post = _a.sent();
+                    case 3:
+                        post = _b.sent();
                         message = 'Post created successfully';
                         res.status(201).json({ message: message, post: post });
-                        return [3 /*break*/, 4];
-                    case 3:
-                        err_1 = _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        err_1 = _b.sent();
                         next(err_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); };
@@ -111,6 +117,7 @@ var PostController = /** @class */ (function () {
                         if (!post) {
                             throw new PostNotFoundException_1.default(id);
                         }
+                        cloudinary_1.v2.uploader.destroy(post.cloudinaryPublicId);
                         if (post.author.toString() !== req.user._id.toString()) {
                             throw new NotAuthorizedException_1.default();
                         }
