@@ -10,7 +10,7 @@ const PostSkeleton = () => {
 			<SkeletonTheme color='#bbb' highlightColor='#ccc'>
 				<div className={postStyles.heading}>
 					<h2>
-						<Skeleton width={250} height={30} />
+						<Skeleton width={200} height={30} />
 					</h2>
 					<div className={postStyles.price}>
 						<Skeleton width={50} height={30} />
@@ -19,7 +19,9 @@ const PostSkeleton = () => {
 				<Skeleton height={300} />
 				<div className={postStyles.description}>
 					<p>
-						<Skeleton count={2} />
+						{/* <Skeleton count={2} /> */}
+						<Skeleton width={250} />
+						<Skeleton width={250} />
 					</p>
 					<p className={postStyles.date}>
 						<Skeleton width={100} />

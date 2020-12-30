@@ -45,8 +45,8 @@ const Cart = () => {
 	}, [dispatch, errorMessageRef]);
 
 	useEffect(() => {
-		console.log('setting cart items');
 		setCartItems(createCartItems(cartProducts));
+		// eslint-disable-next-line
 	}, [cartProducts]);
 
 	const removeCartItem = async (cartItem: PostType) => {

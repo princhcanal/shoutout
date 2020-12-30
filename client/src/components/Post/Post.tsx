@@ -83,7 +83,7 @@ const Post = (props: PostProps) => {
 				quantity: 1,
 			});
 			if (addToCartButton.button) {
-				addToCartButton.button.innerText = 'Added to Cart';
+				addToCartButton.button.innerText = 'Remove from Cart';
 				addToCartButton.button.classList.add(ButtonStyles.hollow);
 				setIsInCart(true);
 			}
@@ -111,7 +111,7 @@ const Post = (props: PostProps) => {
 				product: props.post._id,
 			});
 			if (addToWishlistButton.button) {
-				addToWishlistButton.button.innerText = 'Added to Wishlist';
+				addToWishlistButton.button.innerText = 'Remove from Wishlist';
 				addToWishlistButton.button.classList.add(ButtonStyles.hollow);
 				setIsInWishlist(true);
 			}
@@ -146,7 +146,7 @@ const Post = (props: PostProps) => {
 					style={isInCart ? ['hollow'] : undefined}
 					ref={(c) => (addToCartButton = c as ButtonRef)}
 				>
-					{isInCart ? 'Added to Cart' : 'Add to Cart'}
+					{isInCart ? 'Remove from Cart' : 'Add to Cart'}
 				</Button>
 				<Button
 					onClick={
@@ -157,7 +157,7 @@ const Post = (props: PostProps) => {
 					style={isInWishlist ? ['hollow'] : undefined}
 					ref={(w) => (addToWishlistButton = w as ButtonRef)}
 				>
-					{isInWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
+					{isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
 				</Button>
 			</>
 		);

@@ -11,10 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 import { showErrorMessage } from '../../utils/errors';
-import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
 import NoWishlistItems from '../../components/NoData/NoWishListItems/NoWishlistItems';
+import WishlistItemsSkeleton from '../../components/Loader/SkeletonLoader/WishlistItemsSkeleton/WishlistItemsSkeleton';
 
-// TODO: restyle wishlist (grid)
 const Wishlist = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [wishlist, setWishlist] = useState<WishlistType>({
@@ -68,12 +67,12 @@ const Wishlist = () => {
 	});
 
 	return (
-		<div className={styles.wishlist}>
-			<div className={'postContainer'}>
+		<div className={styles.Wishlist}>
+			<div>
 				{isLoading ? (
-					<PostSkeleton />
+					<WishlistItemsSkeleton />
 				) : wishlistItems.length > 0 ? (
-					wishlistItems
+					<div className={styles.items}>{wishlistItems}</div>
 				) : (
 					<NoWishlistItems />
 				)}
