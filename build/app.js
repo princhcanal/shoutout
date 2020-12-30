@@ -48,8 +48,6 @@ var path_1 = __importDefault(require("path"));
 var error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
 var notFound_middleware_1 = __importDefault(require("./middleware/notFound.middleware"));
 var multerConfig_1 = __importDefault(require("./utils/multerConfig"));
-// TODO: figure out how to use axios in server with authentication
-// TODO: implement pagination
 var App = /** @class */ (function () {
     function App(controllers, port) {
         this.app = express_1.default();

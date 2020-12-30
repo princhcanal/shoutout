@@ -42,13 +42,13 @@ class FeedController implements Controller {
 
 			posts = posts.map((post) => {
 				const author = post.author as User;
+				if (req.user.subscription === 'Premium') {
+					post.price *= 0.25;
+				}
 				if (
 					req.user.subscriptions.includes(author._id as string & User)
 				) {
 					post.price *= discount;
-					if (req.user.subscription === 'Premium') {
-						post.price *= 0.25;
-					}
 				}
 				return post;
 			});

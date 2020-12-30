@@ -191,14 +191,14 @@ const ProfileCard = (props: ProfileCardProps) => {
 						<Button
 							onClick={handleFollowCallback}
 							ref={(f) => (followButton = f as ButtonRef)}
-							style={props.isFollowing ? 'hollow' : undefined}
+							style={props.isFollowing ? ['hollow'] : undefined}
 						>
 							{props.isFollowing ? 'Following' : 'Follow'}
 						</Button>
 						<Button
 							onClick={handleSubscribeCallback}
 							ref={(s) => (subscribeButton = s as ButtonRef)}
-							style={props.isSubscribed ? 'hollow' : undefined}
+							style={props.isSubscribed ? ['hollow'] : undefined}
 						>
 							{props.isSubscribed ? 'Subscribed' : 'Subscribe'}
 						</Button>

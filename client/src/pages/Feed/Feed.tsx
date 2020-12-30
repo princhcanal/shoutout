@@ -19,7 +19,9 @@ import SearchUser from '../../components/Form/SearchUser/SearchUser';
 import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
 import NoPosts from '../../components/NoData/NoPosts/NoPosts';
 
+// TODO: add "You're all caught up message"
 const Feed = () => {
+	const [count, setCount] = useState<number>(1);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [posts, setPosts] = useState<PostType[]>([]);
 	const [cart, setCart] = useState<Cart>({
@@ -36,10 +38,31 @@ const Feed = () => {
 		(state) => state.error.errorMessageRef
 	);
 
+	// useEffect(() => {
+	window.onscroll = async (e: Event) => {
+		const scrolledToBottom =
+			window.innerHeight + window.scrollY >= document.body.offsetHeight;
+
+		if (scrolledToBottom) {
+			const { data } = await axios.get<FetchFeedData>(
+				`/feed?count=${count + 1}`
+			);
+			const newPosts = data.posts;
+			if (newPosts.length === 0) {
+				console.log("You're all caught up!");
+			} else {
+				setCount(count + 1);
+			}
+			setPosts(posts.concat(newPosts));
+		}
+	};
+	// }, [count]);
 	useEffect(() => {
 		try {
 			const fetchFeed = async () => {
-				const feed = await axios.get<FetchFeedData>('/feed');
+				const feed = await axios.get<FetchFeedData>(
+					`/feed?count=${count}`
+				);
 				setPosts(feed.data.posts);
 				const cart = await axios.get<FetchCartData>('/cart');
 				setCart(cart.data.cart);
@@ -54,6 +77,8 @@ const Feed = () => {
 		} catch (err) {
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
+
+		// eslint-disable-next-line
 	}, [dispatch, errorMessageRef]);
 
 	const cartProductIds = cart.products.map((product) => {

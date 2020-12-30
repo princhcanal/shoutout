@@ -1,14 +1,14 @@
 import React, { useRef, Ref, useImperativeHandle, forwardRef } from 'react';
 import styles from './Button.module.scss';
 
-type ButtonStyles = 'hollow' | 'hollow-red' | 'bright';
 type ButtonTypes = 'button' | 'submit' | 'reset' | undefined;
 
 export interface ButtonProps {
 	children: any;
 	onClick?: any;
-	style?: ButtonStyles;
+	style?: string[];
 	type?: ButtonTypes;
+	className?: string[];
 }
 
 export interface ButtonRef {
@@ -19,9 +19,11 @@ const Button = forwardRef((props: ButtonProps, ref: Ref<ButtonRef>) => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const classNames = [
 		styles.button,
-		props.style === 'hollow' && styles.hollow,
-		props.style === 'hollow-red' && styles.hollowRed,
-		props.style === 'bright' && styles.bright,
+		props.style?.includes('hollow') && styles.hollow,
+		props.style?.includes('hollow-red') && styles.hollowRed,
+		props.style?.includes('bright') && styles.bright,
+		props.style?.includes('full-width') && styles.fullWidth,
+		props.className?.join(' '),
 	];
 
 	useImperativeHandle(

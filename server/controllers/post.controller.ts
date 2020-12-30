@@ -60,6 +60,7 @@ class PostController implements Controller {
 
 			let createdPost = new this.post({
 				...postData,
+				price: parseFloat(postData.price.toFixed(2)),
 				image,
 				imagePath,
 				author: req.user._id,
@@ -71,6 +72,7 @@ class PostController implements Controller {
 			const { secure_url, public_id } = await cloudinary.uploader.upload(
 				createdPost.imagePath
 			);
+			deleteFile(imagePath);
 
 			const post = await this.post.findByIdAndUpdate(
 				createdPost._id,
@@ -108,7 +110,6 @@ class PostController implements Controller {
 				throw new NotAuthorizedException();
 			}
 
-			deleteFile(post.imagePath);
 			await this.post.findByIdAndDelete(id);
 
 			const message = 'Post deleted successfully';

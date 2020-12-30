@@ -10,8 +10,6 @@ import errorMiddleware from './middleware/error.middleware';
 import notFoundMiddleware from './middleware/notFound.middleware';
 import multerConfig from './utils/multerConfig';
 
-// TODO: figure out how to use axios in server with authentication
-// TODO: implement pagination
 class App {
 	public app: express.Application;
 	public port: number;

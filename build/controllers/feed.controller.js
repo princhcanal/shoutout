@@ -71,11 +71,11 @@ var FeedController = /** @class */ (function () {
                         posts = _a.sent();
                         posts = posts.map(function (post) {
                             var author = post.author;
+                            if (req.user.subscription === 'Premium') {
+                                post.price *= 0.25;
+                            }
                             if (req.user.subscriptions.includes(author._id)) {
                                 post.price *= discount_1.default;
-                                if (req.user.subscription === 'Premium') {
-                                    post.price *= 0.25;
-                                }
                             }
                             return post;
                         });

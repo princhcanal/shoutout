@@ -23,6 +23,9 @@ const HamburgerMenu = (props: HamburgerMenuProps) => {
 	const username = useSelector<RootState, string>(
 		(state) => state.auth.username
 	);
+	const subscription = useSelector<RootState, string>(
+		(state) => state.auth.subscription
+	);
 	const dispatch = useDispatch();
 	const history = useHistory();
 
@@ -64,6 +67,11 @@ const HamburgerMenu = (props: HamburgerMenuProps) => {
 						</li>
 						<li>
 							<Link to='/cart'>Cart</Link>
+						</li>
+						<li>
+							{subscription === 'None' && (
+								<Link to='/subscribe'>Subscribe</Link>
+							)}
 						</li>
 						<li>
 							<Link to={`/profile/${username}`}>Profile</Link>

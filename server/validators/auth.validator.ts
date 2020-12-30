@@ -20,17 +20,17 @@ const authValidator = {
 				}
 			})
 			.normalizeEmail(),
-		body('password', 'Password must be at least 4 characters')
+		body('password')
 			.trim()
-			.isLength({ min: 4 })
-			.isAlphanumeric(),
+			.isLength({ min: 4, max: 15 })
+			.withMessage('Password must be 4-15 characters'),
 	],
 	login: [
 		check('email').isEmail().withMessage('Please enter a valid email'),
-		body('password', 'Invalid password')
+		body('password')
 			.trim()
-			.isLength({ min: 4 })
-			.isAlphanumeric(),
+			.isLength({ min: 4, max: 15 })
+			.withMessage('Password must be 4-15 characters'),
 	],
 	updateUser: [
 		body('name').trim().optional(),

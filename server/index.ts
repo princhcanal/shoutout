@@ -1,4 +1,3 @@
-// FIXME: change password error on chrome
 import App from './app';
 import 'dotenv/config';
 import { validateEnv } from './utils/validateEnv';

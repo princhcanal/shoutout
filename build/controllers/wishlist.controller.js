@@ -79,11 +79,11 @@ var WishlistController = /** @class */ (function () {
                         products = _a.sent();
                         products = products.map(function (product) {
                             var author = product.author;
+                            if (req.user.subscription === 'Premium') {
+                                product.price *= 0.25;
+                            }
                             if (req.user.subscriptions.includes(author._id)) {
                                 product.price *= discount_1.default;
-                                if (req.user.subscription === 'Premium') {
-                                    product.price *= 0.25;
-                                }
                             }
                             return product;
                         });

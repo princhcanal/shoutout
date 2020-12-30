@@ -78,7 +78,7 @@ var PostController = /** @class */ (function () {
                         }
                         image = process.env.BASE_URL + "/" + req.file.path.replace('\\', '/');
                         imagePath = req.file.path;
-                        createdPost = new this.post(__assign(__assign({}, postData), { image: image,
+                        createdPost = new this.post(__assign(__assign({}, postData), { price: parseFloat(postData.price.toFixed(2)), image: image,
                             imagePath: imagePath, author: req.user._id, cloudinaryPublicId: 'hello', url: "" + process.env.BASE_URL + this.path }));
                         return [4 /*yield*/, createdPost.save()];
                     case 1:
@@ -86,6 +86,7 @@ var PostController = /** @class */ (function () {
                         return [4 /*yield*/, cloudinary_1.v2.uploader.upload(createdPost.imagePath)];
                     case 2:
                         _a = _b.sent(), secure_url = _a.secure_url, public_id = _a.public_id;
+                        deleteFile_1.default(imagePath);
                         return [4 /*yield*/, this.post.findByIdAndUpdate(createdPost._id, {
                                 url: "" + process.env.BASE_URL + this.path + "/" + createdPost._id,
                                 image: secure_url,
@@ -121,7 +122,6 @@ var PostController = /** @class */ (function () {
                         if (post.author.toString() !== req.user._id.toString()) {
                             throw new NotAuthorizedException_1.default();
                         }
-                        deleteFile_1.default(post.imagePath);
                         return [4 /*yield*/, this.post.findByIdAndDelete(id)];
                     case 2:
                         _a.sent();

@@ -143,7 +143,7 @@ const Post = (props: PostProps) => {
 			<>
 				<Button
 					onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
-					style={isInCart ? 'hollow' : undefined}
+					style={isInCart ? ['hollow'] : undefined}
 					ref={(c) => (addToCartButton = c as ButtonRef)}
 				>
 					{isInCart ? 'Added to Cart' : 'Add to Cart'}
@@ -154,7 +154,7 @@ const Post = (props: PostProps) => {
 							? handleRemoveFromWishlist
 							: handleAddToWishlist
 					}
-					style={isInWishlist ? 'hollow' : undefined}
+					style={isInWishlist ? ['hollow'] : undefined}
 					ref={(w) => (addToWishlistButton = w as ButtonRef)}
 				>
 					{isInWishlist ? 'Added to Wishlist' : 'Add to Wishlist'}
@@ -206,7 +206,10 @@ const Post = (props: PostProps) => {
 					ref={(e) => (editOptionsRef = e as CardRef)}
 				>
 					<Button onClick={handleEdit}>Edit</Button>
-					<Button onClick={handleDelete} style={true && 'hollow-red'}>
+					<Button
+						onClick={handleDelete}
+						style={true && ['hollow-red']}
+					>
 						Delete
 					</Button>
 				</Card>

@@ -68,30 +68,33 @@ class PayController implements Controller {
 
 			products = products.map((product) => {
 				const author = product.author as User;
+				if (req.user.subscription === 'Premium') {
+					product.price *= 0.25;
+				}
 				if (
 					req.user.subscriptions.includes(author._id as string & User)
 				) {
 					product.price *= discount;
-					if (req.user.subscription === 'Premium') {
-						product.price *= 0.25;
-					}
 				}
+				product.price = parseFloat(product.price.toFixed(2));
 				return product;
 			});
 
 			const lineItems:
 				| Stripe.Checkout.SessionCreateParams.LineItem[]
-				| undefined = products.map((product) => ({
-				price_data: {
-					currency: 'usd',
-					product_data: {
-						name: product.title,
-						images: [product.image],
+				| undefined = products.map((product) => {
+				return {
+					price_data: {
+						currency: 'usd',
+						product_data: {
+							name: product.title,
+							images: [product.image],
+						},
+						unit_amount: Math.ceil(product.price * 100),
 					},
-					unit_amount: product.price * 100,
-				},
-				quantity: 1,
-			}));
+					quantity: 1,
+				};
+			});
 
 			const session = await this.stripe.checkout.sessions.create({
 				payment_method_types: ['card'],

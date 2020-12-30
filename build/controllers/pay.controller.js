@@ -87,25 +87,28 @@ var PayController = /** @class */ (function () {
                         products = _a.sent();
                         products = products.map(function (product) {
                             var author = product.author;
+                            if (req.user.subscription === 'Premium') {
+                                product.price *= 0.25;
+                            }
                             if (req.user.subscriptions.includes(author._id)) {
                                 product.price *= discount_1.default;
-                                if (req.user.subscription === 'Premium') {
-                                    product.price *= 0.25;
-                                }
                             }
+                            product.price = parseFloat(product.price.toFixed(2));
                             return product;
                         });
-                        lineItems = products.map(function (product) { return ({
-                            price_data: {
-                                currency: 'usd',
-                                product_data: {
-                                    name: product.title,
-                                    images: [product.image],
+                        lineItems = products.map(function (product) {
+                            return {
+                                price_data: {
+                                    currency: 'usd',
+                                    product_data: {
+                                        name: product.title,
+                                        images: [product.image],
+                                    },
+                                    unit_amount: Math.ceil(product.price * 100),
                                 },
-                                unit_amount: product.price * 100,
-                            },
-                            quantity: 1,
-                        }); });
+                                quantity: 1,
+                            };
+                        });
                         return [4 /*yield*/, this.stripe.checkout.sessions.create({
                                 payment_method_types: ['card'],
                                 line_items: lineItems,

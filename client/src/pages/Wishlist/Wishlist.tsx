@@ -14,6 +14,7 @@ import { showErrorMessage } from '../../utils/errors';
 import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
 import NoWishlistItems from '../../components/NoData/NoWishListItems/NoWishlistItems';
 
+// TODO: restyle wishlist (grid)
 const Wishlist = () => {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [wishlist, setWishlist] = useState<WishlistType>({

@@ -71,17 +71,17 @@ var authValidator = {
             });
         })
             .normalizeEmail(),
-        express_validator_1.body('password', 'Password must be at least 4 characters')
+        express_validator_1.body('password')
             .trim()
-            .isLength({ min: 4 })
-            .isAlphanumeric(),
+            .isLength({ min: 4, max: 15 })
+            .withMessage('Password must be 4-15 characters'),
     ],
     login: [
         express_validator_1.check('email').isEmail().withMessage('Please enter a valid email'),
-        express_validator_1.body('password', 'Invalid password')
+        express_validator_1.body('password')
             .trim()
-            .isLength({ min: 4 })
-            .isAlphanumeric(),
+            .isLength({ min: 4, max: 15 })
+            .withMessage('Password must be 4-15 characters'),
     ],
     updateUser: [
         express_validator_1.body('name').trim().optional(),
