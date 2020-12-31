@@ -119,8 +119,8 @@ const Feed = () => {
 				) : (
 					<NoPosts />
 				)}
-				{!bottomComponent && <PostSkeleton />}
-				{bottomComponent}
+				{!bottomComponent && feedPosts.length > 0 && <PostSkeleton />}
+				{feedPosts.length > 0 && bottomComponent}
 			</div>
 		</div>
 	);

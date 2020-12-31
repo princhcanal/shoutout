@@ -10,9 +10,10 @@ const Landing = () => {
 			<div className={styles.text}>
 				<h1>Shoutout</h1>
 				<p>
-					Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-					Impedit dolorum repellat soluta doloremque deserunt nisi
-					adipisci omnis voluptatem. Laboriosam, assumenda?
+					Shoutout allows users to sell their artwork online. Sellers
+					can also subscribe to other users to get a discount on their
+					products. Discover, support, and get inspired by talent from
+					all over the world!
 				</p>
 				<div className={styles.buttons}>
 					<Link

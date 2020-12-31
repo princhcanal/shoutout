@@ -70,6 +70,8 @@
 		padding: 0;
 		margin: 0;
 		text-align: start;
+		max-height: 30rem;
+		overflow-y: scroll;
 
 		li {
 			border-bottom: 1px solid var(--color-tertiary);

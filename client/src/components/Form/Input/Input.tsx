@@ -44,6 +44,7 @@ const Input = ({ label, onChange, ...props }: InputProps) => {
 					{...props}
 					onChange={onChange}
 					className={styles.fileInput}
+					autoComplete='off'
 				/>
 			) : (
 				<input {...props} {...field} />
