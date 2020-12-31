@@ -78,7 +78,7 @@ var PostController = /** @class */ (function () {
                         }
                         image = process.env.BASE_URL + "/" + req.file.path.replace('\\', '/');
                         imagePath = req.file.path;
-                        createdPost = new this.post(__assign(__assign({}, postData), { price: parseFloat(postData.price.toFixed(2)), image: image,
+                        createdPost = new this.post(__assign(__assign({}, postData), { price: postData.price, image: image,
                             imagePath: imagePath, author: req.user._id, cloudinaryPublicId: 'hello', url: "" + process.env.BASE_URL + this.path }));
                         return [4 /*yield*/, createdPost.save()];
                     case 1:

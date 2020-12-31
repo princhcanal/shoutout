@@ -9,6 +9,7 @@
 		"server:run": "nodemon build/index.js",
 		"server": "concurrently npm:server:*",
 		"client": "npm run start --prefix client",
+		"deploy": "git push && git push heroku master",
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
 		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
 	},

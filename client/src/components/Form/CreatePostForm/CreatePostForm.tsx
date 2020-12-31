@@ -31,6 +31,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 		(state) => state.auth.username
 	);
 	const [showCard, setShowCard] = useState<boolean>(false);
+	const [isPosting, setIsPosting] = useState<boolean>(false);
 	const dispatch = useDispatch();
 	const errorMessageRef = useSelector<RootState, ErrorMessageRef | null>(
 		(state) => state.error.errorMessageRef
@@ -56,7 +57,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 		title: Yup.string().required('Required'),
 		price: Yup.number()
 			.typeError('Must be a number')
-			.positive('Must be greater than 0')
+			.moreThan(5, 'Must be greater than $5')
 			.required('Required'),
 		image: Yup.mixed().required('Required'),
 		// .test('fileType', 'Image must be jpg, jpeg, or png', (value) =>
@@ -72,9 +73,12 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 		formData.append('image', values.image);
 
 		try {
+			setIsPosting(true);
 			await axios.post('/posts', formData);
+			setIsPosting(false);
 			history.push(`/profile/${username}`);
 		} catch (err) {
+			setIsPosting(false);
 			showErrorMessage(err, errorMessageRef, dispatch);
 		}
 	};
@@ -247,7 +251,9 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 								</div>
 							</div>
 							<div className={styles.buttons}>
-								<Button type='submit'>Post</Button>
+								<Button type='submit'>
+									{isPosting ? 'Posting...' : 'Post'}
+								</Button>
 							</div>
 						</Form>
 					)}

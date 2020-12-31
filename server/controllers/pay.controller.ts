@@ -69,12 +69,12 @@ class PayController implements Controller {
 			products = products.map((product) => {
 				const author = product.author as User;
 				if (req.user.subscription === 'Premium') {
-					product.price *= 0.25;
+					product.price -= product.price * 0.25;
 				}
 				if (
 					req.user.subscriptions.includes(author._id as string & User)
 				) {
-					product.price *= discount;
+					product.price -= product.price * discount;
 				}
 				product.price = parseFloat(product.price.toFixed(2));
 				return product;

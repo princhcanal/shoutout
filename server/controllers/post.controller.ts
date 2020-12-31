@@ -60,7 +60,7 @@ class PostController implements Controller {
 
 			let createdPost = new this.post({
 				...postData,
-				price: parseFloat(postData.price.toFixed(2)),
+				price: postData.price,
 				image,
 				imagePath,
 				author: req.user._id,

@@ -72,10 +72,10 @@ var FeedController = /** @class */ (function () {
                         posts = posts.map(function (post) {
                             var author = post.author;
                             if (req.user.subscription === 'Premium') {
-                                post.price *= 0.25;
+                                post.price -= post.price * 0.25;
                             }
                             if (req.user.subscriptions.includes(author._id)) {
-                                post.price *= discount_1.default;
+                                post.price -= post.price * discount_1.default;
                             }
                             return post;
                         });
