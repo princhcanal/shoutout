@@ -18,12 +18,15 @@ import { showErrorMessage } from '../../utils/errors';
 import SearchUser from '../../components/Form/SearchUser/SearchUser';
 import PostSkeleton from '../../components/Loader/SkeletonLoader/PostSkeleton/PostSkeleton';
 import NoPosts from '../../components/NoData/NoPosts/NoPosts';
+import CaughtUp from '../../components/CaughtUp/CaughtUp';
 
-// TODO: add "You're all caught up message"
 const Feed = () => {
 	const [count, setCount] = useState<number>(1);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [posts, setPosts] = useState<PostType[]>([]);
+	const [bottomComponent, setBottomComponent] = useState<JSX.Element | null>(
+		null
+	);
 	const [cart, setCart] = useState<Cart>({
 		products: [],
 		totalPrice: 0,
@@ -41,15 +44,16 @@ const Feed = () => {
 	// useEffect(() => {
 	window.onscroll = async (e: Event) => {
 		const scrolledToBottom =
-			window.innerHeight + window.scrollY >= document.body.offsetHeight;
+			window.innerHeight + window.scrollY >=
+			document.body.offsetHeight - 500;
 
-		if (scrolledToBottom) {
+		if (scrolledToBottom && !bottomComponent) {
 			const { data } = await axios.get<FetchFeedData>(
 				`/feed?count=${count + 1}`
 			);
 			const newPosts = data.posts;
 			if (newPosts.length === 0) {
-				console.log("You're all caught up!");
+				setBottomComponent(<CaughtUp />);
 			} else {
 				setCount(count + 1);
 			}
@@ -115,6 +119,8 @@ const Feed = () => {
 				) : (
 					<NoPosts />
 				)}
+				{!bottomComponent && <PostSkeleton />}
+				{bottomComponent}
 			</div>
 		</div>
 	);
