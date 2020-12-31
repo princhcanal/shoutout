@@ -2,52 +2,32 @@
 	display: flex;
 	align-items: center;
 	height: 100vh;
-	background: linear-gradient(
-		to bottom right,
-		var(--color-white),
-		var(--color-secondary-light-1)
-	);
-}
+	background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+		url('/img/art_collage.jpg');
+	.text {
+		width: 50rem;
+		max-width: 90%;
+		margin: auto;
+		text-align: center;
 
-.text {
-	width: 50%;
-	padding: 0 2rem;
-	color: var(--color-secondary);
-}
+		h1 {
+			color: var(--color-yellow);
+			font-size: 4rem;
+			margin: 0;
+			text-shadow: 0.5rem 0.8rem 1rem rgba(0, 0, 0, 0.6);
+		}
 
-.text h1 {
-	font-size: 4rem;
-	margin: 0 0 2rem 0;
-}
+		p {
+			color: var(--color-white);
+			font-weight: bold;
+			font-size: 1.5rem;
+		}
 
-.text p {
-	margin-bottom: 2rem;
-}
-
-.image {
-	width: 50%;
-	display: flex;
-	align-items: center;
-}
-
-.landing img {
-	width: 100%;
-}
-
-.buttons {
-	display: flex;
-	justify-content: flex-start;
-}
-
-.link {
-	border: none;
-	padding: 0.7rem 1rem;
-	border-radius: 0.7rem;
-	font-size: 1rem;
-	background-color: var(--color-primary-dark);
-	color: var(--color-white);
-}
-
-.link:not(:last-of-type) {
-	margin-right: 2rem;
+		.buttons {
+			width: 50%;
+			margin: auto;
+			display: flex;
+			justify-content: space-around;
+		}
+	}
 }

@@ -1,4 +1,3 @@
-// TODO: change post to product
 import mongoose from 'mongoose';
 import Post from '../interfaces/post.interface';
 

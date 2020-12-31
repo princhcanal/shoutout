@@ -1,8 +1,6 @@
 .userListItem {
-	border-bottom: 1px solid var(--color-tertiary);
-	padding-bottom: 0.5rem;
-
 	&:not(:last-of-type) {
+		border-bottom: 1px solid var(--color-tertiary);
 		margin-bottom: 1rem;
 	}
 

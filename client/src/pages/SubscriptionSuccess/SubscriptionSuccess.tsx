@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import styles from './SubscriptionSuccess.module.scss';
 import { useDispatch } from 'react-redux';
 
 import axios from '../../axios';
@@ -39,11 +40,21 @@ const SubscriptionSuccess = () => {
 		window.location.href = data.url;
 	};
 
-	return (
-		<div>
-			<Button onClick={manageBillingForm}>Manage Billing</Button>
+	const component = sessionId && (
+		<div className={styles.SubscriptionSuccess}>
+			<h1>You are now subscribed to Shoutout Premium :)</h1>
+			<h3>Click the button below to manage your payment</h3>
+			<Button
+				onClick={manageBillingForm}
+				style={['bright', 'full-width']}
+				className={[styles.button]}
+			>
+				Manage Billing
+			</Button>
 		</div>
 	);
+
+	return <div>{component}</div>;
 };
 
 export default SubscriptionSuccess;

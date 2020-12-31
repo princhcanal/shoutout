@@ -68,6 +68,12 @@
 	color: var(--color-primary);
 }
 
+.imagePicture {
+	img {
+		width: 100%;
+	}
+}
+
 .imagePicture svg {
 	width: 100%;
 	height: 100%;

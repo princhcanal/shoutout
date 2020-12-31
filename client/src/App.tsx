@@ -28,8 +28,6 @@ import * as ErrorActions from './store/error/actions';
 import ErrorMessageHandle from './types/handles/errorMessageHandle';
 import fetchUserData from './types/fetchData/fetchUserData';
 
-// TODO: style landing page
-// TODO: add 404 page
 const App = () => {
 	const dispatch = useDispatch();
 	const errorMessage = useSelector<RootState, string>(

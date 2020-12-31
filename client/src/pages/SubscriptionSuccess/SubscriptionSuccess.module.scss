@@ -1,2 +1,23 @@
 .SubscriptionSuccess {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 70vh;
+	text-align: center;
+	width: 90%;
+	margin: 2rem auto;
+
+	h1 {
+		color: var(--color-tertiary);
+	}
+
+	h3 {
+		color: var(--color-white);
+	}
+
+	.button {
+		font-weight: bold;
+		font-size: 1.5rem;
+	}
 }

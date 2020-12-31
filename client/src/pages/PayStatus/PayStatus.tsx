@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styles from './PayStatus.module.scss';
 
 import axios from '../../axios';
 
@@ -20,7 +21,16 @@ const PayStatus = () => {
 		showPayStatus();
 	}, [query]);
 
-	return <div>{message}</div>;
+	const image = query.get('success')
+		? '/img/pay_success.svg'
+		: '/img/pay_cancel.svg';
+
+	return (
+		<div className={styles.PayStatus}>
+			<h1>{message}</h1>
+			<img src={image} alt='' />
+		</div>
+	);
 };
 
 export default PayStatus;

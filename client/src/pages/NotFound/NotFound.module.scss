@@ -1,5 +1,17 @@
 .notFound {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	width: 90%;
+	margin: 2rem auto;
+
+	h1 {
+		color: var(--color-tertiary);
+	}
+
+	img {
+		display: block;
+		width: 100%;
+	}
 }

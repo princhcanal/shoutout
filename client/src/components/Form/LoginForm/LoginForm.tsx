@@ -66,6 +66,7 @@ const LoginForm = () => {
 
 	return (
 		<div className={styles.loginForm}>
+			<h1 className={styles.header}>Login to Shoutout</h1>
 			<div className={styles.form}>
 				<Formik
 					initialValues={initialValues}
@@ -78,7 +79,7 @@ const LoginForm = () => {
 							name='email'
 							id='email'
 							label='Email'
-							placeholder='Email'
+							// placeholder='Email'
 							className={styles.input}
 						/>
 						<Input
@@ -86,7 +87,7 @@ const LoginForm = () => {
 							name='password'
 							id='password'
 							label='Password'
-							placeholder='Password'
+							// placeholder='Password'
 							className={styles.input}
 						/>
 						<p className={styles.register}>

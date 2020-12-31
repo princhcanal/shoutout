@@ -139,7 +139,7 @@ class PayController implements Controller {
 				// the actual Session ID is returned in the query parameter when your customer
 				// is redirected to the success page.
 				success_url: `${process.env.BASE_URL_CLIENT}/subscription-success?session_id={CHECKOUT_SESSION_ID}`,
-				cancel_url: `${process.env.BASE_URL_CLIENT}/subscription-cancel`,
+				cancel_url: `${process.env.BASE_URL_CLIENT}/`,
 			});
 
 			res.status(201).json({ sessionId: session.id });

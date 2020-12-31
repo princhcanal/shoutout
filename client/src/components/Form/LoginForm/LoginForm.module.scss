@@ -15,6 +15,12 @@
 	@media only screen and (max-width: 500px) {
 		width: 90%;
 	}
+
+	.header {
+		color: var(--color-primary);
+		text-align: center;
+		margin: 0 0 2rem;
+	}
 }
 
 .input {

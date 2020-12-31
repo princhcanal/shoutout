@@ -127,7 +127,7 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 								placeholder='Price'
 								className={styles.input}
 							/>
-							<Input
+							{/* <Input
 								type='file'
 								name='image'
 								id='image'
@@ -179,12 +179,72 @@ const CreatePostForm = (props: CreatePostFormProps) => {
 								label='Choose an image'
 								accept='.jpg, .jpeg, .png'
 								className={styles.input}
-							/>
-							<div
-								className={styles.imagePreview}
-								ref={imagePreviewDivRef}
-							>
-								<img ref={imagePreviewRef} alt='' />
+							/> */}
+							<div className={styles.imageInput}>
+								<Input
+									type='file'
+									name='image'
+									id='image'
+									onChange={(
+										e: ChangeEvent<HTMLInputElement>
+									) => {
+										if (e.target.files) {
+											if (e.target.files[0]) {
+												formProps.setFieldValue(
+													'image',
+													e.target.files[0]
+												);
+												const fileReader = new FileReader();
+												if (
+													e.target.files[0] &&
+													imagePreviewDivRef.current
+												) {
+													imagePreviewDivRef.current.style.display =
+														'block';
+													fileReader.readAsDataURL(
+														e.target.files[0]
+													);
+													fileReader.onload = (e) => {
+														if (
+															imagePreviewRef.current
+														) {
+															imagePreviewRef.current.src = e
+																.target
+																?.result as string;
+														}
+													};
+												}
+											} else {
+												formProps.setFieldValue(
+													'image',
+													''
+												);
+												if (
+													imagePreviewDivRef.current
+												) {
+													imagePreviewDivRef.current.style.display =
+														'none';
+												}
+												if (imagePreviewRef.current) {
+													imagePreviewRef.current.src =
+														'';
+												}
+											}
+										}
+									}}
+									label='Choose an image'
+									accept='.jpg, .jpeg, .png'
+									className={styles.input}
+								/>
+								<div
+									className={styles.imagePreview}
+									ref={imagePreviewDivRef}
+								>
+									<div className={styles.imageWatermark}>
+										<p>Image</p>
+									</div>
+									<img ref={imagePreviewRef} alt='' />
+								</div>
 							</div>
 							<div className={styles.buttons}>
 								<Button type='submit'>Post</Button>

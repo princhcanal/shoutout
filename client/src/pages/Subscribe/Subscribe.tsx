@@ -1,10 +1,14 @@
 import React from 'react';
+import styles from './Subscribe.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axios from '../../axios';
 import { loadStripe } from '@stripe/stripe-js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 import Button from '../../components/Button/Button';
+import Card from '../../components/Card/Card';
 import { showErrorMessage } from '../../utils/errors';
 import { ErrorMessageRef } from '../../components/ErrorMessage/ErrorMessage';
 import { RootState } from '../../store';
@@ -44,13 +48,28 @@ const Subscribe = () => {
 	};
 
 	return (
-		<div>
-			<Button onClick={() => subscribe(premiumPriceId)}>
-				Subscribe to Shoutout Premium
-			</Button>
-			{/* <Button onClick={() => subscribe(goldPriceId)}>
+		<div className={styles.center}>
+			<Card className={styles.Subscribe}>
+				<h1>Shoutout Premium</h1>
+				<img src='/img/shoutout_premium.svg' alt='Shoutout Premium' />
+				<ul className={styles.benefitsList}>
+					<li className={styles.benefit}>
+						<FontAwesomeIcon icon={faCheck} color={'#3587a4'} />
+						<p>Get 25% off all items</p>
+					</li>
+				</ul>
+				<div className={styles.button}>
+					<Button
+						onClick={() => subscribe(premiumPriceId)}
+						style={['bright', 'full-width']}
+					>
+						Subscribe to Shoutout Premium
+					</Button>
+				</div>
+				{/* <Button onClick={() => subscribe(goldPriceId)}>
 				Subscribe to Shoutout Gold
 			</Button> */}
+			</Card>
 		</div>
 	);
 };
